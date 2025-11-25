@@ -1,6 +1,7 @@
 # Python
 __pycache__/
 balanced_data/
+data/
 assets/
 data/
 *.py[cod]
