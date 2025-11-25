@@ -1,0 +1,30 @@
+# Robotics environment configuration
+# Optimized for robotic applications with ROS2 integration
+
+extends: ../default.yaml
+
+project:
+  name: "robotics_object_detection"
+
+model:
+  input_size: 416  # Higher resolution for small object detection
+  confidence_threshold: 0.6  # Higher confidence for robotics
+
+training:
+  epochs: 100
+  batch_size: 4  # Smaller batch for embedded training
+  device: "cpu"  # Default to CPU for Raspberry Pi training
+
+  # Optimized for small objects at distance
+  augmentation:
+    scale: 0.5  # Distance simulation
+    degrees: 15.0  # Limited rotation for oriented objects
+
+ros2:
+  enabled: true
+
+realtime:
+  temporal_filter: true
+  temporal_alpha: 0.4
+  temporal_min_frames: 5
+  temporal_boost_factor: 0.25

@@ -1,0 +1,31 @@
+# Embedded system configuration
+# Optimized for Raspberry Pi and edge deployment
+
+extends: ../default.yaml
+
+project:
+  name: "embedded_object_detection"
+
+model:
+  input_size: 320  # Smaller input for faster inference
+  confidence_threshold: 0.4  # Lower threshold for better detection
+  max_detections: 10  # Limit detections for performance
+
+training:
+  batch_size: 2  # Very small batch for limited memory
+  device: "cpu"  # Force CPU training
+
+  # Limited augmentation for embedded constraints
+  augmentation:
+    mosaic: 0.0  # Disable memory-intensive augmentations
+    mixup: 0.0
+
+attention:
+  enabled: false  # Disable attention for faster inference
+
+ros2:
+  enabled: true
+
+realtime:
+  temporal_filter: true  # Important for noisy embedded cameras
+  temporal_alpha: 0.3  # More aggressive smoothing

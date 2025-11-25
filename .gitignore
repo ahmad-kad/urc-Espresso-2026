@@ -1,5 +1,8 @@
 # Python
 __pycache__/
+balanced_data/
+assets/
+data/
 *.py[cod]
 *$py.class
 *.so

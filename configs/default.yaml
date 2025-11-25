@@ -1,0 +1,91 @@
+# Default configuration for object detection
+project:
+  name: "object_detection"
+  version: "0.1.0"
+  description: "General-purpose YOLO object detection framework"
+
+# Dataset configuration
+data:
+  yaml_path: "data/data.yaml"
+  train_split: "data/train"
+  val_split: "data/valid"
+  test_split: "data/test"
+  classes: []  # Will be populated from data.yaml or overridden
+  num_classes: 0
+
+# Model configuration
+model:
+  architecture: "yolov8s"
+  pretrained_weights: "assets/models/pretrained/yolov8s.pt"
+  input_size: 416
+  confidence_threshold: 0.5
+  iou_threshold: 0.4
+  max_detections: 20
+
+# Training configuration
+training:
+  epochs: 100  # Increased for better convergence with balanced data
+  batch_size: 16  # Increased batch size for stability
+  learning_rate: 0.001
+  weight_decay: 0.0005
+  patience: 25  # Increased patience for longer training
+
+  # Data augmentation
+  augmentation:
+    degrees: 15.0
+    translate: 0.1
+    scale: 0.5
+    shear: 5.0
+    perspective: 0.0002
+    flipud: 0.0
+    fliplr: 0.5
+    mosaic: 1.0
+    mixup: 0.1
+    hsv_h: 0.015
+    hsv_s: 0.7
+    hsv_v: 0.4
+
+  # Loss weights
+  loss_weights:
+    box: 7.5
+    cls: 0.5
+    dfl: 1.5
+
+# Attention modules (CBAM/SE)
+attention:
+  enabled: false
+  type: "cbam"  # cbam or se
+  layers: ["model.3", "model.6", "model.9", "model.12"]
+
+# Output directories
+output:
+  models: "output/models"
+  results: "output/results"
+  logs: "output/logs"
+  visualizations: "output/visualizations"
+
+# Device configuration
+device: "cpu"  # Use CPU by default (change to "cuda" if GPU available)
+
+# Evaluation settings
+evaluation:
+  save_results: true
+  plot_results: true
+  confusion_matrix: true
+  classification_report: true
+
+# ROS2 settings (optional)
+ros2:
+  enabled: false
+  node_name: "object_detector"
+  input_topic: "/camera/image_raw"
+  output_topic: "/object_detector/detections"
+  annotated_topic: "/object_detector/annotated_image"
+  publish_annotated: true
+
+# Real-time settings
+realtime:
+  temporal_filter: true
+  temporal_alpha: 0.4
+  temporal_min_frames: 5
+  temporal_boost_factor: 0.25
