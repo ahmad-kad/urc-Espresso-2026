@@ -5,59 +5,63 @@ This document explains the reorganized project structure and how to use the gene
 ## Directory Structure
 
 ```
-robotics_objdetection/
-├── configs/                       # Configuration files
-│   ├── default.yaml               # Default configuration
-│   └── environments/              # Environment-specific configs
-│       ├── robotics.yaml          # Robotics-optimized settings
-│       └── embedded.yaml          # Embedded device settings
-├── output/                        # Centralized outputs (auto-created)
+urc-espresso-2026/
+├── configs/                       # All configuration files (flattened)
+│   ├── default.yaml               # Default framework configuration
+│   ├── embedded.yaml              # Embedded device settings
+│   ├── robotics.yaml              # Robotics-optimized settings
+│   ├── yolov8s_confidence.yaml    # YOLOv8s training config
+│   └── ...                        # Other training configurations
+├── consolidated_dataset/          # Dataset for training/benchmarking
+│   ├── data.yaml                  # Dataset configuration
+│   ├── train/                     # Training data
+│   ├── val/                       # Validation data
+│   └── test/                      # Test data
+├── docs/                          # Documentation
+├── models/                        # Pretrained model weights
+├── scripts/                       # All executable scripts (flattened)
+│   ├── run_rover_optimization.py  # Main optimization pipeline
+│   ├── benchmark_models.py        # Model benchmarking
+│   ├── quantize_models.py         # Model quantization
+│   ├── analyze_memory.py          # Memory analysis
+│   └── ...                        # Other utility scripts
+├── output/                        # Generated outputs (auto-created)
 │   ├── models/                    # Trained models
 │   ├── results/                   # Test results and reports
 │   ├── logs/                      # Training logs
-│   └── visualizations/            # Plots and images
-├── src/                           # Core source code
-│   ├── core/                      # Core detection framework
-│   │   ├── detector.py            # Generic YOLO detector class
-│   │   ├── trainer.py             # Training framework
-│   │   ├── evaluator.py           # Model evaluation tools
-│   │   └── config.py              # Configuration management
-│   ├── models/                    # Model architectures
-│   │   └── attention_modules.py   # Attention mechanisms (CBAM, SE)
-│   └── utils/                     # Utilities
-│       ├── data_utils.py          # Data processing utilities
-│       ├── visualization.py       # Plotting and visualization
-│       └── metrics.py             # Performance metrics
-├── scripts/                       # Executable scripts
-│   ├── train.py                   # Training script
-│   ├── evaluate.py                # Evaluation script
-│   ├── webcam_demo.py             # Real-time demo
-│   ├── setup_webcam_test.py       # Webcam setup utility
-│   ├── test_temporal_filter.py    # Temporal filter testing
-├── ros2_ws/                       # ROS2 workspace
-│   └── src/object_detection/      # ROS2 package
-├── data/                          # Dataset (configurable)
-├── docs/                          # Documentation
-└── requirements.txt               # Python dependencies
+│   └── quantized/                 # Quantized models
+├── config.py                      # Configuration management
+├── data_utils.py                  # Data processing utilities
+├── detector.py                    # Generic YOLO detector class
+├── efficientnet.py                # EfficientNet model architecture
+├── evaluator.py                   # Model evaluation tools
+├── metrics.py                     # Performance metrics
+├── mobilevit.py                   # MobileViT model architecture
+├── trainer.py                     # Training framework
+├── visualization.py               # Plotting and visualization
+├── requirements.txt               # Python dependencies
+└── README.md                      # Project documentation
 ```
 
-## Key Changes from Previous Version
+## Key Features
 
-### 1. **Generalized Framework**
-- Removed hardcoded references to "hammer", "bottle", "ArUco"
-- Support for any object classes via configuration
-- Flexible dataset support (any YOLO-compatible format)
+### 1. **Flattened Directory Structure**
+- All core modules moved to root level for easier navigation
+- Scripts consolidated in single `scripts/` directory
+- Configuration files flattened into `configs/`
+- Removed unnecessary nesting (src/core/ → core/, etc.)
 
-### 2. **Organized Structure**
-- **configs/**: All configuration files centralized
-- **output/**: All outputs go to organized subdirectories
-- **src/**: Refactored into core/, models/, utils/
-- **scripts/**: All executable scripts in one place
+### 2. **ML Training, Benchmarking, and Conversion Focus**
+- Removed all deployment/inference code
+- Focused on model training workflows
+- Comprehensive benchmarking capabilities
+- Model quantization for deployment preparation
 
 ### 3. **Modular Architecture**
-- **core/**: Core framework classes (Detector, Trainer, Evaluator)
-- **models/**: Model architectures and attention modules
-- **utils/**: Data processing, visualization, metrics
+- **Core modules**: trainer.py, detector.py, evaluator.py at root level
+- **Model architectures**: efficientnet.py, mobilevit.py
+- **Utilities**: config.py, data_utils.py, metrics.py, visualization.py
+- **Scripts**: Organized by function in single directory
 
 ### 4. **Configuration-Driven**
 - YAML-based configuration system
@@ -76,7 +80,7 @@ python scripts/train.py --data_yaml data/data.yaml --train_baseline --epochs 50
 python scripts/train.py --data_yaml data/data.yaml --train_attention --attention_type cbam --epochs 50
 
 # Use custom configuration
-python scripts/train.py --config configs/environments/embedded.yaml --data_yaml data/data.yaml
+python scripts/train.py --config configs/framework/environments/embedded.yaml --data_yaml data/data.yaml
 ```
 
 ### Model Evaluation
@@ -95,7 +99,7 @@ python scripts/evaluate.py \
 # Webcam detection demo
 python scripts/webcam_demo.py \
     --model output/models/cbam_enhanced/weights/best.pt \
-    --config configs/environments/robotics.yaml
+    --config configs/framework/environments/robotics.yaml
 ```
 
 ### ROS2 Integration
@@ -115,7 +119,7 @@ ros2 run object_detection camera_detector \
 
 The framework uses YAML-based configuration for flexibility:
 
-### Default Configuration (`configs/default.yaml`)
+### Default Configuration (`configs/framework/default.yaml`)
 - Baseline settings for general use
 - Can be extended for specific environments
 
@@ -198,7 +202,7 @@ All outputs are now centralized in the `output/` directory:
 ### Common Issues
 
 1. **Import Errors**: Ensure `PYTHONPATH` includes `src/` directory
-2. **Configuration Not Found**: Check file paths in `configs/` directory
+2. **Configuration Not Found**: Check file paths in `configs/framework/` directory
 3. **ROS2 Build Failures**: Ensure package name updated in all files
 4. **Output Paths**: Use absolute paths or ensure `output/` directory exists
 

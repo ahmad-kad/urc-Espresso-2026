@@ -1,0 +1,571 @@
+2025-12-22 13:29:25,326 - INFO - ================================================================================
+2025-12-22 13:29:25,326 - INFO - STARTING COMPREHENSIVE MODEL TRAINING
+2025-12-22 13:29:25,326 - INFO - ================================================================================
+2025-12-22 13:29:25,326 - INFO - Models: ['yolov8n_160']
+2025-12-22 13:29:25,326 - INFO - Epochs: 1
+2025-12-22 13:29:25,326 - INFO - ================================================================================
+2025-12-22 13:29:25,326 - INFO - ================================================================================
+2025-12-22 13:29:25,326 - INFO - STARTING COMPREHENSIVE MODEL TRAINING
+2025-12-22 13:29:25,335 - INFO - ================================================================================
+2025-12-22 13:29:25,335 - INFO - Training 1 models
+2025-12-22 13:29:25,335 - INFO - ================================================================================
+2025-12-22 13:29:25,335 - INFO - [1/1] Training yolov8n_160
+2025-12-22 13:29:25,335 - INFO - Starting training for yolov8n_160
+2025-12-22 13:29:25,335 - INFO - Loading model with architecture: yolov8n
+2025-12-22 13:29:25,361 - INFO - Created default YOLOv8s model
+2025-12-22 13:29:25,361 - INFO - Model loaded with 11,166,560 parameters
+2025-12-22 13:29:25,361 - INFO - Starting enhanced training with advanced techniques...
+2025-12-22 13:29:25,372 - INFO - Enhanced training configuration: {'data': 'consolidated_dataset/data.yaml', 'epochs': 1, 'batch': 16, 'imgsz': 160, 'lr0': 0.001, 'lrf': 0.1, 'momentum': 0.937, 'weight_decay': 0.0005, 'warmup_epochs': 3.0, 'warmup_momentum': 0.8, 'warmup_bias_lr': 0.1, 'box': 7.5, 'cls': 0.5, 'dfl': 1.5, 'patience': 10, 'save': True, 'save_period': 5, 'cache': False, 'device': '0', 'workers': 8, 'project': 'output/models', 'name': 'yolov8n_160', 'exist_ok': True, 'pretrained': True, 'optimizer': 'AdamW', 'cos_lr': True, 'close_mosaic': 10, 'resume': False, 'amp': True, 'fraction': 1.0, 'seed': 42, 'deterministic': True, 'single_cls': False, 'rect': False, 'multi_scale': True, 'overlap_mask': True, 'mask_ratio': 4, 'dropout': 0.0, 'val': True, 'plots': True}
+2025-12-22 13:30:29,332 - INFO - Enhanced training completed successfully!
+2025-12-22 13:30:29,332 - INFO - Model saved to: K:\AI\urc-Espresso-2026\output\models\yolov8n_160
+2025-12-22 13:30:29,332 - INFO - Successfully completed training for yolov8n_160
+2025-12-22 13:30:29,332 - INFO - Model saved to: K:\AI\urc-Espresso-2026\output\models\yolov8n_160\weights\best.pt
+2025-12-22 13:30:29,499 - INFO - ================================================================================
+2025-12-22 13:30:29,499 - INFO - TRAINING COMPLETED
+2025-12-22 13:30:29,499 - INFO - ================================================================================
+2025-12-22 13:30:29,499 - INFO - Total time: 64.17 seconds
+2025-12-22 13:30:29,499 - INFO - Results: 1/1 models trained successfully
+2025-12-22 13:30:29,499 - INFO -   yolov8n_160: SUCCESS
+2025-12-22 13:30:29,509 - INFO - Summary written to output/full_training_complete_summary.txt
+2025-12-22 13:30:37,382 - INFO - ================================================================================
+2025-12-22 13:30:37,382 - INFO - STARTING COMPREHENSIVE MODEL TRAINING
+2025-12-22 13:30:37,382 - INFO - ================================================================================
+2025-12-22 13:30:37,382 - INFO - Models: all
+2025-12-22 13:30:37,382 - INFO - Epochs: 100
+2025-12-22 13:30:37,383 - INFO - ================================================================================
+2025-12-22 13:30:37,383 - INFO - ================================================================================
+2025-12-22 13:30:37,383 - INFO - STARTING COMPREHENSIVE MODEL TRAINING
+2025-12-22 13:30:37,383 - INFO - ================================================================================
+2025-12-22 13:30:37,383 - INFO - Training 12 models
+2025-12-22 13:30:37,383 - INFO - ================================================================================
+2025-12-22 13:30:37,383 - INFO - [1/12] Training yolov8n_160
+2025-12-22 13:30:37,383 - INFO - Starting training for yolov8n_160
+2025-12-22 13:30:37,383 - INFO - Loading model with architecture: yolov8n
+2025-12-22 13:30:37,408 - INFO - Created default YOLOv8s model
+2025-12-22 13:30:37,409 - INFO - Model loaded with 11,166,560 parameters
+2025-12-22 13:30:37,409 - INFO - Starting enhanced training with advanced techniques...
+2025-12-22 13:30:37,420 - INFO - Enhanced training configuration: {'data': 'consolidated_dataset/data.yaml', 'epochs': 100, 'batch': 16, 'imgsz': 160, 'lr0': 0.001, 'lrf': 0.1, 'momentum': 0.937, 'weight_decay': 0.0005, 'warmup_epochs': 3.0, 'warmup_momentum': 0.8, 'warmup_bias_lr': 0.1, 'box': 7.5, 'cls': 0.5, 'dfl': 1.5, 'patience': 10, 'save': True, 'save_period': 5, 'cache': False, 'device': '0', 'workers': 8, 'project': 'output/models', 'name': 'yolov8n_160', 'exist_ok': True, 'pretrained': True, 'optimizer': 'AdamW', 'cos_lr': True, 'close_mosaic': 10, 'resume': False, 'amp': True, 'fraction': 1.0, 'seed': 42, 'deterministic': True, 'single_cls': False, 'rect': False, 'multi_scale': True, 'overlap_mask': True, 'mask_ratio': 4, 'dropout': 0.0, 'val': True, 'plots': True}
+2025-12-22 13:32:01,386 - INFO - ================================================================================
+2025-12-22 13:32:01,386 - INFO - STARTING COMPREHENSIVE MODEL TRAINING
+2025-12-22 13:32:01,386 - INFO - ================================================================================
+2025-12-22 13:32:01,386 - INFO - Models: all
+2025-12-22 13:32:01,386 - INFO - Epochs: 100
+2025-12-22 13:32:01,386 - INFO - ================================================================================
+2025-12-22 13:32:01,386 - INFO - ================================================================================
+2025-12-22 13:32:01,386 - INFO - STARTING COMPREHENSIVE MODEL TRAINING
+2025-12-22 13:32:01,386 - INFO - ================================================================================
+2025-12-22 13:32:01,387 - INFO - Training 12 models
+2025-12-22 13:32:01,387 - INFO - ================================================================================
+2025-12-22 13:32:01,387 - INFO - [1/12] Training yolov8n_160
+2025-12-22 13:32:01,387 - INFO - Starting training for yolov8n_160
+2025-12-22 13:32:01,387 - INFO - Loading model with architecture: yolov8n
+2025-12-22 13:32:01,413 - INFO - Created default YOLOv8s model
+2025-12-22 13:32:01,413 - INFO - Model loaded with 11,166,560 parameters
+2025-12-22 13:32:01,413 - INFO - Starting enhanced training with advanced techniques...
+2025-12-22 13:32:01,424 - INFO - Enhanced training configuration: {'data': 'consolidated_dataset/data.yaml', 'epochs': 100, 'batch': 16, 'imgsz': 160, 'lr0': 0.001, 'lrf': 0.1, 'momentum': 0.937, 'weight_decay': 0.0005, 'warmup_epochs': 3.0, 'warmup_momentum': 0.8, 'warmup_bias_lr': 0.1, 'box': 7.5, 'cls': 0.5, 'dfl': 1.5, 'patience': 10, 'save': True, 'save_period': 5, 'cache': False, 'device': '0', 'workers': 8, 'project': 'output/models', 'name': 'yolov8n_160', 'exist_ok': True, 'pretrained': True, 'optimizer': 'AdamW', 'cos_lr': True, 'close_mosaic': 10, 'resume': False, 'amp': True, 'fraction': 1.0, 'seed': 42, 'deterministic': True, 'single_cls': False, 'rect': False, 'multi_scale': True, 'overlap_mask': True, 'mask_ratio': 4, 'dropout': 0.0, 'val': True, 'plots': True}
+2025-12-22 13:42:07,780 - INFO - Enhanced training completed successfully!
+2025-12-22 13:42:07,780 - INFO - Model saved to: K:\AI\urc-Espresso-2026\output\models\yolov8n_160
+2025-12-22 13:42:07,780 - INFO - Successfully completed training for yolov8n_160
+2025-12-22 13:42:07,780 - INFO - Model saved to: K:\AI\urc-Espresso-2026\output\models\yolov8n_160\weights\best.pt
+2025-12-22 13:42:07,964 - INFO - Pausing for 60 seconds before next model...
+2025-12-22 13:43:07,963 - INFO - [2/12] Training yolov8n_192
+2025-12-22 13:43:07,964 - INFO - Starting training for yolov8n_192
+2025-12-22 13:43:07,964 - INFO - Loading model with architecture: yolov8n
+2025-12-22 13:43:07,989 - INFO - Created default YOLOv8s model
+2025-12-22 13:43:07,990 - INFO - Model loaded with 11,166,560 parameters
+2025-12-22 13:43:07,990 - INFO - Starting enhanced training with advanced techniques...
+2025-12-22 13:43:07,990 - INFO - Enhanced training configuration: {'data': 'consolidated_dataset/data.yaml', 'epochs': 100, 'batch': 16, 'imgsz': 192, 'lr0': 0.001, 'lrf': 0.1, 'momentum': 0.937, 'weight_decay': 0.0005, 'warmup_epochs': 3.0, 'warmup_momentum': 0.8, 'warmup_bias_lr': 0.1, 'box': 7.5, 'cls': 0.5, 'dfl': 1.5, 'patience': 10, 'save': True, 'save_period': 5, 'cache': False, 'device': '0', 'workers': 8, 'project': 'output/models', 'name': 'yolov8n_192', 'exist_ok': True, 'pretrained': True, 'optimizer': 'AdamW', 'cos_lr': True, 'close_mosaic': 10, 'resume': False, 'amp': True, 'fraction': 1.0, 'seed': 42, 'deterministic': True, 'single_cls': False, 'rect': False, 'multi_scale': True, 'overlap_mask': True, 'mask_ratio': 4, 'dropout': 0.0, 'val': True, 'plots': True}
+2025-12-22 13:53:36,131 - INFO - Enhanced training completed successfully!
+2025-12-22 13:53:36,131 - INFO - Model saved to: K:\AI\urc-Espresso-2026\output\models\yolov8n_192
+2025-12-22 13:53:36,131 - INFO - Successfully completed training for yolov8n_192
+2025-12-22 13:53:36,131 - INFO - Model saved to: K:\AI\urc-Espresso-2026\output\models\yolov8n_192\weights\best.pt
+2025-12-22 13:53:36,304 - INFO - Pausing for 60 seconds before next model...
+2025-12-22 13:54:36,303 - INFO - [3/12] Training yolov8n_224
+2025-12-22 13:54:36,304 - INFO - Starting training for yolov8n_224
+2025-12-22 13:54:36,304 - INFO - Loading model with architecture: yolov8n
+2025-12-22 13:54:36,333 - INFO - Created default YOLOv8s model
+2025-12-22 13:54:36,334 - INFO - Model loaded with 11,166,560 parameters
+2025-12-22 13:54:36,334 - INFO - Starting enhanced training with advanced techniques...
+2025-12-22 13:54:36,334 - INFO - Enhanced training configuration: {'data': 'consolidated_dataset/data.yaml', 'epochs': 100, 'batch': 16, 'imgsz': 224, 'lr0': 0.001, 'lrf': 0.1, 'momentum': 0.937, 'weight_decay': 0.0005, 'warmup_epochs': 3.0, 'warmup_momentum': 0.8, 'warmup_bias_lr': 0.1, 'box': 7.5, 'cls': 0.5, 'dfl': 1.5, 'patience': 10, 'save': True, 'save_period': 5, 'cache': False, 'device': '0', 'workers': 8, 'project': 'output/models', 'name': 'yolov8n_224', 'exist_ok': True, 'pretrained': True, 'optimizer': 'AdamW', 'cos_lr': True, 'close_mosaic': 10, 'resume': False, 'amp': True, 'fraction': 1.0, 'seed': 42, 'deterministic': True, 'single_cls': False, 'rect': False, 'multi_scale': True, 'overlap_mask': True, 'mask_ratio': 4, 'dropout': 0.0, 'val': True, 'plots': True}
+2025-12-22 14:03:53,107 - INFO - Enhanced training completed successfully!
+2025-12-22 14:03:53,107 - INFO - Model saved to: K:\AI\urc-Espresso-2026\output\models\yolov8n_224
+2025-12-22 14:03:53,107 - INFO - Successfully completed training for yolov8n_224
+2025-12-22 14:03:53,107 - INFO - Model saved to: K:\AI\urc-Espresso-2026\output\models\yolov8n_224\weights\best.pt
+2025-12-22 14:03:53,276 - INFO - Pausing for 60 seconds before next model...
+2025-12-22 14:04:53,276 - INFO - [4/12] Training yolov8s_confidence
+2025-12-22 14:04:53,276 - INFO - Starting training for yolov8s_confidence
+2025-12-22 14:04:53,276 - INFO - Loading model with architecture: yolov8s_baseline
+2025-12-22 14:04:53,301 - INFO - Created YOLOv8s baseline model with COCO pre-trained weights
+2025-12-22 14:04:53,302 - INFO - Model loaded with 11,166,560 parameters
+2025-12-22 14:04:53,302 - INFO - Starting enhanced training with advanced techniques...
+2025-12-22 14:04:53,302 - INFO - Enhanced training configuration: {'data': 'consolidated_dataset/data.yaml', 'epochs': 100, 'batch': 24, 'imgsz': 416, 'lr0': 0.0005, 'lrf': 0.1, 'momentum': 0.937, 'weight_decay': 0.0005, 'warmup_epochs': 3.0, 'warmup_momentum': 0.8, 'warmup_bias_lr': 0.1, 'box': 7.5, 'cls': 0.5, 'dfl': 1.5, 'patience': 10, 'save': True, 'save_period': 5, 'cache': False, 'device': '0', 'workers': 8, 'project': 'output/models', 'name': 'yolov8s_confidence', 'exist_ok': True, 'pretrained': True, 'optimizer': 'AdamW', 'cos_lr': True, 'close_mosaic': 10, 'resume': False, 'amp': True, 'fraction': 1.0, 'seed': 42, 'deterministic': True, 'single_cls': False, 'rect': False, 'multi_scale': True, 'overlap_mask': True, 'mask_ratio': 4, 'dropout': 0.0, 'val': True, 'plots': True}
+2025-12-22 14:14:18,966 - INFO - Enhanced training completed successfully!
+2025-12-22 14:14:18,966 - INFO - Model saved to: K:\AI\urc-Espresso-2026\output\models\yolov8s_confidence
+2025-12-22 14:14:18,966 - INFO - Successfully completed training for yolov8s_confidence
+2025-12-22 14:14:18,966 - INFO - Model saved to: K:\AI\urc-Espresso-2026\output\models\yolov8s_confidence\weights\best.pt
+2025-12-22 14:14:19,137 - INFO - Pausing for 60 seconds before next model...
+2025-12-22 14:15:19,137 - INFO - [5/12] Training yolov8s_cbam_confidence
+2025-12-22 14:15:19,137 - INFO - Starting training for yolov8s_cbam_confidence
+2025-12-22 14:15:19,137 - INFO - Loading model with architecture: yolov8s_cbam
+2025-12-22 14:15:19,174 - WARNING - CBAM model creation failed: 'DetectionModel(
+  (model): Sequential(
+    (0): Conv(
+      (conv): Conv2d(3, 32, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn): BatchNorm2d(32, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+      (act): SiLU(inplace=True)
+    )
+    (1): Conv(
+      (conv): Conv2d(32, 64, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn): BatchNorm2d(64, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+      (act): SiLU(inplace=True)
+    )
+    (2): C2f(
+      (cv1): Conv(
+        (conv): Conv2d(64, 64, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn): BatchNorm2d(64, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+        (act): SiLU(inplace=True)
+      )
+      (cv2): Conv(
+        (conv): Conv2d(96, 64, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn): BatchNorm2d(64, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+        (act): SiLU(inplace=True)
+      )
+      (m): ModuleList(
+        (0): Bottleneck(
+          (cv1): Conv(
+            (conv): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+            (bn): BatchNorm2d(32, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+            (act): SiLU(inplace=True)
+          )
+          (cv2): Conv(
+            (conv): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+            (bn): BatchNorm2d(32, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+            (act): SiLU(inplace=True)
+          )
+        )
+      )
+    )
+    (3): Conv(
+      (conv): Conv2d(64, 128, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn): BatchNorm2d(128, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+      (act): SiLU(inplace=True)
+    )
+    (4): C2f(
+      (cv1): Conv(
+        (conv): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn): BatchNorm2d(128, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+        (act): SiLU(inplace=True)
+      )
+      (cv2): Conv(
+        (conv): Conv2d(256, 128, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn): BatchNorm2d(128, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+        (act): SiLU(inplace=True)
+      )
+      (m): ModuleList(
+        (0-1): 2 x Bottleneck(
+          (cv1): Conv(
+            (conv): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+            (bn): BatchNorm2d(64, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+            (act): SiLU(inplace=True)
+          )
+          (cv2): Conv(
+            (conv): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+            (bn): BatchNorm2d(64, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+            (act): SiLU(inplace=True)
+          )
+        )
+      )
+    )
+    (5): Conv(
+      (conv): Conv2d(128, 256, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn): BatchNorm2d(256, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+      (act): SiLU(inplace=True)
+    )
+    (6): C2f(
+      (cv1): Conv(
+        (conv): Conv2d(256, 256, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn): BatchNorm2d(256, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+        (act): SiLU(inplace=True)
+      )
+      (cv2): Conv(
+        (conv): Conv2d(512, 256, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn): BatchNorm2d(256, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+        (act): SiLU(inplace=True)
+      )
+      (m): ModuleList(
+        (0-1): 2 x Bottleneck(
+          (cv1): Conv(
+            (conv): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+            (bn): BatchNorm2d(128, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+            (act): SiLU(inplace=True)
+          )
+          (cv2): Conv(
+            (conv): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+            (bn): BatchNorm2d(128, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+            (act): SiLU(inplace=True)
+          )
+        )
+      )
+    )
+    (7): Conv(
+      (conv): Conv2d(256, 512, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn): BatchNorm2d(512, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+      (act): SiLU(inplace=True)
+    )
+    (8): C2f(
+      (cv1): Conv(
+        (conv): Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn): BatchNorm2d(512, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+        (act): SiLU(inplace=True)
+      )
+      (cv2): Conv(
+        (conv): Conv2d(768, 512, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn): BatchNorm2d(512, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+        (act): SiLU(inplace=True)
+      )
+      (m): ModuleList(
+        (0): Bottleneck(
+          (cv1): Conv(
+            (conv): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+            (bn): BatchNorm2d(256, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+            (act): SiLU(inplace=True)
+          )
+          (cv2): Conv(
+            (conv): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+            (bn): BatchNorm2d(256, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+            (act): SiLU(inplace=True)
+          )
+        )
+      )
+    )
+    (9): SPPF(
+      (cv1): Conv(
+        (conv): Conv2d(512, 256, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn): BatchNorm2d(256, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+        (act): SiLU(inplace=True)
+      )
+      (cv2): Conv(
+        (conv): Conv2d(1024, 512, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn): BatchNorm2d(512, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+        (act): SiLU(inplace=True)
+      )
+      (m): MaxPool2d(kernel_size=5, stride=1, padding=2, dilation=1, ceil_mode=False)
+    )
+    (10): Upsample(scale_factor=2.0, mode='nearest')
+    (11): Concat()
+    (12): C2f(
+      (cv1): Conv(
+        (conv): Conv2d(768, 256, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn): BatchNorm2d(256, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+        (act): SiLU(inplace=True)
+      )
+      (cv2): Conv(
+        (conv): Conv2d(384, 256, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn): BatchNorm2d(256, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+        (act): SiLU(inplace=True)
+      )
+      (m): ModuleList(
+        (0): Bottleneck(
+          (cv1): Conv(
+            (conv): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+            (bn): BatchNorm2d(128, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+            (act): SiLU(inplace=True)
+          )
+          (cv2): Conv(
+            (conv): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+            (bn): BatchNorm2d(128, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+            (act): SiLU(inplace=True)
+          )
+        )
+      )
+    )
+    (13): Upsample(scale_factor=2.0, mode='nearest')
+    (14): Concat()
+    (15): C2f(
+      (cv1): Conv(
+        (conv): Conv2d(384, 128, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn): BatchNorm2d(128, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+        (act): SiLU(inplace=True)
+      )
+      (cv2): Conv(
+        (conv): Conv2d(192, 128, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn): BatchNorm2d(128, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+        (act): SiLU(inplace=True)
+      )
+      (m): ModuleList(
+        (0): Bottleneck(
+          (cv1): Conv(
+            (conv): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+            (bn): BatchNorm2d(64, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+            (act): SiLU(inplace=True)
+          )
+          (cv2): Conv(
+            (conv): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+            (bn): BatchNorm2d(64, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+            (act): SiLU(inplace=True)
+          )
+        )
+      )
+    )
+    (16): Conv(
+      (conv): Conv2d(128, 128, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn): BatchNorm2d(128, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+      (act): SiLU(inplace=True)
+    )
+    (17): Concat()
+    (18): C2f(
+      (cv1): Conv(
+        (conv): Conv2d(384, 256, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn): BatchNorm2d(256, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+        (act): SiLU(inplace=True)
+      )
+      (cv2): Conv(
+        (conv): Conv2d(384, 256, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn): BatchNorm2d(256, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+        (act): SiLU(inplace=True)
+      )
+      (m): ModuleList(
+        (0): Bottleneck(
+          (cv1): Conv(
+            (conv): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+            (bn): BatchNorm2d(128, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+            (act): SiLU(inplace=True)
+          )
+          (cv2): Conv(
+            (conv): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+            (bn): BatchNorm2d(128, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+            (act): SiLU(inplace=True)
+          )
+        )
+      )
+    )
+    (19): Conv(
+      (conv): Conv2d(256, 256, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn): BatchNorm2d(256, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+      (act): SiLU(inplace=True)
+    )
+    (20): Concat()
+    (21): C2f(
+      (cv1): Conv(
+        (conv): Conv2d(768, 512, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn): BatchNorm2d(512, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+        (act): SiLU(inplace=True)
+      )
+      (cv2): Conv(
+        (conv): Conv2d(768, 512, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (bn): BatchNorm2d(512, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+        (act): SiLU(inplace=True)
+      )
+      (m): ModuleList(
+        (0): Bottleneck(
+          (cv1): Conv(
+            (conv): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+            (bn): BatchNorm2d(256, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+            (act): SiLU(inplace=True)
+          )
+          (cv2): Conv(
+            (conv): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+            (bn): BatchNorm2d(256, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+            (act): SiLU(inplace=True)
+          )
+        )
+      )
+    )
+    (22): Detect(
+      (cv2): ModuleList(
+        (0): Sequential(
+          (0): Conv(
+            (conv): Conv2d(128, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+            (bn): BatchNorm2d(64, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+            (act): SiLU(inplace=True)
+          )
+          (1): Conv(
+            (conv): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+            (bn): BatchNorm2d(64, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+            (act): SiLU(inplace=True)
+          )
+          (2): Conv2d(64, 64, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (1): Sequential(
+          (0): Conv(
+            (conv): Conv2d(256, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+            (bn): BatchNorm2d(64, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+            (act): SiLU(inplace=True)
+          )
+          (1): Conv(
+            (conv): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+            (bn): BatchNorm2d(64, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+            (act): SiLU(inplace=True)
+          )
+          (2): Conv2d(64, 64, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (2): Sequential(
+          (0): Conv(
+            (conv): Conv2d(512, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+            (bn): BatchNorm2d(64, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+            (act): SiLU(inplace=True)
+          )
+          (1): Conv(
+            (conv): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+            (bn): BatchNorm2d(64, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+            (act): SiLU(inplace=True)
+          )
+          (2): Conv2d(64, 64, kernel_size=(1, 1), stride=(1, 1))
+        )
+      )
+      (cv3): ModuleList(
+        (0): Sequential(
+          (0): Conv(
+            (conv): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+            (bn): BatchNorm2d(128, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+            (act): SiLU(inplace=True)
+          )
+          (1): Conv(
+            (conv): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+            (bn): BatchNorm2d(128, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+            (act): SiLU(inplace=True)
+          )
+          (2): Conv2d(128, 80, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (1): Sequential(
+          (0): Conv(
+            (conv): Conv2d(256, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+            (bn): BatchNorm2d(128, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+            (act): SiLU(inplace=True)
+          )
+          (1): Conv(
+            (conv): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+            (bn): BatchNorm2d(128, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+            (act): SiLU(inplace=True)
+          )
+          (2): Conv2d(128, 80, kernel_size=(1, 1), stride=(1, 1))
+        )
+        (2): Sequential(
+          (0): Conv(
+            (conv): Conv2d(512, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+            (bn): BatchNorm2d(128, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+            (act): SiLU(inplace=True)
+          )
+          (1): Conv(
+            (conv): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+            (bn): BatchNorm2d(128, eps=0.001, momentum=0.03, affine=True, track_running_stats=True)
+            (act): SiLU(inplace=True)
+          )
+          (2): Conv2d(128, 80, kernel_size=(1, 1), stride=(1, 1))
+        )
+      )
+      (dfl): DFL(
+        (conv): Conv2d(16, 1, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      )
+    )
+  )
+)' does not exist. Falling back to baseline.
+2025-12-22 14:15:19,196 - INFO - Model loaded with 11,166,560 parameters
+2025-12-22 14:15:19,197 - INFO - Starting enhanced training with advanced techniques...
+2025-12-22 14:15:19,197 - INFO - Enhanced training configuration: {'data': 'consolidated_dataset/data.yaml', 'epochs': 100, 'batch': 20, 'imgsz': 416, 'lr0': 0.0005, 'lrf': 0.1, 'momentum': 0.937, 'weight_decay': 0.0005, 'warmup_epochs': 3.0, 'warmup_momentum': 0.8, 'warmup_bias_lr': 0.1, 'box': 7.5, 'cls': 0.5, 'dfl': 1.5, 'patience': 10, 'save': True, 'save_period': 5, 'cache': False, 'device': '0', 'workers': 8, 'project': 'output/models', 'name': 'yolov8s_cbam_confidence_cbam', 'exist_ok': True, 'pretrained': True, 'optimizer': 'AdamW', 'cos_lr': True, 'close_mosaic': 10, 'resume': False, 'amp': True, 'fraction': 1.0, 'seed': 42, 'deterministic': True, 'single_cls': False, 'rect': False, 'multi_scale': True, 'overlap_mask': True, 'mask_ratio': 4, 'dropout': 0.0, 'val': True, 'plots': True}
+2025-12-22 14:30:52,125 - INFO - Enhanced training completed successfully!
+2025-12-22 14:30:52,126 - INFO - Model saved to: K:\AI\urc-Espresso-2026\output\models\yolov8s_cbam_confidence_cbam
+2025-12-22 14:30:52,126 - INFO - Successfully completed training for yolov8s_cbam_confidence
+2025-12-22 14:30:52,126 - INFO - Model saved to: K:\AI\urc-Espresso-2026\output\models\yolov8s_cbam_confidence_cbam\weights\best.pt
+2025-12-22 14:30:52,302 - INFO - Pausing for 60 seconds before next model...
+2025-12-22 14:31:52,301 - INFO - [6/12] Training yolov8m_confidence
+2025-12-22 14:31:52,301 - INFO - Starting training for yolov8m_confidence
+2025-12-22 14:31:52,301 - INFO - Loading model with architecture: yolov8m
+2025-12-22 14:31:52,327 - INFO - Created default YOLOv8s model
+2025-12-22 14:31:52,327 - INFO - Model loaded with 11,166,560 parameters
+2025-12-22 14:31:52,327 - INFO - Starting enhanced training with advanced techniques...
+2025-12-22 14:31:52,327 - INFO - Enhanced training configuration: {'data': 'consolidated_dataset/data.yaml', 'epochs': 100, 'batch': 16, 'imgsz': 416, 'lr0': 0.0005, 'lrf': 0.1, 'momentum': 0.937, 'weight_decay': 0.0005, 'warmup_epochs': 3.0, 'warmup_momentum': 0.8, 'warmup_bias_lr': 0.1, 'box': 7.5, 'cls': 0.5, 'dfl': 1.5, 'patience': 10, 'save': True, 'save_period': 5, 'cache': False, 'device': '0', 'workers': 8, 'project': 'output/models', 'name': 'yolov8m_confidence', 'exist_ok': True, 'pretrained': True, 'optimizer': 'AdamW', 'cos_lr': True, 'close_mosaic': 10, 'resume': False, 'amp': True, 'fraction': 1.0, 'seed': 42, 'deterministic': True, 'single_cls': False, 'rect': False, 'multi_scale': True, 'overlap_mask': True, 'mask_ratio': 4, 'dropout': 0.0, 'val': True, 'plots': True}
+2025-12-22 14:47:31,197 - INFO - Enhanced training completed successfully!
+2025-12-22 14:47:31,197 - INFO - Model saved to: K:\AI\urc-Espresso-2026\output\models\yolov8m_confidence
+2025-12-22 14:47:31,197 - INFO - Successfully completed training for yolov8m_confidence
+2025-12-22 14:47:31,197 - INFO - Model saved to: K:\AI\urc-Espresso-2026\output\models\yolov8m_confidence\weights\best.pt
+2025-12-22 14:47:31,366 - INFO - Pausing for 60 seconds before next model...
+2025-12-22 14:48:31,366 - INFO - [7/12] Training yolov8l_confidence
+2025-12-22 14:48:31,366 - INFO - Starting training for yolov8l_confidence
+2025-12-22 14:48:31,366 - INFO - Loading model with architecture: yolov8l
+2025-12-22 14:48:31,391 - INFO - Created default YOLOv8s model
+2025-12-22 14:48:31,392 - INFO - Model loaded with 11,166,560 parameters
+2025-12-22 14:48:31,392 - INFO - Starting enhanced training with advanced techniques...
+2025-12-22 14:48:31,392 - INFO - Enhanced training configuration: {'data': 'consolidated_dataset/data.yaml', 'epochs': 100, 'batch': 12, 'imgsz': 416, 'lr0': 0.0005, 'lrf': 0.1, 'momentum': 0.937, 'weight_decay': 0.0005, 'warmup_epochs': 3.0, 'warmup_momentum': 0.8, 'warmup_bias_lr': 0.1, 'box': 7.5, 'cls': 0.5, 'dfl': 1.5, 'patience': 10, 'save': True, 'save_period': 5, 'cache': False, 'device': '0', 'workers': 8, 'project': 'output/models', 'name': 'yolov8l_confidence', 'exist_ok': True, 'pretrained': True, 'optimizer': 'AdamW', 'cos_lr': True, 'close_mosaic': 10, 'resume': False, 'amp': True, 'fraction': 1.0, 'seed': 42, 'deterministic': True, 'single_cls': False, 'rect': False, 'multi_scale': True, 'overlap_mask': True, 'mask_ratio': 4, 'dropout': 0.0, 'val': True, 'plots': True}
+2025-12-22 15:04:04,001 - INFO - Enhanced training completed successfully!
+2025-12-22 15:04:04,001 - INFO - Model saved to: K:\AI\urc-Espresso-2026\output\models\yolov8l_confidence
+2025-12-22 15:04:04,002 - INFO - Successfully completed training for yolov8l_confidence
+2025-12-22 15:04:04,002 - INFO - Model saved to: K:\AI\urc-Espresso-2026\output\models\yolov8l_confidence\weights\best.pt
+2025-12-22 15:04:04,174 - INFO - Pausing for 60 seconds before next model...
+2025-12-22 15:05:04,173 - INFO - [8/12] Training mobilenet_160
+2025-12-22 15:05:04,174 - INFO - Starting training for mobilenet_160
+2025-12-22 15:05:04,174 - INFO - Loading model with architecture: mobilenet_vit
+2025-12-22 15:05:04,174 - WARNING - MobileNetVIT creation failed: attempted relative import with no known parent package. Falling back to YOLOv8n.
+2025-12-22 15:05:04,194 - INFO - Model loaded with 3,157,200 parameters
+2025-12-22 15:05:04,194 - INFO - Starting enhanced training with advanced techniques...
+2025-12-22 15:05:04,194 - INFO - Enhanced training configuration: {'data': 'consolidated_dataset/data.yaml', 'epochs': 100, 'batch': 16, 'imgsz': 160, 'lr0': 0.001, 'lrf': 0.1, 'momentum': 0.937, 'weight_decay': 0.0005, 'warmup_epochs': 3.0, 'warmup_momentum': 0.8, 'warmup_bias_lr': 0.1, 'box': 7.5, 'cls': 0.5, 'dfl': 1.5, 'patience': 10, 'save': True, 'save_period': 5, 'cache': False, 'device': '0', 'workers': 8, 'project': 'output/models', 'name': 'mobilenet_160', 'exist_ok': True, 'pretrained': True, 'optimizer': 'AdamW', 'cos_lr': True, 'close_mosaic': 10, 'resume': False, 'amp': True, 'fraction': 1.0, 'seed': 42, 'deterministic': True, 'single_cls': False, 'rect': False, 'multi_scale': True, 'overlap_mask': True, 'mask_ratio': 4, 'dropout': 0.0, 'val': True, 'plots': True}
+2025-12-22 15:12:19,365 - INFO - Enhanced training completed successfully!
+2025-12-22 15:12:19,365 - INFO - Model saved to: K:\AI\urc-Espresso-2026\output\models\mobilenet_160
+2025-12-22 15:12:19,365 - INFO - Successfully completed training for mobilenet_160
+2025-12-22 15:12:19,365 - INFO - Model saved to: K:\AI\urc-Espresso-2026\output\models\mobilenet_160\weights\best.pt
+2025-12-22 15:12:19,534 - INFO - Pausing for 60 seconds before next model...
+2025-12-22 15:13:19,534 - INFO - [9/12] Training mobilenet_192
+2025-12-22 15:13:19,534 - INFO - Starting training for mobilenet_192
+2025-12-22 15:13:19,534 - INFO - Loading model with architecture: mobilenet_vit
+2025-12-22 15:13:19,534 - WARNING - MobileNetVIT creation failed: attempted relative import with no known parent package. Falling back to YOLOv8n.
+2025-12-22 15:13:19,549 - INFO - Model loaded with 3,157,200 parameters
+2025-12-22 15:13:19,549 - INFO - Starting enhanced training with advanced techniques...
+2025-12-22 15:13:19,550 - INFO - Enhanced training configuration: {'data': 'consolidated_dataset/data.yaml', 'epochs': 100, 'batch': 16, 'imgsz': 192, 'lr0': 0.001, 'lrf': 0.1, 'momentum': 0.937, 'weight_decay': 0.0005, 'warmup_epochs': 3.0, 'warmup_momentum': 0.8, 'warmup_bias_lr': 0.1, 'box': 7.5, 'cls': 0.5, 'dfl': 1.5, 'patience': 10, 'save': True, 'save_period': 5, 'cache': False, 'device': '0', 'workers': 8, 'project': 'output/models', 'name': 'mobilenet_192', 'exist_ok': True, 'pretrained': True, 'optimizer': 'AdamW', 'cos_lr': True, 'close_mosaic': 10, 'resume': False, 'amp': True, 'fraction': 1.0, 'seed': 42, 'deterministic': True, 'single_cls': False, 'rect': False, 'multi_scale': True, 'overlap_mask': True, 'mask_ratio': 4, 'dropout': 0.0, 'val': True, 'plots': True}
+2025-12-22 15:20:35,098 - INFO - Enhanced training completed successfully!
+2025-12-22 15:20:35,098 - INFO - Model saved to: K:\AI\urc-Espresso-2026\output\models\mobilenet_192
+2025-12-22 15:20:35,098 - INFO - Successfully completed training for mobilenet_192
+2025-12-22 15:20:35,098 - INFO - Model saved to: K:\AI\urc-Espresso-2026\output\models\mobilenet_192\weights\best.pt
+2025-12-22 15:20:35,272 - INFO - Pausing for 60 seconds before next model...
+2025-12-22 15:21:35,272 - INFO - [10/12] Training mobilenet_224
+2025-12-22 15:21:35,272 - INFO - Starting training for mobilenet_224
+2025-12-22 15:21:35,272 - INFO - Loading model with architecture: mobilenet_vit
+2025-12-22 15:21:35,272 - WARNING - MobileNetVIT creation failed: attempted relative import with no known parent package. Falling back to YOLOv8n.
+2025-12-22 15:21:35,288 - INFO - Model loaded with 3,157,200 parameters
+2025-12-22 15:21:35,288 - INFO - Starting enhanced training with advanced techniques...
+2025-12-22 15:21:35,288 - INFO - Enhanced training configuration: {'data': 'consolidated_dataset/data.yaml', 'epochs': 100, 'batch': 16, 'imgsz': 224, 'lr0': 0.001, 'lrf': 0.1, 'momentum': 0.937, 'weight_decay': 0.0005, 'warmup_epochs': 3.0, 'warmup_momentum': 0.8, 'warmup_bias_lr': 0.1, 'box': 7.5, 'cls': 0.5, 'dfl': 1.5, 'patience': 10, 'save': True, 'save_period': 5, 'cache': False, 'device': '0', 'workers': 8, 'project': 'output/models', 'name': 'mobilenet_224', 'exist_ok': True, 'pretrained': True, 'optimizer': 'AdamW', 'cos_lr': True, 'close_mosaic': 10, 'resume': False, 'amp': True, 'fraction': 1.0, 'seed': 42, 'deterministic': True, 'single_cls': False, 'rect': False, 'multi_scale': True, 'overlap_mask': True, 'mask_ratio': 4, 'dropout': 0.0, 'val': True, 'plots': True}
+2025-12-22 15:26:17,184 - INFO - Enhanced training completed successfully!
+2025-12-22 15:26:17,184 - INFO - Model saved to: K:\AI\urc-Espresso-2026\output\models\mobilenet_224
+2025-12-22 15:26:17,184 - INFO - Successfully completed training for mobilenet_224
+2025-12-22 15:26:17,184 - INFO - Model saved to: K:\AI\urc-Espresso-2026\output\models\mobilenet_224\weights\best.pt
+2025-12-22 15:26:17,365 - INFO - Pausing for 60 seconds before next model...
+2025-12-22 15:27:17,364 - INFO - [11/12] Training mobilenet_confidence
+2025-12-22 15:27:17,364 - INFO - Starting training for mobilenet_confidence
+2025-12-22 15:27:17,364 - INFO - Loading model with architecture: mobilenet_vit
+2025-12-22 15:27:17,364 - WARNING - MobileNetVIT creation failed: attempted relative import with no known parent package. Falling back to YOLOv8n.
+2025-12-22 15:27:17,379 - INFO - Model loaded with 3,157,200 parameters
+2025-12-22 15:27:17,380 - INFO - Starting enhanced training with advanced techniques...
+2025-12-22 15:27:17,380 - INFO - Enhanced training configuration: {'data': 'consolidated_dataset/data.yaml', 'epochs': 100, 'batch': 20, 'imgsz': 416, 'lr0': 0.001, 'lrf': 0.1, 'momentum': 0.937, 'weight_decay': 0.0005, 'warmup_epochs': 3.0, 'warmup_momentum': 0.8, 'warmup_bias_lr': 0.1, 'box': 7.5, 'cls': 0.5, 'dfl': 1.5, 'patience': 10, 'save': True, 'save_period': 5, 'cache': False, 'device': '0', 'workers': 8, 'project': 'output/models', 'name': 'mobilenet_confidence', 'exist_ok': True, 'pretrained': True, 'optimizer': 'AdamW', 'cos_lr': True, 'close_mosaic': 10, 'resume': False, 'amp': True, 'fraction': 1.0, 'seed': 42, 'deterministic': True, 'single_cls': False, 'rect': False, 'multi_scale': True, 'overlap_mask': True, 'mask_ratio': 4, 'dropout': 0.0, 'val': True, 'plots': True}
+2025-12-22 15:32:45,847 - INFO - Enhanced training completed successfully!
+2025-12-22 15:32:45,847 - INFO - Model saved to: K:\AI\urc-Espresso-2026\output\models\mobilenet_confidence
+2025-12-22 15:32:45,847 - INFO - Successfully completed training for mobilenet_confidence
+2025-12-22 15:32:45,847 - INFO - Model saved to: K:\AI\urc-Espresso-2026\output\models\mobilenet_confidence\weights\best.pt
+2025-12-22 15:32:46,024 - INFO - Pausing for 60 seconds before next model...
+2025-12-22 15:33:46,023 - INFO - [12/12] Training efficientnet_confidence
+2025-12-22 15:33:46,024 - INFO - Starting training for efficientnet_confidence
+2025-12-22 15:33:46,024 - INFO - Loading model with architecture: efficientnet
+2025-12-22 15:33:46,024 - WARNING - EfficientNet creation failed: attempted relative import with no known parent package. Falling back to YOLOv8s.
+2025-12-22 15:33:46,044 - INFO - Model loaded with 11,166,560 parameters
+2025-12-22 15:33:46,044 - INFO - Starting enhanced training with advanced techniques...
+2025-12-22 15:33:46,044 - INFO - Enhanced training configuration: {'data': 'consolidated_dataset/data.yaml', 'epochs': 100, 'batch': 16, 'imgsz': 416, 'lr0': 0.001, 'lrf': 0.1, 'momentum': 0.937, 'weight_decay': 0.0005, 'warmup_epochs': 3.0, 'warmup_momentum': 0.8, 'warmup_bias_lr': 0.1, 'box': 7.5, 'cls': 0.5, 'dfl': 1.5, 'patience': 10, 'save': True, 'save_period': 5, 'cache': False, 'device': '0', 'workers': 8, 'project': 'output/models', 'name': 'efficientnet_confidence', 'exist_ok': True, 'pretrained': True, 'optimizer': 'AdamW', 'cos_lr': True, 'close_mosaic': 10, 'resume': False, 'amp': True, 'fraction': 1.0, 'seed': 42, 'deterministic': True, 'single_cls': False, 'rect': False, 'multi_scale': True, 'overlap_mask': True, 'mask_ratio': 4, 'dropout': 0.0, 'val': True, 'plots': True}
+2025-12-22 15:49:33,849 - INFO - Enhanced training completed successfully!
+2025-12-22 15:49:33,849 - INFO - Model saved to: K:\AI\urc-Espresso-2026\output\models\efficientnet_confidence
+2025-12-22 15:49:33,849 - INFO - Successfully completed training for efficientnet_confidence
+2025-12-22 15:49:33,849 - INFO - Model saved to: K:\AI\urc-Espresso-2026\output\models\efficientnet_confidence\weights\best.pt
+2025-12-22 15:49:34,054 - INFO - ================================================================================
+2025-12-22 15:49:34,054 - INFO - TRAINING COMPLETED
+2025-12-22 15:49:34,054 - INFO - ================================================================================
+2025-12-22 15:49:34,054 - INFO - Total time: 8252.67 seconds
+2025-12-22 15:49:34,054 - INFO - Results: 12/12 models trained successfully
+2025-12-22 15:49:34,054 - INFO -   yolov8n_160: SUCCESS
+2025-12-22 15:49:34,054 - INFO -   yolov8n_192: SUCCESS
+2025-12-22 15:49:34,054 - INFO -   yolov8n_224: SUCCESS
+2025-12-22 15:49:34,054 - INFO -   yolov8s_confidence: SUCCESS
+2025-12-22 15:49:34,054 - INFO -   yolov8s_cbam_confidence: SUCCESS
+2025-12-22 15:49:34,054 - INFO -   yolov8m_confidence: SUCCESS
+2025-12-22 15:49:34,054 - INFO -   yolov8l_confidence: SUCCESS
+2025-12-22 15:49:34,054 - INFO -   mobilenet_160: SUCCESS
+2025-12-22 15:49:34,054 - INFO -   mobilenet_192: SUCCESS
+2025-12-22 15:49:34,054 - INFO -   mobilenet_224: SUCCESS
+2025-12-22 15:49:34,054 - INFO -   mobilenet_confidence: SUCCESS
+2025-12-22 15:49:34,054 - INFO -   efficientnet_confidence: SUCCESS
+2025-12-22 15:49:34,055 - INFO - Summary written to output/full_training_complete_summary.txt

@@ -1,9 +1,11 @@
 # Python
-__pycache__/
-balanced_data/
+consolidated_dataset/
+simple_aruco/
 data/
 assets/
 data/
+balanced_data/
+__pycache__/
 *.py[cod]
 *$py.class
 *.so
@@ -24,39 +26,91 @@ wheels/
 .installed.cfg
 *.egg
 
-# PyTorch
+# Virtual Environments
+.env
+.venv
+venv/
+env/
+mobilenet_venv/
+*/venv/
+*/env/
+
+# PyTorch & ML Models
 *.pth
 *.pt
 *.ckpt
+#*.onnx
+*.engine
+*.rpk
+*.tflite
+*.pb
 
-# Outputs
+# Generated Outputs & Results
 output/
+output_confidence/
 runs/
 test_results/
-models/
-*.onnx
-*.engine
+memory_analysis_results.csv
+rover_final_benchmark_results.csv
+rover_optimization.log
+*.csv
+*.png
+*.jpg
+*.jpeg
+*.gif
 
 # Logs
 *.log
 logs/
 wandb/
+tensorboard/
 
-# IDE
+# IDE & Editor Files
 .vscode/
 .idea/
 *.swp
 *.swo
+*~
 
-# OS
+# Cursor IDE
+.cursor/
+.cursorignore
+
+# OS Generated Files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
+Desktop.ini
 
-# Environment
-.env
-.venv
-venv/
-env/
+# Windows
+*.stackdump
+*.lnk
+*.sys
+*.dll
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# macOS
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
 
 # ROS2
 ros2_ws/install/
@@ -68,18 +122,16 @@ ros2_ws/build/
 *.ipynb_checkpoints/
 
 # ML Experiment Tracking
-tensorboard/
 mlruns/
 comet.ml/
 dvc/
+dvc.lock
+dvc.yaml
 
 # CUDA/GPU
 *.nvprof
 *.nvvp
 *.cupti
-__pycache__/*.pyc
-__pycache__/*.pyo
-__pycache__/*.pyd
 .cupy/
 .nv/
 
@@ -88,8 +140,9 @@ __pycache__/*.pyd
 docker-compose.override.yml
 Dockerfile.*
 docker/
+.docker/
 
-# Temporary files
+# Temporary & Cache Files
 *.tmp
 *.temp
 .cache/
@@ -97,14 +150,36 @@ docker/
 .mypy_cache/
 .dmypy.json
 dmypy.json
+*.bak
+*.backup
 
-# Coverage reports
+# Utility Scripts (remove after use)
+scripts/remove_emojis.py
+
+# Coverage & Testing
 .coverage
 coverage.xml
 *.cover
 .hypothesis/
+.coverage.*
+coverage-*.xml
+*.lcov
 
-# Datasets (uncomment if you want to ignore large datasets)
+# Documentation Build
+docs/_build/
+*.doctree
+
+# Node.js (if any)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Large Datasets (uncomment to ignore)
+# consolidated_dataset/
+# simple_aruco/
 # data/
 # balanced_data/
 # *.zip
+# *.tar.gz
+# *.7z

@@ -41,21 +41,42 @@ pip install -r requirements.txt
 python -c "from ultralytics import YOLO; print('YOLO ready')"
 ```
 
-### 2. Data Preparation
+### 2. Dataset
 
-Prepare your dataset in the standard YOLO format:
-- **Structure**: `data/train/`, `data/valid/`, `data/test/` directories with images
-- **Annotations**: `data/data.yaml` configuration file
-- **Format**: YOLO txt files or COCO JSON annotations
+This project uses a consolidated dataset combining robotics objects and computer ports for comprehensive object detection training.
 
-Example data.yaml:
-```yaml
-train: data/train
-val: data/valid
-test: data/test
-nc: 3
-names: ['class1', 'class2', 'class3']
+#### Dataset Overview
+- **Name**: Consolidated URC + Ports Dataset
+- **Total Images**: 1,806
+- **Classes**: 6 object classes (ArUcoTag, Bottle, BrickHammer, OrangeHammer, USB-A, USB-C)
+- **Source**: Combined URC.v2 robotics dataset with computer ports dataset
+- **Format**: YOLO format with normalized coordinates (0-1)
+
+#### Dataset Structure
 ```
+consolidated_dataset/
+├── data.yaml              # YOLO dataset configuration
+├── README.md             # Detailed dataset documentation
+├── train/
+│   ├── images/           # 1,322 training images
+│   └── labels/           # 1,322 training labels
+├── val/
+│   ├── images/           # 320 validation images
+│   └── labels/           # 320 validation labels
+└── test/
+    ├── images/           # 164 test images
+    └── labels/           # 164 test labels
+```
+
+#### Class Distribution
+- **ArUcoTag** (ID 0): 430 annotations - Robotics navigation markers
+- **Bottle** (ID 1): 402 annotations - Sample collection targets
+- **BrickHammer** (ID 2): 400 annotations - Tool detection
+- **OrangeHammer** (ID 3): 400 annotations - Tool detection (color variant)
+- **USB-A** (ID 4): 692 annotations - Computer ports
+- **USB-C** (ID 5): 110 annotations - Computer ports
+
+The dataset is pre-processed and ready for training. See `consolidated_dataset/README.md` for detailed information.
 
 ### 3. Train Models
 
@@ -65,13 +86,13 @@ The training scripts now automatically use pre-trained YOLOv8s weights (`yolov8s
 
 ```bash
 # 🚀 TRAIN ALL 4 MODEL ARCHITECTURES AUTOMATICALLY
-python scripts/train.py --data_yaml data/data.yaml --epochs 50 --batch_size 8
+python scripts/train.py --data_yaml consolidated_dataset/data.yaml --epochs 50 --batch_size 8
 
 # This trains: YOLOv8s Baseline, YOLOv8s CBAM, MobileNetVIT, EfficientNet
 # Results saved to output/models/[model_name]/
 
 # Individual model training (advanced usage)
-# python scripts/train.py --config configs/environments/[environment].yaml --data_yaml data/data.yaml
+# python scripts/train.py --config configs/framework/environments/[environment].yaml --data_yaml consolidated_dataset/data.yaml
 ```
 
 **Why pre-trained weights?**
@@ -94,7 +115,7 @@ python scripts/evaluate.py \
                    output/models/yolov8s_cbam/ \
                    output/models/mobilenet_vit/ \
                    output/models/efficientnet/ \
-    --data_yaml data/data.yaml \
+    --data_yaml consolidated_dataset/data.yaml \
     --compare_all
 
 # Generates: accuracy over time plots, performance tables, radar charts
@@ -179,7 +200,7 @@ robotics_objdetection/
 │   └── test_temporal_filter.py    # Temporal filter testing
 ├── ros2_ws/                       # ROS2 workspace
 │   └── src/object_detection/      # ROS2 package (renamed)
-├── data/                          # Dataset (configurable)
+├── consolidated_dataset/          # URC + Ports consolidated dataset
 ├── docs/                          # Documentation
 └── requirements.txt               # Python dependencies
 ```
@@ -195,7 +216,7 @@ baseline_config = {
     'imgsz': 416,
     'batch': 8,
     'epochs': 100,
-    'data': 'data/data.yaml'
+    'data': 'consolidated_dataset/data.yaml'
 }
 
 # CBAM-enhanced configuration
@@ -303,6 +324,178 @@ def generate_launch_description():
 - **Pruning**: Model compression for edge deployment
 - **Threading**: Optimized for Raspberry Pi CPU cores
 - **Memory**: Efficient inference with memory pooling
+
+### ONNX Model Deployment
+
+All trained models are available in ONNX format for cross-platform deployment:
+
+| Model | ONNX File | Size | Best For |
+|-------|-----------|------|----------|
+| **YOLOv8s Baseline** | `yolov8s_baseline.onnx` | 42.5 MB | **Best accuracy & balance** |
+| **YOLOv8s CBAM** | `yolov8s_cbam.onnx` | 42.5 MB | High precision |
+| **EfficientNet** | `efficientnet_trained.onnx` | 42.5 MB | Consistent performance |
+| **MobileNet-ViT** | `mobilenet_vit_trained.onnx` | 11.5 MB | **Lightweight deployment** |
+
+#### ONNX Runtime Inference
+
+```python
+import onnxruntime as ort
+import numpy as np
+
+# Load model
+session = ort.InferenceSession('output/onnx_models/yolov8s_baseline.onnx')
+
+# Prepare input (416x416 RGB image)
+input_data = np.random.randn(1, 3, 416, 416).astype(np.float32)
+
+# Run inference
+outputs = session.run(None, {'input': input_data})
+```
+
+#### OpenVINO Deployment (Intel)
+
+```bash
+# Convert ONNX to OpenVINO IR
+python -m openvino.tools.mo \
+    --input_model yolov8s_baseline.onnx \
+    --output_dir openvino_models
+```
+
+#### TensorRT Deployment (NVIDIA)
+
+```bash
+# Convert ONNX to TensorRT engine
+trtexec --onnx=yolov8s_baseline.onnx --saveEngine=model.trt --fp16
+```
+
+## 🚀 **Production Deployment on Raspberry Pi Zero 2 W**
+
+### **Complete Production Setup with Temporal Confidence**
+
+For robotics applications requiring reliable, continuous operation with temporal confidence validation:
+
+#### **1. Production Detector Script**
+
+The `production_detector.py` script provides:
+
+- **Temporal Confidence Tracking**: Accumulates confidence over multiple frames before confirming detections
+- **Continuous Operation**: Runs 24/7 with automatic error recovery
+- **Comprehensive Logging**: Detailed logs for monitoring and debugging
+- **Headless Operation**: No display required, optimized for embedded deployment
+- **Robotics Integration**: Ready for navigation and manipulation control
+
+Key Features:
+- **90% Temporal Confidence** required before confirming detections
+- **5 FPS operation** optimized for 5 mph robot movement
+- **Automatic camera management** with error recovery
+- **Systemd integration** for auto-startup on boot
+- **Performance monitoring** with FPS and resource tracking
+
+#### **2. Auto-Startup Setup**
+
+```bash
+# Copy the production script to your Raspberry Pi
+scp production_detector.py pi@raspberrypi.local:~/
+scp robotics-detector.service pi@raspberrypi.local:~/
+
+# Copy the trained model
+scp output/onnx_models/mobilenet_vit_trained.onnx pi@raspberrypi.local:~/
+
+# SSH into the Pi and set up the service
+ssh pi@raspberrypi.local
+
+# Install the systemd service
+sudo cp robotics-detector.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable robotics-detector.service
+
+# Start the service
+sudo systemctl start robotics-detector.service
+
+# Check status
+sudo systemctl status robotics-detector.service
+
+# View logs
+sudo journalctl -u robotics-detector.service -f
+```
+
+#### **3. Production Operation**
+
+Once deployed, the system will:
+
+✅ **Auto-start on power-on** (45-60 second boot time)  
+✅ **Run continuously** while powered  
+✅ **Process 5 FPS** for 5 mph robot compatibility  
+✅ **Confirm detections** only after 90% temporal confidence  
+✅ **Log all activity** to `/home/pi/detection.log`  
+✅ **Recover automatically** from errors  
+✅ **Monitor performance** and system health  
+
+#### **4. Monitoring & Maintenance**
+
+```bash
+# Check service status
+sudo systemctl status robotics-detector.service
+
+# View recent logs
+sudo journalctl -u robotics-detector.service -n 20
+
+# Monitor system resources
+htop
+vcgencmd measure_temp
+
+# View detection logs
+tail -f /home/pi/detection.log
+```
+
+#### **5. Expected Performance**
+
+| Metric | Production Target | Notes |
+|--------|------------------|-------|
+| **FPS** | 5 FPS | Optimized for 5 mph movement |
+| **Temporal Confidence** | 90% | High reliability for robotics |
+| **CPU Usage** | 70-85% | Single-threaded optimization |
+| **Memory Usage** | 150-200MB | Efficient ONNX model |
+| **Confirmed Detections** | 90%+ accuracy | Temporal filtering eliminates noise |
+
+#### **6. Robotics Integration**
+
+The production detector includes hooks for robotics control:
+
+```python
+# In process_confirmed_detections() method
+if class_name == 'ArUcoTag':
+    # Navigation marker - update path planning
+    pass
+elif class_name in ['BrickHammer', 'OrangeHammer']:
+    # Tool detected - prepare manipulation
+    pass
+elif class_name == 'Bottle':
+    # Sample target - initiate collection sequence
+    pass
+```
+
+#### **7. Emergency Controls**
+
+```bash
+# Graceful shutdown
+sudo systemctl stop robotics-detector.service
+
+# Restart service
+sudo systemctl restart robotics-detector.service
+
+# Emergency power off (use only when necessary)
+sudo poweroff
+```
+
+### **Production Files Overview**
+
+- **`production_detector.py`**: Main production script with temporal confidence
+- **`robotics-detector.service`**: Systemd service for auto-startup
+- **`/home/pi/detection.log`**: Comprehensive logging file
+- **Model files**: ONNX models in `/home/pi/` directory
+
+This setup provides **enterprise-grade reliability** for robotics applications, ensuring detections are confirmed with high temporal confidence before triggering any control actions.
 
 ## 📈 Results Visualization
 

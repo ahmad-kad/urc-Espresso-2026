@@ -1,0 +1,665 @@
+2025-12-22 12:20:12,133 - INFO - ================================================================================
+2025-12-22 12:20:12,133 - INFO - STARTING COMPREHENSIVE MODEL TRAINING
+2025-12-22 12:20:12,133 - INFO - ================================================================================
+2025-12-22 12:20:12,133 - INFO - Architectures: all
+2025-12-22 12:20:12,133 - INFO - Sizes: all
+2025-12-22 12:20:12,133 - INFO - Epochs: 100
+2025-12-22 12:20:12,133 - INFO - Parallel: False
+2025-12-22 12:20:12,133 - INFO - ================================================================================
+2025-12-22 12:20:12,133 - INFO - Training 12 models total
+2025-12-22 12:20:12,133 - INFO - [1/12] Training yolov8n_160
+2025-12-22 12:20:12,133 - INFO - Starting training for yolov8n_160 using config: configs/yolov8n_160.yaml
+2025-12-22 12:20:12,133 - INFO - Running command: yolo train cfg configs/yolov8n_160.yaml
+2025-12-22 12:20:13,824 - INFO - Successfully completed training for yolov8n_160
+2025-12-22 12:20:13,826 - INFO - Pausing for 30 seconds before next model...
+2025-12-22 12:20:43,826 - INFO - [2/12] Training yolov8n_192
+2025-12-22 12:20:43,826 - INFO - Starting training for yolov8n_192 using config: configs/yolov8n_192.yaml
+2025-12-22 12:20:43,826 - INFO - Running command: yolo train cfg configs/yolov8n_192.yaml
+2025-12-22 12:20:45,572 - INFO - Successfully completed training for yolov8n_192
+2025-12-22 12:20:45,572 - INFO - Pausing for 30 seconds before next model...
+2025-12-22 12:21:15,572 - INFO - [3/12] Training yolov8n_224
+2025-12-22 12:21:15,572 - INFO - Starting training for yolov8n_224 using config: configs/yolov8n_224.yaml
+2025-12-22 12:21:15,573 - INFO - Running command: yolo train cfg configs/yolov8n_224.yaml
+2025-12-22 12:21:17,346 - INFO - Successfully completed training for yolov8n_224
+2025-12-22 12:21:17,347 - INFO - Pausing for 30 seconds before next model...
+2025-12-22 12:21:47,347 - INFO - [4/12] Training yolov8s
+2025-12-22 12:21:47,347 - INFO - Starting training for yolov8s using config: configs/yolov8s_confidence.yaml
+2025-12-22 12:21:47,347 - INFO - Running command: yolo train cfg configs/yolov8s_confidence.yaml
+2025-12-22 12:21:49,189 - INFO - Successfully completed training for yolov8s
+2025-12-22 12:21:49,198 - INFO - Pausing for 30 seconds before next model...
+2025-12-22 12:22:19,198 - INFO - [5/12] Training yolov8s_cbam
+2025-12-22 12:22:19,199 - INFO - Starting training for yolov8s_cbam using config: configs/yolov8s_cbam_confidence.yaml
+2025-12-22 12:22:19,199 - INFO - Running command: yolo train cfg configs/yolov8s_cbam_confidence.yaml
+2025-12-22 12:22:20,842 - INFO - Successfully completed training for yolov8s_cbam
+2025-12-22 12:22:20,843 - INFO - Pausing for 30 seconds before next model...
+2025-12-22 12:22:43,059 - INFO - ================================================================================
+2025-12-22 12:22:43,059 - INFO - STARTING COMPREHENSIVE MODEL TRAINING
+2025-12-22 12:22:43,059 - INFO - ================================================================================
+2025-12-22 12:22:43,059 - INFO - Architectures: all
+2025-12-22 12:22:43,059 - INFO - Sizes: all
+2025-12-22 12:22:43,059 - INFO - Epochs: 100
+2025-12-22 12:22:43,059 - INFO - Parallel: False
+2025-12-22 12:22:43,059 - INFO - ================================================================================
+2025-12-22 12:22:43,059 - INFO - Training 12 models total
+2025-12-22 12:22:43,059 - INFO - [1/12] Training yolov8n_160
+2025-12-22 12:22:43,059 - INFO - Starting training for yolov8n_160 using config: configs/yolov8n_160.yaml
+2025-12-22 12:22:43,059 - INFO - Running command: yolo train cfg configs/yolov8n_160.yaml
+2025-12-22 12:22:44,749 - INFO - Successfully completed training for yolov8n_160
+2025-12-22 12:22:44,749 - INFO - Pausing for 30 seconds before next model...
+2025-12-22 12:22:50,843 - INFO - [6/12] Training yolov8m
+2025-12-22 12:22:50,843 - INFO - Starting training for yolov8m using config: configs/yolov8m_confidence.yaml
+2025-12-22 12:22:50,843 - INFO - Running command: yolo train cfg configs/yolov8m_confidence.yaml
+2025-12-22 12:22:52,395 - INFO - Successfully completed training for yolov8m
+2025-12-22 12:22:52,395 - INFO - Pausing for 30 seconds before next model...
+2025-12-22 12:23:14,750 - INFO - [2/12] Training yolov8n_192
+2025-12-22 12:23:14,750 - INFO - Starting training for yolov8n_192 using config: configs/yolov8n_192.yaml
+2025-12-22 12:23:14,750 - INFO - Running command: yolo train cfg configs/yolov8n_192.yaml
+2025-12-22 12:23:16,367 - INFO - Successfully completed training for yolov8n_192
+2025-12-22 12:23:16,368 - INFO - Pausing for 30 seconds before next model...
+2025-12-22 12:23:22,395 - INFO - [7/12] Training yolov8l
+2025-12-22 12:23:22,395 - INFO - Starting training for yolov8l using config: configs/yolov8l_confidence.yaml
+2025-12-22 12:23:22,395 - INFO - Running command: yolo train cfg configs/yolov8l_confidence.yaml
+2025-12-22 12:23:24,022 - INFO - Successfully completed training for yolov8l
+2025-12-22 12:23:24,022 - INFO - Pausing for 30 seconds before next model...
+2025-12-22 12:23:44,246 - INFO - ================================================================================
+2025-12-22 12:23:44,246 - INFO - STARTING COMPREHENSIVE MODEL TRAINING
+2025-12-22 12:23:44,247 - INFO - ================================================================================
+2025-12-22 12:23:44,247 - INFO - Architectures: ['yolov8n']
+2025-12-22 12:23:44,247 - INFO - Sizes: ['160']
+2025-12-22 12:23:44,247 - INFO - Epochs: 1
+2025-12-22 12:23:44,247 - INFO - Parallel: False
+2025-12-22 12:23:44,247 - INFO - ================================================================================
+2025-12-22 12:23:44,247 - INFO - Training 1 models total
+2025-12-22 12:23:44,247 - INFO - [1/1] Training yolov8n_160
+2025-12-22 12:23:44,247 - INFO - Starting training for yolov8n_160 using config: configs/yolov8n_160.yaml
+2025-12-22 12:23:44,250 - INFO - Running command: yolo train task=detect mode=train model=models/yolov8n.pt data=consolidated_dataset/data.yaml epochs=100 patience=20 batch=16 imgsz=160 save=True save_period=10 cache=disk device=0 workers=4 project=output/models name=yolov8n_160 exist_ok=True pretrained=True optimizer=AdamW verbose=True seed=42 deterministic=True cos_lr=True close_mosaic=15 amp=True fraction=1.0 overlap_mask=True mask_ratio=4 dropout=0.1 val=True split=val conf=0.1 iou=0.6 max_det=300 half=True plots=True vid_stride=1 augment=True save_txt=True save_conf=True show_labels=True show_conf=True show_boxes=True format=torchscript simplify=True lr0=0.001 lrf=0.1 momentum=0.937 weight_decay=0.0005 warmup_epochs=5.0 warmup_momentum=0.8 warmup_bias_lr=0.1 box=4.0 cls=2.5 dfl=1.5 pose=12.0 kobj=1.0 nbs=64 hsv_h=0.01 hsv_s=0.5 hsv_v=0.3 degrees=0.0 translate=0.05 scale=0.3 shear=0.0 perspective=0.0 flipud=0.0 fliplr=0.5 bgr=0.0 mosaic=0.8 mixup=0.1 cutmix=0.0 copy_paste=0.0 copy_paste_mode=flip auto_augment=randaugment erasing=0.3 tracker=botsort.yaml
+2025-12-22 12:23:46,368 - INFO - [3/12] Training yolov8n_224
+2025-12-22 12:23:46,368 - INFO - Starting training for yolov8n_224 using config: configs/yolov8n_224.yaml
+2025-12-22 12:23:46,368 - INFO - Running command: yolo train cfg configs/yolov8n_224.yaml
+2025-12-22 12:23:48,111 - INFO - Successfully completed training for yolov8n_224
+2025-12-22 12:23:48,111 - INFO - Pausing for 30 seconds before next model...
+2025-12-22 12:23:54,022 - INFO - [8/12] Training mobilenet_160
+2025-12-22 12:23:54,022 - INFO - Starting training for mobilenet_160 using config: configs/mobilenet_160.yaml
+2025-12-22 12:23:54,022 - INFO - Running command: yolo train cfg configs/mobilenet_160.yaml
+2025-12-22 12:23:55,795 - INFO - Successfully completed training for mobilenet_160
+2025-12-22 12:23:55,795 - INFO - Pausing for 30 seconds before next model...
+2025-12-22 12:24:18,111 - INFO - [4/12] Training yolov8s
+2025-12-22 12:24:18,111 - INFO - Starting training for yolov8s using config: configs/yolov8s_confidence.yaml
+2025-12-22 12:24:18,111 - INFO - Running command: yolo train cfg configs/yolov8s_confidence.yaml
+2025-12-22 12:24:19,799 - INFO - Successfully completed training for yolov8s
+2025-12-22 12:24:19,800 - INFO - Pausing for 30 seconds before next model...
+2025-12-22 12:24:25,795 - INFO - [9/12] Training mobilenet_192
+2025-12-22 12:24:25,795 - INFO - Starting training for mobilenet_192 using config: configs/mobilenet_192.yaml
+2025-12-22 12:24:25,795 - INFO - Running command: yolo train cfg configs/mobilenet_192.yaml
+2025-12-22 12:24:27,507 - INFO - Successfully completed training for mobilenet_192
+2025-12-22 12:24:27,508 - INFO - Pausing for 30 seconds before next model...
+2025-12-22 12:24:49,800 - INFO - [5/12] Training yolov8s_cbam
+2025-12-22 12:24:49,800 - INFO - Starting training for yolov8s_cbam using config: configs/yolov8s_cbam_confidence.yaml
+2025-12-22 12:24:49,800 - INFO - Running command: yolo train cfg configs/yolov8s_cbam_confidence.yaml
+2025-12-22 12:24:51,526 - INFO - Successfully completed training for yolov8s_cbam
+2025-12-22 12:24:51,527 - INFO - Pausing for 30 seconds before next model...
+2025-12-22 12:24:57,508 - INFO - [10/12] Training mobilenet_224
+2025-12-22 12:24:57,508 - INFO - Starting training for mobilenet_224 using config: configs/mobilenet_224.yaml
+2025-12-22 12:24:57,508 - INFO - Running command: yolo train cfg configs/mobilenet_224.yaml
+2025-12-22 12:24:59,169 - INFO - Successfully completed training for mobilenet_224
+2025-12-22 12:24:59,178 - INFO - Pausing for 30 seconds before next model...
+2025-12-22 12:25:21,526 - INFO - [6/12] Training yolov8m
+2025-12-22 12:25:21,527 - INFO - Starting training for yolov8m using config: configs/yolov8m_confidence.yaml
+2025-12-22 12:25:21,527 - INFO - Running command: yolo train cfg configs/yolov8m_confidence.yaml
+2025-12-22 12:25:23,204 - INFO - Successfully completed training for yolov8m
+2025-12-22 12:25:23,206 - INFO - Pausing for 30 seconds before next model...
+2025-12-22 12:25:29,178 - INFO - [11/12] Training mobilenet
+2025-12-22 12:25:29,179 - INFO - Starting training for mobilenet using config: configs/mobilenet_confidence.yaml
+2025-12-22 12:25:29,179 - INFO - Running command: yolo train cfg configs/mobilenet_confidence.yaml
+2025-12-22 12:25:30,880 - INFO - Successfully completed training for mobilenet
+2025-12-22 12:25:30,892 - INFO - Pausing for 30 seconds before next model...
+2025-12-22 12:25:53,206 - INFO - [7/12] Training yolov8l
+2025-12-22 12:25:53,206 - INFO - Starting training for yolov8l using config: configs/yolov8l_confidence.yaml
+2025-12-22 12:25:53,206 - INFO - Running command: yolo train cfg configs/yolov8l_confidence.yaml
+2025-12-22 12:25:54,894 - INFO - Successfully completed training for yolov8l
+2025-12-22 12:25:54,896 - INFO - Pausing for 30 seconds before next model...
+2025-12-22 12:26:00,893 - INFO - [12/12] Training efficientnet
+2025-12-22 12:26:00,894 - INFO - Starting training for efficientnet using config: configs/efficientnet_confidence.yaml
+2025-12-22 12:26:00,894 - INFO - Running command: yolo train cfg configs/efficientnet_confidence.yaml
+2025-12-22 12:26:02,750 - INFO - Successfully completed training for efficientnet
+2025-12-22 12:26:02,751 - INFO - ================================================================================
+2025-12-22 12:26:02,751 - INFO - TRAINING COMPLETED
+2025-12-22 12:26:02,751 - INFO - ================================================================================
+2025-12-22 12:26:02,751 - INFO - Total time: 350.62 seconds
+2025-12-22 12:26:02,751 - INFO - Results: 12/12 models trained successfully
+2025-12-22 12:26:02,751 - INFO -   yolov8n_160: SUCCESS
+2025-12-22 12:26:02,751 - INFO -   yolov8n_192: SUCCESS
+2025-12-22 12:26:02,751 - INFO -   yolov8n_224: SUCCESS
+2025-12-22 12:26:02,751 - INFO -   yolov8s: SUCCESS
+2025-12-22 12:26:02,751 - INFO -   yolov8s_cbam: SUCCESS
+2025-12-22 12:26:02,751 - INFO -   yolov8m: SUCCESS
+2025-12-22 12:26:02,751 - INFO -   yolov8l: SUCCESS
+2025-12-22 12:26:02,751 - INFO -   mobilenet_160: SUCCESS
+2025-12-22 12:26:02,751 - INFO -   mobilenet_192: SUCCESS
+2025-12-22 12:26:02,751 - INFO -   mobilenet_224: SUCCESS
+2025-12-22 12:26:02,751 - INFO -   mobilenet: SUCCESS
+2025-12-22 12:26:02,751 - INFO -   efficientnet: SUCCESS
+2025-12-22 12:26:02,752 - INFO - Summary written to output/full_training_from_scratch_summary.txt
+2025-12-22 12:26:24,896 - INFO - [8/12] Training mobilenet_160
+2025-12-22 12:26:24,896 - INFO - Starting training for mobilenet_160 using config: configs/mobilenet_160.yaml
+2025-12-22 12:26:24,896 - INFO - Running command: yolo train cfg configs/mobilenet_160.yaml
+2025-12-22 12:26:26,575 - INFO - Successfully completed training for mobilenet_160
+2025-12-22 12:26:26,575 - INFO - Pausing for 30 seconds before next model...
+2025-12-22 12:26:56,575 - INFO - [9/12] Training mobilenet_192
+2025-12-22 12:26:56,575 - INFO - Starting training for mobilenet_192 using config: configs/mobilenet_192.yaml
+2025-12-22 12:26:56,575 - INFO - Running command: yolo train cfg configs/mobilenet_192.yaml
+2025-12-22 12:26:58,325 - INFO - Successfully completed training for mobilenet_192
+2025-12-22 12:26:58,325 - INFO - Pausing for 30 seconds before next model...
+2025-12-22 12:27:28,325 - INFO - [10/12] Training mobilenet_224
+2025-12-22 12:27:28,326 - INFO - Starting training for mobilenet_224 using config: configs/mobilenet_224.yaml
+2025-12-22 12:27:28,326 - INFO - Running command: yolo train cfg configs/mobilenet_224.yaml
+2025-12-22 12:27:30,047 - INFO - Successfully completed training for mobilenet_224
+2025-12-22 12:27:30,047 - INFO - Pausing for 30 seconds before next model...
+2025-12-22 12:28:00,047 - INFO - [11/12] Training mobilenet
+2025-12-22 12:28:00,047 - INFO - Starting training for mobilenet using config: configs/mobilenet_confidence.yaml
+2025-12-22 12:28:00,048 - INFO - Running command: yolo train cfg configs/mobilenet_confidence.yaml
+2025-12-22 12:28:01,761 - INFO - Successfully completed training for mobilenet
+2025-12-22 12:28:01,761 - INFO - Pausing for 30 seconds before next model...
+2025-12-22 12:28:31,761 - INFO - [12/12] Training efficientnet
+2025-12-22 12:28:31,761 - INFO - Starting training for efficientnet using config: configs/efficientnet_confidence.yaml
+2025-12-22 12:28:31,761 - INFO - Running command: yolo train cfg configs/efficientnet_confidence.yaml
+2025-12-22 12:28:33,427 - INFO - Successfully completed training for efficientnet
+2025-12-22 12:28:33,427 - INFO - ================================================================================
+2025-12-22 12:28:33,427 - INFO - TRAINING COMPLETED
+2025-12-22 12:28:33,427 - INFO - ================================================================================
+2025-12-22 12:28:33,428 - INFO - Total time: 350.37 seconds
+2025-12-22 12:28:33,428 - INFO - Results: 12/12 models trained successfully
+2025-12-22 12:28:33,428 - INFO -   yolov8n_160: SUCCESS
+2025-12-22 12:28:33,428 - INFO -   yolov8n_192: SUCCESS
+2025-12-22 12:28:33,428 - INFO -   yolov8n_224: SUCCESS
+2025-12-22 12:28:33,428 - INFO -   yolov8s: SUCCESS
+2025-12-22 12:28:33,428 - INFO -   yolov8s_cbam: SUCCESS
+2025-12-22 12:28:33,428 - INFO -   yolov8m: SUCCESS
+2025-12-22 12:28:33,428 - INFO -   yolov8l: SUCCESS
+2025-12-22 12:28:33,428 - INFO -   mobilenet_160: SUCCESS
+2025-12-22 12:28:33,428 - INFO -   mobilenet_192: SUCCESS
+2025-12-22 12:28:33,428 - INFO -   mobilenet_224: SUCCESS
+2025-12-22 12:28:33,428 - INFO -   mobilenet: SUCCESS
+2025-12-22 12:28:33,428 - INFO -   efficientnet: SUCCESS
+2025-12-22 12:28:33,428 - INFO - Summary written to output/full_training_from_scratch_summary.txt
+2025-12-22 12:36:07,830 - INFO - Successfully completed training for yolov8n_160
+2025-12-22 12:36:07,830 - INFO - ================================================================================
+2025-12-22 12:36:07,830 - INFO - TRAINING COMPLETED
+2025-12-22 12:36:07,830 - INFO - ================================================================================
+2025-12-22 12:36:07,830 - INFO - Total time: 743.58 seconds
+2025-12-22 12:36:07,830 - INFO - Results: 1/1 models trained successfully
+2025-12-22 12:36:07,830 - INFO -   yolov8n_160: SUCCESS
+2025-12-22 12:36:07,830 - INFO - Summary written to output/full_training_from_scratch_summary.txt
+2025-12-22 12:36:12,419 - INFO - ================================================================================
+2025-12-22 12:36:12,419 - INFO - STARTING COMPREHENSIVE MODEL TRAINING
+2025-12-22 12:36:12,419 - INFO - ================================================================================
+2025-12-22 12:36:12,420 - INFO - Architectures: all
+2025-12-22 12:36:12,420 - INFO - Sizes: all
+2025-12-22 12:36:12,420 - INFO - Epochs: 100
+2025-12-22 12:36:12,420 - INFO - Parallel: False
+2025-12-22 12:36:12,420 - INFO - ================================================================================
+2025-12-22 12:36:12,420 - INFO - Training 12 models total
+2025-12-22 12:36:12,420 - INFO - [1/12] Training yolov8n_160
+2025-12-22 12:36:12,420 - INFO - Starting training for yolov8n_160 using config: configs/yolov8n_160.yaml
+2025-12-22 12:36:12,423 - INFO - Running command: yolo train task=detect mode=train model=models/yolov8n.pt data=consolidated_dataset/data.yaml epochs=100 patience=20 batch=16 imgsz=160 save=True save_period=10 cache=disk device=0 workers=4 project=output/models name=yolov8n_160 exist_ok=True pretrained=True optimizer=AdamW verbose=True seed=42 deterministic=True cos_lr=True close_mosaic=15 amp=True fraction=1.0 overlap_mask=True mask_ratio=4 dropout=0.1 val=True split=val conf=0.1 iou=0.6 max_det=300 half=True plots=True vid_stride=1 augment=True save_txt=True save_conf=True show_labels=True show_conf=True show_boxes=True format=torchscript simplify=True lr0=0.001 lrf=0.1 momentum=0.937 weight_decay=0.0005 warmup_epochs=5.0 warmup_momentum=0.8 warmup_bias_lr=0.1 box=4.0 cls=2.5 dfl=1.5 pose=12.0 kobj=1.0 nbs=64 hsv_h=0.01 hsv_s=0.5 hsv_v=0.3 degrees=0.0 translate=0.05 scale=0.3 shear=0.0 perspective=0.0 flipud=0.0 fliplr=0.5 bgr=0.0 mosaic=0.8 mixup=0.1 cutmix=0.0 copy_paste=0.0 copy_paste_mode=flip auto_augment=randaugment erasing=0.3 tracker=botsort.yaml
+2025-12-22 12:44:58,672 - INFO - Successfully completed training for yolov8n_160
+2025-12-22 12:44:58,672 - INFO - Pausing for 30 seconds before next model...
+2025-12-22 12:45:28,672 - INFO - [2/12] Training yolov8n_192
+2025-12-22 12:45:28,672 - INFO - Starting training for yolov8n_192 using config: configs/yolov8n_192.yaml
+2025-12-22 12:45:28,675 - INFO - Running command: yolo train task=detect mode=train model=models/yolov8n.pt data=consolidated_dataset/data.yaml epochs=100 patience=20 batch=16 imgsz=192 save=True save_period=10 cache=disk device=0 workers=4 project=output/models name=yolov8n_192 exist_ok=True pretrained=True optimizer=AdamW verbose=True seed=42 deterministic=True cos_lr=True close_mosaic=15 amp=True fraction=1.0 overlap_mask=True mask_ratio=4 dropout=0.1 val=True split=val conf=0.1 iou=0.6 max_det=300 half=True plots=True vid_stride=1 augment=True save_txt=True save_conf=True show_labels=True show_conf=True show_boxes=True format=torchscript simplify=True lr0=0.001 lrf=0.1 momentum=0.937 weight_decay=0.0005 warmup_epochs=5.0 warmup_momentum=0.8 warmup_bias_lr=0.1 box=4.0 cls=2.5 dfl=1.5 pose=12.0 kobj=1.0 nbs=64 hsv_h=0.01 hsv_s=0.5 hsv_v=0.3 degrees=0.0 translate=0.05 scale=0.3 shear=0.0 perspective=0.0 flipud=0.0 fliplr=0.5 bgr=0.0 mosaic=0.8 mixup=0.1 cutmix=0.0 copy_paste=0.0 copy_paste_mode=flip auto_augment=randaugment erasing=0.3 tracker=botsort.yaml
+2025-12-22 12:54:09,548 - INFO - Successfully completed training for yolov8n_192
+2025-12-22 12:54:09,548 - INFO - Pausing for 30 seconds before next model...
+2025-12-22 12:54:39,548 - INFO - [3/12] Training yolov8n_224
+2025-12-22 12:54:39,548 - INFO - Starting training for yolov8n_224 using config: configs/yolov8n_224.yaml
+2025-12-22 12:54:39,551 - INFO - Running command: yolo train task=detect mode=train model=models/yolov8n.pt data=consolidated_dataset/data.yaml epochs=100 patience=20 batch=16 imgsz=224 save=True save_period=10 cache=disk device=0 workers=4 project=output/models name=yolov8n_224 exist_ok=True pretrained=True optimizer=AdamW verbose=True seed=42 deterministic=True cos_lr=True close_mosaic=15 amp=True fraction=1.0 overlap_mask=True mask_ratio=4 dropout=0.1 val=True split=val conf=0.1 iou=0.6 max_det=300 half=True plots=True vid_stride=1 augment=True save_txt=True save_conf=True show_labels=True show_conf=True show_boxes=True format=torchscript simplify=True lr0=0.001 lrf=0.1 momentum=0.937 weight_decay=0.0005 warmup_epochs=5.0 warmup_momentum=0.8 warmup_bias_lr=0.1 box=4.0 cls=2.5 dfl=1.5 pose=12.0 kobj=1.0 nbs=64 hsv_h=0.01 hsv_s=0.5 hsv_v=0.3 degrees=0.0 translate=0.05 scale=0.3 shear=0.0 perspective=0.0 flipud=0.0 fliplr=0.5 bgr=0.0 mosaic=0.8 mixup=0.1 cutmix=0.0 copy_paste=0.0 copy_paste_mode=flip auto_augment=randaugment erasing=0.3 tracker=botsort.yaml
+2025-12-22 13:03:21,421 - INFO - Successfully completed training for yolov8n_224
+2025-12-22 13:03:21,421 - INFO - Pausing for 30 seconds before next model...
+2025-12-22 13:03:51,421 - INFO - [4/12] Training yolov8s
+2025-12-22 13:03:51,422 - INFO - Starting training for yolov8s using config: configs/yolov8s_confidence.yaml
+2025-12-22 13:03:51,425 - INFO - Running command: yolo train task=detect mode=train data=enhanced_dataset/data.yaml epochs=100 patience=20 batch=24 imgsz=416 save=True save_period=10 cache=disk device=0 workers=4 project=output name=yolov8s_confidence exist_ok=True pretrained=True optimizer=AdamW verbose=True seed=42 deterministic=True cos_lr=True close_mosaic=15 amp=True fraction=1.0 multi_scale=True overlap_mask=True mask_ratio=4 dropout=0.1 val=True split=val conf=0.1 iou=0.6 max_det=300 half=True plots=True vid_stride=1 augment=True save_txt=True save_conf=True show_labels=True show_conf=True show_boxes=True format=torchscript simplify=True lr0=0.0005 lrf=0.1 momentum=0.937 weight_decay=0.0005 warmup_epochs=5.0 warmup_momentum=0.8 warmup_bias_lr=0.1 box=4.0 cls=3.0 dfl=1.5 pose=12.0 kobj=1.0 nbs=64 hsv_h=0.01 hsv_s=0.5 hsv_v=0.3 degrees=0.0 translate=0.05 scale=0.3 shear=0.0 perspective=0.0 flipud=0.0 fliplr=0.5 bgr=0.0 mosaic=0.8 mixup=0.1 cutmix=0.0 copy_paste=0.0 copy_paste_mode=flip auto_augment=randaugment erasing=0.3 tracker=botsort.yaml model=models/yolov8s.pt
+2025-12-22 13:03:54,148 - ERROR - Training failed for yolov8s
+2025-12-22 13:03:54,148 - ERROR - Return code: 1
+2025-12-22 13:03:54,148 - ERROR - Stderr: Traceback (most recent call last):
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\engine\trainer.py", line 649, in get_dataset
+    data = check_det_dataset(self.args.data)
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\data\utils.py", line 400, in check_det_dataset
+    file = check_file(dataset)
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\utils\checks.py", line 621, in check_file
+    raise FileNotFoundError(f"'{file}' does not exist")
+FileNotFoundError: 'enhanced_dataset/data.yaml' does not exist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Scripts\yolo.exe\__main__.py", line 6, in <module>
+    sys.exit(entrypoint())
+             ~~~~~~~~~~^^
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\cfg\__init__.py", line 985, in entrypoint
+    getattr(model, mode)(**overrides)  # default args from model
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\engine\model.py", line 768, in train
+    self.trainer = (trainer or self._smart_load("trainer"))(overrides=args, _callbacks=self.callbacks)
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\models\yolo\detect\train.py", line 63, in __init__
+    super().__init__(cfg, overrides, _callbacks)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\engine\trainer.py", line 163, in __init__
+    self.data = self.get_dataset()
+                ~~~~~~~~~~~~~~~~^^
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\engine\trainer.py", line 653, in get_dataset
+    raise RuntimeError(emojis(f"Dataset '{clean_url(self.args.data)}' error \u274c {e}")) from e
+RuntimeError: Dataset 'enhanced_dataset/data.yaml' error  'enhanced_dataset/data.yaml' does not exist
+
+2025-12-22 13:03:54,148 - ERROR - Stdout: New https://pypi.org/project/ultralytics/8.3.241 available  Update with 'pip install -U ultralytics'
+Ultralytics 8.3.240  Python-3.13.9 torch-2.6.0+cu124 CUDA:0 (NVIDIA GeForce RTX 4060 Ti, 16380MiB)
+[34m[1mengine\trainer: [0magnostic_nms=False, amp=True, augment=True, auto_augment=randaugment, batch=24, bgr=0.0, box=4.0, cache=disk, cfg=None, classes=None, close_mosaic=15, cls=3.0, compile=False, conf=0.1, copy_paste=0.0, copy_paste_mode=flip, cos_lr=True, cutmix=0.0, data=enhanced_dataset/data.yaml, degrees=0.0, deterministic=True, device=0, dfl=1.5, dnn=False, dropout=0.1, dynamic=False, embed=None, epochs=100, erasing=0.3, exist_ok=True, fliplr=0.5, flipud=0.0, format=torchscript, fraction=1.0, freeze=None, half=True, hsv_h=0.01, hsv_s=0.5, hsv_v=0.3, imgsz=416, int8=False, iou=0.6, keras=False, kobj=1.0, line_width=None, lr0=0.0005, lrf=0.1, mask_ratio=4, max_det=300, mixup=0.1, mode=train, model=models/yolov8s.pt, momentum=0.937, mosaic=0.8, multi_scale=True, name=yolov8s_confidence, nbs=64, nms=False, opset=None, optimize=False, optimizer=AdamW, overlap_mask=True, patience=20, perspective=0.0, plots=True, pose=12.0, pretrained=True, profile=False, project=output, rect=False, resume=False, retina_masks=False, save=True, save_conf=True, save_crop=False, save_dir=K:\AI\urc-Espresso-2026\output\yolov8s_confidence, save_frames=False, save_json=False, save_period=10, save_txt=True, scale=0.3, seed=42, shear=0.0, show=False, show_boxes=True, show_conf=True, show_labels=True, simplify=True, single_cls=False, source=None, split=val, stream_buffer=False, task=detect, time=None, tracker=botsort.yaml, translate=0.05, val=True, verbose=True, vid_stride=1, visualize=False, warmup_bias_lr=0.1, warmup_epochs=5.0, warmup_momentum=0.8, weight_decay=0.0005, workers=4, workspace=None
+
+2025-12-22 13:03:54,148 - INFO - Pausing for 30 seconds before next model...
+2025-12-22 13:04:24,148 - INFO - [5/12] Training yolov8s_cbam
+2025-12-22 13:04:24,148 - INFO - Starting training for yolov8s_cbam using config: configs/yolov8s_cbam_confidence.yaml
+2025-12-22 13:04:24,151 - INFO - Running command: yolo train task=detect mode=train data=enhanced_dataset/data.yaml epochs=100 patience=20 batch=24 imgsz=416 save=True save_period=10 cache=disk device=0 workers=4 project=output name=yolov8s_cbam_confidence exist_ok=True pretrained=True optimizer=AdamW verbose=True seed=42 deterministic=True cos_lr=True close_mosaic=15 amp=True fraction=1.0 multi_scale=True overlap_mask=True mask_ratio=4 dropout=0.1 val=True split=val conf=0.1 iou=0.6 max_det=300 half=True plots=True vid_stride=1 augment=True save_txt=True save_conf=True show_labels=True show_conf=True show_boxes=True format=torchscript simplify=True lr0=0.001 lrf=0.1 momentum=0.937 weight_decay=0.0005 warmup_epochs=5.0 warmup_momentum=0.8 warmup_bias_lr=0.1 box=4.0 cls=2.5 dfl=1.5 pose=12.0 kobj=1.0 nbs=64 hsv_h=0.01 hsv_s=0.5 hsv_v=0.3 degrees=0.0 translate=0.05 scale=0.3 shear=0.0 perspective=0.0 flipud=0.0 fliplr=0.5 bgr=0.0 mosaic=0.8 mixup=0.1 cutmix=0.0 copy_paste=0.0 copy_paste_mode=flip auto_augment=randaugment erasing=0.3 tracker=botsort.yaml model=models/yolov8s.pt
+2025-12-22 13:04:26,832 - ERROR - Training failed for yolov8s_cbam
+2025-12-22 13:04:26,832 - ERROR - Return code: 1
+2025-12-22 13:04:26,832 - ERROR - Stderr: Traceback (most recent call last):
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\engine\trainer.py", line 649, in get_dataset
+    data = check_det_dataset(self.args.data)
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\data\utils.py", line 400, in check_det_dataset
+    file = check_file(dataset)
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\utils\checks.py", line 621, in check_file
+    raise FileNotFoundError(f"'{file}' does not exist")
+FileNotFoundError: 'enhanced_dataset/data.yaml' does not exist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Scripts\yolo.exe\__main__.py", line 6, in <module>
+    sys.exit(entrypoint())
+             ~~~~~~~~~~^^
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\cfg\__init__.py", line 985, in entrypoint
+    getattr(model, mode)(**overrides)  # default args from model
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\engine\model.py", line 768, in train
+    self.trainer = (trainer or self._smart_load("trainer"))(overrides=args, _callbacks=self.callbacks)
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\models\yolo\detect\train.py", line 63, in __init__
+    super().__init__(cfg, overrides, _callbacks)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\engine\trainer.py", line 163, in __init__
+    self.data = self.get_dataset()
+                ~~~~~~~~~~~~~~~~^^
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\engine\trainer.py", line 653, in get_dataset
+    raise RuntimeError(emojis(f"Dataset '{clean_url(self.args.data)}' error \u274c {e}")) from e
+RuntimeError: Dataset 'enhanced_dataset/data.yaml' error  'enhanced_dataset/data.yaml' does not exist
+
+2025-12-22 13:04:26,832 - ERROR - Stdout: New https://pypi.org/project/ultralytics/8.3.241 available  Update with 'pip install -U ultralytics'
+Ultralytics 8.3.240  Python-3.13.9 torch-2.6.0+cu124 CUDA:0 (NVIDIA GeForce RTX 4060 Ti, 16380MiB)
+[34m[1mengine\trainer: [0magnostic_nms=False, amp=True, augment=True, auto_augment=randaugment, batch=24, bgr=0.0, box=4.0, cache=disk, cfg=None, classes=None, close_mosaic=15, cls=2.5, compile=False, conf=0.1, copy_paste=0.0, copy_paste_mode=flip, cos_lr=True, cutmix=0.0, data=enhanced_dataset/data.yaml, degrees=0.0, deterministic=True, device=0, dfl=1.5, dnn=False, dropout=0.1, dynamic=False, embed=None, epochs=100, erasing=0.3, exist_ok=True, fliplr=0.5, flipud=0.0, format=torchscript, fraction=1.0, freeze=None, half=True, hsv_h=0.01, hsv_s=0.5, hsv_v=0.3, imgsz=416, int8=False, iou=0.6, keras=False, kobj=1.0, line_width=None, lr0=0.001, lrf=0.1, mask_ratio=4, max_det=300, mixup=0.1, mode=train, model=models/yolov8s.pt, momentum=0.937, mosaic=0.8, multi_scale=True, name=yolov8s_cbam_confidence, nbs=64, nms=False, opset=None, optimize=False, optimizer=AdamW, overlap_mask=True, patience=20, perspective=0.0, plots=True, pose=12.0, pretrained=True, profile=False, project=output, rect=False, resume=False, retina_masks=False, save=True, save_conf=True, save_crop=False, save_dir=K:\AI\urc-Espresso-2026\output\yolov8s_cbam_confidence, save_frames=False, save_json=False, save_period=10, save_txt=True, scale=0.3, seed=42, shear=0.0, show=False, show_boxes=True, show_conf=True, show_labels=True, simplify=True, single_cls=False, source=None, split=val, stream_buffer=False, task=detect, time=None, tracker=botsort.yaml, translate=0.05, val=True, verbose=True, vid_stride=1, visualize=False, warmup_bias_lr=0.1, warmup_epochs=5.0, warmup_momentum=0.8, weight_decay=0.0005, workers=4, workspace=None
+
+2025-12-22 13:04:26,832 - INFO - Pausing for 30 seconds before next model...
+2025-12-22 13:04:56,832 - INFO - [6/12] Training yolov8m
+2025-12-22 13:04:56,832 - INFO - Starting training for yolov8m using config: configs/yolov8m_confidence.yaml
+2025-12-22 13:04:56,835 - INFO - Running command: yolo train task=detect mode=train data=enhanced_dataset/data.yaml epochs=100 patience=20 batch=12 imgsz=480 save=True save_period=10 cache=disk device=0 workers=4 project=output name=yolov8m_confidence exist_ok=True pretrained=True optimizer=AdamW verbose=True seed=42 deterministic=True cos_lr=True close_mosaic=15 amp=True fraction=1.0 multi_scale=True overlap_mask=True mask_ratio=4 dropout=0.1 val=True split=val conf=0.1 iou=0.6 max_det=300 half=True plots=True vid_stride=1 augment=True save_txt=True save_conf=True show_labels=True show_conf=True show_boxes=True format=torchscript simplify=True lr0=0.001 lrf=0.1 momentum=0.937 weight_decay=0.0005 warmup_epochs=5.0 warmup_momentum=0.8 warmup_bias_lr=0.1 box=4.0 cls=2.5 dfl=1.5 pose=12.0 kobj=1.0 nbs=64 hsv_h=0.01 hsv_s=0.5 hsv_v=0.3 degrees=0.0 translate=0.05 scale=0.3 shear=0.0 perspective=0.0 flipud=0.0 fliplr=0.5 bgr=0.0 mosaic=0.8 mixup=0.1 cutmix=0.0 copy_paste=0.0 copy_paste_mode=flip auto_augment=randaugment erasing=0.3 tracker=botsort.yaml model=models/yolov8m.pt
+2025-12-22 13:04:59,572 - ERROR - Training failed for yolov8m
+2025-12-22 13:04:59,572 - ERROR - Return code: 1
+2025-12-22 13:04:59,572 - ERROR - Stderr: Traceback (most recent call last):
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\engine\trainer.py", line 649, in get_dataset
+    data = check_det_dataset(self.args.data)
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\data\utils.py", line 400, in check_det_dataset
+    file = check_file(dataset)
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\utils\checks.py", line 621, in check_file
+    raise FileNotFoundError(f"'{file}' does not exist")
+FileNotFoundError: 'enhanced_dataset/data.yaml' does not exist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Scripts\yolo.exe\__main__.py", line 6, in <module>
+    sys.exit(entrypoint())
+             ~~~~~~~~~~^^
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\cfg\__init__.py", line 985, in entrypoint
+    getattr(model, mode)(**overrides)  # default args from model
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\engine\model.py", line 768, in train
+    self.trainer = (trainer or self._smart_load("trainer"))(overrides=args, _callbacks=self.callbacks)
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\models\yolo\detect\train.py", line 63, in __init__
+    super().__init__(cfg, overrides, _callbacks)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\engine\trainer.py", line 163, in __init__
+    self.data = self.get_dataset()
+                ~~~~~~~~~~~~~~~~^^
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\engine\trainer.py", line 653, in get_dataset
+    raise RuntimeError(emojis(f"Dataset '{clean_url(self.args.data)}' error \u274c {e}")) from e
+RuntimeError: Dataset 'enhanced_dataset/data.yaml' error  'enhanced_dataset/data.yaml' does not exist
+
+2025-12-22 13:04:59,572 - ERROR - Stdout: New https://pypi.org/project/ultralytics/8.3.241 available  Update with 'pip install -U ultralytics'
+Ultralytics 8.3.240  Python-3.13.9 torch-2.6.0+cu124 CUDA:0 (NVIDIA GeForce RTX 4060 Ti, 16380MiB)
+[34m[1mengine\trainer: [0magnostic_nms=False, amp=True, augment=True, auto_augment=randaugment, batch=12, bgr=0.0, box=4.0, cache=disk, cfg=None, classes=None, close_mosaic=15, cls=2.5, compile=False, conf=0.1, copy_paste=0.0, copy_paste_mode=flip, cos_lr=True, cutmix=0.0, data=enhanced_dataset/data.yaml, degrees=0.0, deterministic=True, device=0, dfl=1.5, dnn=False, dropout=0.1, dynamic=False, embed=None, epochs=100, erasing=0.3, exist_ok=True, fliplr=0.5, flipud=0.0, format=torchscript, fraction=1.0, freeze=None, half=True, hsv_h=0.01, hsv_s=0.5, hsv_v=0.3, imgsz=480, int8=False, iou=0.6, keras=False, kobj=1.0, line_width=None, lr0=0.001, lrf=0.1, mask_ratio=4, max_det=300, mixup=0.1, mode=train, model=models/yolov8m.pt, momentum=0.937, mosaic=0.8, multi_scale=True, name=yolov8m_confidence, nbs=64, nms=False, opset=None, optimize=False, optimizer=AdamW, overlap_mask=True, patience=20, perspective=0.0, plots=True, pose=12.0, pretrained=True, profile=False, project=output, rect=False, resume=False, retina_masks=False, save=True, save_conf=True, save_crop=False, save_dir=K:\AI\urc-Espresso-2026\output\yolov8m_confidence, save_frames=False, save_json=False, save_period=10, save_txt=True, scale=0.3, seed=42, shear=0.0, show=False, show_boxes=True, show_conf=True, show_labels=True, simplify=True, single_cls=False, source=None, split=val, stream_buffer=False, task=detect, time=None, tracker=botsort.yaml, translate=0.05, val=True, verbose=True, vid_stride=1, visualize=False, warmup_bias_lr=0.1, warmup_epochs=5.0, warmup_momentum=0.8, weight_decay=0.0005, workers=4, workspace=None
+
+2025-12-22 13:04:59,572 - INFO - Pausing for 30 seconds before next model...
+2025-12-22 13:05:29,572 - INFO - [7/12] Training yolov8l
+2025-12-22 13:05:29,573 - INFO - Starting training for yolov8l using config: configs/yolov8l_confidence.yaml
+2025-12-22 13:05:29,576 - INFO - Running command: yolo train task=detect mode=train data=enhanced_dataset/data.yaml epochs=100 patience=20 batch=8 imgsz=512 save=True save_period=10 cache=disk device=0 workers=4 project=output name=yolov8l_confidence exist_ok=True pretrained=True optimizer=AdamW verbose=True seed=42 deterministic=True cos_lr=True close_mosaic=15 amp=True fraction=1.0 multi_scale=True overlap_mask=True mask_ratio=4 dropout=0.1 val=True split=val conf=0.1 iou=0.6 max_det=300 half=True plots=True vid_stride=1 augment=True save_txt=True save_conf=True show_labels=True show_conf=True show_boxes=True format=torchscript simplify=True lr0=0.0005 lrf=0.1 momentum=0.937 weight_decay=0.0005 warmup_epochs=5.0 warmup_momentum=0.8 warmup_bias_lr=0.1 box=4.0 cls=3.0 dfl=1.5 pose=12.0 kobj=1.0 nbs=64 hsv_h=0.01 hsv_s=0.5 hsv_v=0.3 degrees=0.0 translate=0.05 scale=0.3 shear=0.0 perspective=0.0 flipud=0.0 fliplr=0.5 bgr=0.0 mosaic=0.8 mixup=0.1 cutmix=0.0 copy_paste=0.0 copy_paste_mode=flip auto_augment=randaugment erasing=0.3 tracker=botsort.yaml model=models/yolov8l.pt
+2025-12-22 13:05:32,367 - ERROR - Training failed for yolov8l
+2025-12-22 13:05:32,367 - ERROR - Return code: 1
+2025-12-22 13:05:32,367 - ERROR - Stderr: Traceback (most recent call last):
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\engine\trainer.py", line 649, in get_dataset
+    data = check_det_dataset(self.args.data)
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\data\utils.py", line 400, in check_det_dataset
+    file = check_file(dataset)
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\utils\checks.py", line 621, in check_file
+    raise FileNotFoundError(f"'{file}' does not exist")
+FileNotFoundError: 'enhanced_dataset/data.yaml' does not exist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Scripts\yolo.exe\__main__.py", line 6, in <module>
+    sys.exit(entrypoint())
+             ~~~~~~~~~~^^
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\cfg\__init__.py", line 985, in entrypoint
+    getattr(model, mode)(**overrides)  # default args from model
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\engine\model.py", line 768, in train
+    self.trainer = (trainer or self._smart_load("trainer"))(overrides=args, _callbacks=self.callbacks)
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\models\yolo\detect\train.py", line 63, in __init__
+    super().__init__(cfg, overrides, _callbacks)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\engine\trainer.py", line 163, in __init__
+    self.data = self.get_dataset()
+                ~~~~~~~~~~~~~~~~^^
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\engine\trainer.py", line 653, in get_dataset
+    raise RuntimeError(emojis(f"Dataset '{clean_url(self.args.data)}' error \u274c {e}")) from e
+RuntimeError: Dataset 'enhanced_dataset/data.yaml' error  'enhanced_dataset/data.yaml' does not exist
+
+2025-12-22 13:05:32,367 - ERROR - Stdout: New https://pypi.org/project/ultralytics/8.3.241 available  Update with 'pip install -U ultralytics'
+Ultralytics 8.3.240  Python-3.13.9 torch-2.6.0+cu124 CUDA:0 (NVIDIA GeForce RTX 4060 Ti, 16380MiB)
+[34m[1mengine\trainer: [0magnostic_nms=False, amp=True, augment=True, auto_augment=randaugment, batch=8, bgr=0.0, box=4.0, cache=disk, cfg=None, classes=None, close_mosaic=15, cls=3.0, compile=False, conf=0.1, copy_paste=0.0, copy_paste_mode=flip, cos_lr=True, cutmix=0.0, data=enhanced_dataset/data.yaml, degrees=0.0, deterministic=True, device=0, dfl=1.5, dnn=False, dropout=0.1, dynamic=False, embed=None, epochs=100, erasing=0.3, exist_ok=True, fliplr=0.5, flipud=0.0, format=torchscript, fraction=1.0, freeze=None, half=True, hsv_h=0.01, hsv_s=0.5, hsv_v=0.3, imgsz=512, int8=False, iou=0.6, keras=False, kobj=1.0, line_width=None, lr0=0.0005, lrf=0.1, mask_ratio=4, max_det=300, mixup=0.1, mode=train, model=models/yolov8l.pt, momentum=0.937, mosaic=0.8, multi_scale=True, name=yolov8l_confidence, nbs=64, nms=False, opset=None, optimize=False, optimizer=AdamW, overlap_mask=True, patience=20, perspective=0.0, plots=True, pose=12.0, pretrained=True, profile=False, project=output, rect=False, resume=False, retina_masks=False, save=True, save_conf=True, save_crop=False, save_dir=K:\AI\urc-Espresso-2026\output\yolov8l_confidence, save_frames=False, save_json=False, save_period=10, save_txt=True, scale=0.3, seed=42, shear=0.0, show=False, show_boxes=True, show_conf=True, show_labels=True, simplify=True, single_cls=False, source=None, split=val, stream_buffer=False, task=detect, time=None, tracker=botsort.yaml, translate=0.05, val=True, verbose=True, vid_stride=1, visualize=False, warmup_bias_lr=0.1, warmup_epochs=5.0, warmup_momentum=0.8, weight_decay=0.0005, workers=4, workspace=None
+
+2025-12-22 13:05:32,368 - INFO - Pausing for 30 seconds before next model...
+2025-12-22 13:06:02,367 - INFO - [8/12] Training mobilenet_160
+2025-12-22 13:06:02,367 - INFO - Starting training for mobilenet_160 using config: configs/mobilenet_160.yaml
+2025-12-22 13:06:02,371 - INFO - Running command: yolo train task=detect mode=train data=consolidated_dataset/data.yaml epochs=100 patience=15 batch=16 imgsz=160 save=True save_period=10 cache=disk device=0 workers=4 project=output name=mobilenet_160 exist_ok=True pretrained=True optimizer=AdamW verbose=True seed=42 deterministic=True cos_lr=True close_mosaic=10 amp=True fraction=1.0 overlap_mask=True mask_ratio=4 dropout=0.1 val=True split=val conf=0.1 iou=0.6 max_det=300 half=True plots=True vid_stride=1 augment=True save_txt=True save_conf=True show_labels=True show_conf=True show_boxes=True format=torchscript simplify=True lr0=0.001 lrf=0.1 momentum=0.937 weight_decay=0.0005 warmup_epochs=3.0 warmup_momentum=0.8 warmup_bias_lr=0.1 box=4.0 cls=2.5 dfl=1.5 pose=12.0 kobj=1.0 nbs=64 hsv_h=0.01 hsv_s=0.5 hsv_v=0.3 degrees=0.0 translate=0.05 scale=0.2 shear=0.0 perspective=0.0 flipud=0.0 fliplr=0.5 bgr=0.0 mosaic=0.5 mixup=0.05 cutmix=0.0 copy_paste=0.0 copy_paste_mode=flip auto_augment=randaugment erasing=0.2 tracker=botsort.yaml model=models/yolov8n.pt mobilevit_input_size=160
+2025-12-22 13:06:03,813 - ERROR - Training failed for mobilenet_160
+2025-12-22 13:06:03,813 - ERROR - Return code: 1
+2025-12-22 13:06:03,813 - ERROR - Stderr: Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Scripts\yolo.exe\__main__.py", line 6, in <module>
+    sys.exit(entrypoint())
+             ~~~~~~~~~~^^
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\cfg\__init__.py", line 909, in entrypoint
+    check_dict_alignment(full_args_dict, overrides)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\cfg\__init__.py", line 505, in check_dict_alignment
+    raise SyntaxError(string + CLI_HELP_MSG) from e
+SyntaxError: '[31m[1mmobilevit_input_size[0m' is not a valid YOLO argument. 
+
+    Arguments received: ['yolo', 'train', 'task=detect', 'mode=train', 'data=consolidated_dataset/data.yaml', 'epochs=100', 'patience=15', 'batch=16', 'imgsz=160', 'save=True', 'save_period=10', 'cache=disk', 'device=0', 'workers=4', 'project=output', 'name=mobilenet_160', 'exist_ok=True', 'pretrained=True', 'optimizer=AdamW', 'verbose=True', 'seed=42', 'deterministic=True', 'cos_lr=True', 'close_mosaic=10', 'amp=True', 'fraction=1.0', 'overlap_mask=True', 'mask_ratio=4', 'dropout=0.1', 'val=True', 'split=val', 'conf=0.1', 'iou=0.6', 'max_det=300', 'half=True', 'plots=True', 'vid_stride=1', 'augment=True', 'save_txt=True', 'save_conf=True', 'show_labels=True', 'show_conf=True', 'show_boxes=True', 'format=torchscript', 'simplify=True', 'lr0=0.001', 'lrf=0.1', 'momentum=0.937', 'weight_decay=0.0005', 'warmup_epochs=3.0', 'warmup_momentum=0.8', 'warmup_bias_lr=0.1', 'box=4.0', 'cls=2.5', 'dfl=1.5', 'pose=12.0', 'kobj=1.0', 'nbs=64', 'hsv_h=0.01', 'hsv_s=0.5', 'hsv_v=0.3', 'degrees=0.0', 'translate=0.05', 'scale=0.2', 'shear=0.0', 'perspective=0.0', 'flipud=0.0', 'fliplr=0.5', 'bgr=0.0', 'mosaic=0.5', 'mixup=0.05', 'cutmix=0.0', 'copy_paste=0.0', 'copy_paste_mode=flip', 'auto_augment=randaugment', 'erasing=0.2', 'tracker=botsort.yaml', 'model=models/yolov8n.pt', 'mobilevit_input_size=160']. Ultralytics 'yolo' commands use the following syntax:
+
+        yolo TASK MODE ARGS
+
+        Where   TASK (optional) is one of ['classify', 'detect', 'segment', 'obb', 'pose']
+                MODE (required) is one of ['val', 'predict', 'track', 'train', 'export', 'benchmark']
+                ARGS (optional) are any number of custom 'arg=value' pairs like 'imgsz=320' that override defaults.
+                    See all ARGS at https://docs.ultralytics.com/usage/cfg or with 'yolo cfg'
+
+    1. Train a detection model for 10 epochs with an initial learning_rate of 0.01
+        yolo train data=coco8.yaml model=yolo11n.pt epochs=10 lr0=0.01
+
+    2. Predict a YouTube video using a pretrained segmentation model at image size 320:
+        yolo predict model=yolo11n-seg.pt source='https://youtu.be/LNwODJXcvt4' imgsz=320
+
+    3. Validate a pretrained detection model at batch-size 1 and image size 640:
+        yolo val model=yolo11n.pt data=coco8.yaml batch=1 imgsz=640
+
+    4. Export a YOLO11n classification model to ONNX format at image size 224 by 128 (no TASK required)
+        yolo export model=yolo11n-cls.pt format=onnx imgsz=224,128
+
+    5. Ultralytics solutions usage
+        yolo solutions count or any of ['crop', 'blur', 'workout', 'heatmap', 'isegment', 'visioneye', 'speed', 'queue', 'analytics', 'inference', 'trackzone'] source="path/to/video.mp4"
+
+    6. Run special commands:
+        yolo help
+        yolo checks
+        yolo version
+        yolo settings
+        yolo copy-cfg
+        yolo cfg
+        yolo solutions help
+
+    Docs: https://docs.ultralytics.com
+    Solutions: https://docs.ultralytics.com/solutions/
+    Community: https://community.ultralytics.com
+    GitHub: https://github.com/ultralytics/ultralytics
+    
+
+2025-12-22 13:06:03,813 - INFO - Pausing for 30 seconds before next model...
+2025-12-22 13:06:33,813 - INFO - [9/12] Training mobilenet_192
+2025-12-22 13:06:33,813 - INFO - Starting training for mobilenet_192 using config: configs/mobilenet_192.yaml
+2025-12-22 13:06:33,817 - INFO - Running command: yolo train task=detect mode=train data=consolidated_dataset/data.yaml epochs=100 patience=15 batch=12 imgsz=192 save=True save_period=10 cache=disk device=0 workers=4 project=output name=mobilenet_192 exist_ok=True pretrained=True optimizer=AdamW verbose=True seed=42 deterministic=True cos_lr=True close_mosaic=10 amp=True fraction=1.0 overlap_mask=True mask_ratio=4 dropout=0.1 val=True split=val conf=0.1 iou=0.6 max_det=300 half=True plots=True vid_stride=1 augment=True save_txt=True save_conf=True show_labels=True show_conf=True show_boxes=True format=torchscript simplify=True lr0=0.001 lrf=0.1 momentum=0.937 weight_decay=0.0005 warmup_epochs=3.0 warmup_momentum=0.8 warmup_bias_lr=0.1 box=4.0 cls=2.5 dfl=1.5 pose=12.0 kobj=1.0 nbs=64 hsv_h=0.01 hsv_s=0.5 hsv_v=0.3 degrees=0.0 translate=0.05 scale=0.25 shear=0.0 perspective=0.0 flipud=0.0 fliplr=0.5 bgr=0.0 mosaic=0.6 mixup=0.08 cutmix=0.0 copy_paste=0.0 copy_paste_mode=flip auto_augment=randaugment erasing=0.25 tracker=botsort.yaml model=models/yolov8n.pt mobilevit_input_size=192
+2025-12-22 13:06:35,280 - ERROR - Training failed for mobilenet_192
+2025-12-22 13:06:35,280 - ERROR - Return code: 1
+2025-12-22 13:06:35,280 - ERROR - Stderr: Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Scripts\yolo.exe\__main__.py", line 6, in <module>
+    sys.exit(entrypoint())
+             ~~~~~~~~~~^^
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\cfg\__init__.py", line 909, in entrypoint
+    check_dict_alignment(full_args_dict, overrides)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\cfg\__init__.py", line 505, in check_dict_alignment
+    raise SyntaxError(string + CLI_HELP_MSG) from e
+SyntaxError: '[31m[1mmobilevit_input_size[0m' is not a valid YOLO argument. 
+
+    Arguments received: ['yolo', 'train', 'task=detect', 'mode=train', 'data=consolidated_dataset/data.yaml', 'epochs=100', 'patience=15', 'batch=12', 'imgsz=192', 'save=True', 'save_period=10', 'cache=disk', 'device=0', 'workers=4', 'project=output', 'name=mobilenet_192', 'exist_ok=True', 'pretrained=True', 'optimizer=AdamW', 'verbose=True', 'seed=42', 'deterministic=True', 'cos_lr=True', 'close_mosaic=10', 'amp=True', 'fraction=1.0', 'overlap_mask=True', 'mask_ratio=4', 'dropout=0.1', 'val=True', 'split=val', 'conf=0.1', 'iou=0.6', 'max_det=300', 'half=True', 'plots=True', 'vid_stride=1', 'augment=True', 'save_txt=True', 'save_conf=True', 'show_labels=True', 'show_conf=True', 'show_boxes=True', 'format=torchscript', 'simplify=True', 'lr0=0.001', 'lrf=0.1', 'momentum=0.937', 'weight_decay=0.0005', 'warmup_epochs=3.0', 'warmup_momentum=0.8', 'warmup_bias_lr=0.1', 'box=4.0', 'cls=2.5', 'dfl=1.5', 'pose=12.0', 'kobj=1.0', 'nbs=64', 'hsv_h=0.01', 'hsv_s=0.5', 'hsv_v=0.3', 'degrees=0.0', 'translate=0.05', 'scale=0.25', 'shear=0.0', 'perspective=0.0', 'flipud=0.0', 'fliplr=0.5', 'bgr=0.0', 'mosaic=0.6', 'mixup=0.08', 'cutmix=0.0', 'copy_paste=0.0', 'copy_paste_mode=flip', 'auto_augment=randaugment', 'erasing=0.25', 'tracker=botsort.yaml', 'model=models/yolov8n.pt', 'mobilevit_input_size=192']. Ultralytics 'yolo' commands use the following syntax:
+
+        yolo TASK MODE ARGS
+
+        Where   TASK (optional) is one of ['detect', 'pose', 'classify', 'obb', 'segment']
+                MODE (required) is one of ['export', 'train', 'benchmark', 'predict', 'track', 'val']
+                ARGS (optional) are any number of custom 'arg=value' pairs like 'imgsz=320' that override defaults.
+                    See all ARGS at https://docs.ultralytics.com/usage/cfg or with 'yolo cfg'
+
+    1. Train a detection model for 10 epochs with an initial learning_rate of 0.01
+        yolo train data=coco8.yaml model=yolo11n.pt epochs=10 lr0=0.01
+
+    2. Predict a YouTube video using a pretrained segmentation model at image size 320:
+        yolo predict model=yolo11n-seg.pt source='https://youtu.be/LNwODJXcvt4' imgsz=320
+
+    3. Validate a pretrained detection model at batch-size 1 and image size 640:
+        yolo val model=yolo11n.pt data=coco8.yaml batch=1 imgsz=640
+
+    4. Export a YOLO11n classification model to ONNX format at image size 224 by 128 (no TASK required)
+        yolo export model=yolo11n-cls.pt format=onnx imgsz=224,128
+
+    5. Ultralytics solutions usage
+        yolo solutions count or any of ['crop', 'blur', 'workout', 'heatmap', 'isegment', 'visioneye', 'speed', 'queue', 'analytics', 'inference', 'trackzone'] source="path/to/video.mp4"
+
+    6. Run special commands:
+        yolo help
+        yolo checks
+        yolo version
+        yolo settings
+        yolo copy-cfg
+        yolo cfg
+        yolo solutions help
+
+    Docs: https://docs.ultralytics.com
+    Solutions: https://docs.ultralytics.com/solutions/
+    Community: https://community.ultralytics.com
+    GitHub: https://github.com/ultralytics/ultralytics
+    
+
+2025-12-22 13:06:35,280 - INFO - Pausing for 30 seconds before next model...
+2025-12-22 13:07:05,280 - INFO - [10/12] Training mobilenet_224
+2025-12-22 13:07:05,280 - INFO - Starting training for mobilenet_224 using config: configs/mobilenet_224.yaml
+2025-12-22 13:07:05,283 - INFO - Running command: yolo train task=detect mode=train data=consolidated_dataset/data.yaml epochs=100 patience=15 batch=8 imgsz=224 save=True save_period=10 cache=disk device=0 workers=4 project=output name=mobilenet_224 exist_ok=True pretrained=True optimizer=AdamW verbose=True seed=42 deterministic=True cos_lr=True close_mosaic=10 amp=True fraction=1.0 overlap_mask=True mask_ratio=4 dropout=0.1 val=True split=val conf=0.1 iou=0.6 max_det=300 half=True plots=True vid_stride=1 augment=True save_txt=True save_conf=True show_labels=True show_conf=True show_boxes=True format=torchscript simplify=True lr0=0.001 lrf=0.1 momentum=0.937 weight_decay=0.0005 warmup_epochs=3.0 warmup_momentum=0.8 warmup_bias_lr=0.1 box=4.0 cls=2.5 dfl=1.5 pose=12.0 kobj=1.0 nbs=64 hsv_h=0.01 hsv_s=0.5 hsv_v=0.3 degrees=0.0 translate=0.05 scale=0.3 shear=0.0 perspective=0.0 flipud=0.0 fliplr=0.5 bgr=0.0 mosaic=0.7 mixup=0.1 cutmix=0.0 copy_paste=0.0 copy_paste_mode=flip auto_augment=randaugment erasing=0.3 tracker=botsort.yaml model=models/yolov8s.pt mobilevit_input_size=224
+2025-12-22 13:07:06,718 - ERROR - Training failed for mobilenet_224
+2025-12-22 13:07:06,718 - ERROR - Return code: 1
+2025-12-22 13:07:06,718 - ERROR - Stderr: Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Scripts\yolo.exe\__main__.py", line 6, in <module>
+    sys.exit(entrypoint())
+             ~~~~~~~~~~^^
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\cfg\__init__.py", line 909, in entrypoint
+    check_dict_alignment(full_args_dict, overrides)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\cfg\__init__.py", line 505, in check_dict_alignment
+    raise SyntaxError(string + CLI_HELP_MSG) from e
+SyntaxError: '[31m[1mmobilevit_input_size[0m' is not a valid YOLO argument. 
+
+    Arguments received: ['yolo', 'train', 'task=detect', 'mode=train', 'data=consolidated_dataset/data.yaml', 'epochs=100', 'patience=15', 'batch=8', 'imgsz=224', 'save=True', 'save_period=10', 'cache=disk', 'device=0', 'workers=4', 'project=output', 'name=mobilenet_224', 'exist_ok=True', 'pretrained=True', 'optimizer=AdamW', 'verbose=True', 'seed=42', 'deterministic=True', 'cos_lr=True', 'close_mosaic=10', 'amp=True', 'fraction=1.0', 'overlap_mask=True', 'mask_ratio=4', 'dropout=0.1', 'val=True', 'split=val', 'conf=0.1', 'iou=0.6', 'max_det=300', 'half=True', 'plots=True', 'vid_stride=1', 'augment=True', 'save_txt=True', 'save_conf=True', 'show_labels=True', 'show_conf=True', 'show_boxes=True', 'format=torchscript', 'simplify=True', 'lr0=0.001', 'lrf=0.1', 'momentum=0.937', 'weight_decay=0.0005', 'warmup_epochs=3.0', 'warmup_momentum=0.8', 'warmup_bias_lr=0.1', 'box=4.0', 'cls=2.5', 'dfl=1.5', 'pose=12.0', 'kobj=1.0', 'nbs=64', 'hsv_h=0.01', 'hsv_s=0.5', 'hsv_v=0.3', 'degrees=0.0', 'translate=0.05', 'scale=0.3', 'shear=0.0', 'perspective=0.0', 'flipud=0.0', 'fliplr=0.5', 'bgr=0.0', 'mosaic=0.7', 'mixup=0.1', 'cutmix=0.0', 'copy_paste=0.0', 'copy_paste_mode=flip', 'auto_augment=randaugment', 'erasing=0.3', 'tracker=botsort.yaml', 'model=models/yolov8s.pt', 'mobilevit_input_size=224']. Ultralytics 'yolo' commands use the following syntax:
+
+        yolo TASK MODE ARGS
+
+        Where   TASK (optional) is one of ['segment', 'classify', 'obb', 'pose', 'detect']
+                MODE (required) is one of ['export', 'benchmark', 'train', 'track', 'val', 'predict']
+                ARGS (optional) are any number of custom 'arg=value' pairs like 'imgsz=320' that override defaults.
+                    See all ARGS at https://docs.ultralytics.com/usage/cfg or with 'yolo cfg'
+
+    1. Train a detection model for 10 epochs with an initial learning_rate of 0.01
+        yolo train data=coco8.yaml model=yolo11n.pt epochs=10 lr0=0.01
+
+    2. Predict a YouTube video using a pretrained segmentation model at image size 320:
+        yolo predict model=yolo11n-seg.pt source='https://youtu.be/LNwODJXcvt4' imgsz=320
+
+    3. Validate a pretrained detection model at batch-size 1 and image size 640:
+        yolo val model=yolo11n.pt data=coco8.yaml batch=1 imgsz=640
+
+    4. Export a YOLO11n classification model to ONNX format at image size 224 by 128 (no TASK required)
+        yolo export model=yolo11n-cls.pt format=onnx imgsz=224,128
+
+    5. Ultralytics solutions usage
+        yolo solutions count or any of ['crop', 'blur', 'workout', 'heatmap', 'isegment', 'visioneye', 'speed', 'queue', 'analytics', 'inference', 'trackzone'] source="path/to/video.mp4"
+
+    6. Run special commands:
+        yolo help
+        yolo checks
+        yolo version
+        yolo settings
+        yolo copy-cfg
+        yolo cfg
+        yolo solutions help
+
+    Docs: https://docs.ultralytics.com
+    Solutions: https://docs.ultralytics.com/solutions/
+    Community: https://community.ultralytics.com
+    GitHub: https://github.com/ultralytics/ultralytics
+    
+
+2025-12-22 13:07:06,718 - INFO - Pausing for 30 seconds before next model...
+2025-12-22 13:07:36,718 - INFO - [11/12] Training mobilenet
+2025-12-22 13:07:36,718 - INFO - Starting training for mobilenet using config: configs/mobilenet_confidence.yaml
+2025-12-22 13:07:36,721 - INFO - Running command: yolo train task=detect mode=train data=enhanced_dataset/data.yaml epochs=100 patience=20 batch=20 imgsz=416 save=True save_period=10 cache=disk device=0 workers=4 project=output name=mobilenet_confidence exist_ok=True pretrained=True optimizer=AdamW verbose=True seed=42 deterministic=True cos_lr=True close_mosaic=15 amp=True fraction=1.0 multi_scale=True overlap_mask=True mask_ratio=4 dropout=0.1 val=True split=val conf=0.1 iou=0.6 max_det=300 half=True plots=True vid_stride=1 augment=True save_txt=True save_conf=True show_labels=True show_conf=True show_boxes=True format=torchscript simplify=True lr0=0.001 lrf=0.1 momentum=0.937 weight_decay=0.0005 warmup_epochs=5.0 warmup_momentum=0.8 warmup_bias_lr=0.1 box=4.0 cls=2.5 dfl=1.5 pose=12.0 kobj=1.0 nbs=64 hsv_h=0.01 hsv_s=0.5 hsv_v=0.3 degrees=0.0 translate=0.05 scale=0.3 shear=0.0 perspective=0.0 flipud=0.0 fliplr=0.5 bgr=0.0 mosaic=0.8 mixup=0.1 cutmix=0.0 copy_paste=0.0 copy_paste_mode=flip auto_augment=randaugment erasing=0.3 tracker=botsort.yaml model=models/yolov8s.pt
+2025-12-22 13:07:39,390 - ERROR - Training failed for mobilenet
+2025-12-22 13:07:39,390 - ERROR - Return code: 1
+2025-12-22 13:07:39,390 - ERROR - Stderr: Traceback (most recent call last):
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\engine\trainer.py", line 649, in get_dataset
+    data = check_det_dataset(self.args.data)
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\data\utils.py", line 400, in check_det_dataset
+    file = check_file(dataset)
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\utils\checks.py", line 621, in check_file
+    raise FileNotFoundError(f"'{file}' does not exist")
+FileNotFoundError: 'enhanced_dataset/data.yaml' does not exist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Scripts\yolo.exe\__main__.py", line 6, in <module>
+    sys.exit(entrypoint())
+             ~~~~~~~~~~^^
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\cfg\__init__.py", line 985, in entrypoint
+    getattr(model, mode)(**overrides)  # default args from model
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\engine\model.py", line 768, in train
+    self.trainer = (trainer or self._smart_load("trainer"))(overrides=args, _callbacks=self.callbacks)
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\models\yolo\detect\train.py", line 63, in __init__
+    super().__init__(cfg, overrides, _callbacks)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\engine\trainer.py", line 163, in __init__
+    self.data = self.get_dataset()
+                ~~~~~~~~~~~~~~~~^^
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\engine\trainer.py", line 653, in get_dataset
+    raise RuntimeError(emojis(f"Dataset '{clean_url(self.args.data)}' error \u274c {e}")) from e
+RuntimeError: Dataset 'enhanced_dataset/data.yaml' error  'enhanced_dataset/data.yaml' does not exist
+
+2025-12-22 13:07:39,391 - ERROR - Stdout: New https://pypi.org/project/ultralytics/8.3.241 available  Update with 'pip install -U ultralytics'
+Ultralytics 8.3.240  Python-3.13.9 torch-2.6.0+cu124 CUDA:0 (NVIDIA GeForce RTX 4060 Ti, 16380MiB)
+[34m[1mengine\trainer: [0magnostic_nms=False, amp=True, augment=True, auto_augment=randaugment, batch=20, bgr=0.0, box=4.0, cache=disk, cfg=None, classes=None, close_mosaic=15, cls=2.5, compile=False, conf=0.1, copy_paste=0.0, copy_paste_mode=flip, cos_lr=True, cutmix=0.0, data=enhanced_dataset/data.yaml, degrees=0.0, deterministic=True, device=0, dfl=1.5, dnn=False, dropout=0.1, dynamic=False, embed=None, epochs=100, erasing=0.3, exist_ok=True, fliplr=0.5, flipud=0.0, format=torchscript, fraction=1.0, freeze=None, half=True, hsv_h=0.01, hsv_s=0.5, hsv_v=0.3, imgsz=416, int8=False, iou=0.6, keras=False, kobj=1.0, line_width=None, lr0=0.001, lrf=0.1, mask_ratio=4, max_det=300, mixup=0.1, mode=train, model=models/yolov8s.pt, momentum=0.937, mosaic=0.8, multi_scale=True, name=mobilenet_confidence, nbs=64, nms=False, opset=None, optimize=False, optimizer=AdamW, overlap_mask=True, patience=20, perspective=0.0, plots=True, pose=12.0, pretrained=True, profile=False, project=output, rect=False, resume=False, retina_masks=False, save=True, save_conf=True, save_crop=False, save_dir=K:\AI\urc-Espresso-2026\output\mobilenet_confidence, save_frames=False, save_json=False, save_period=10, save_txt=True, scale=0.3, seed=42, shear=0.0, show=False, show_boxes=True, show_conf=True, show_labels=True, simplify=True, single_cls=False, source=None, split=val, stream_buffer=False, task=detect, time=None, tracker=botsort.yaml, translate=0.05, val=True, verbose=True, vid_stride=1, visualize=False, warmup_bias_lr=0.1, warmup_epochs=5.0, warmup_momentum=0.8, weight_decay=0.0005, workers=4, workspace=None
+
+2025-12-22 13:07:39,391 - INFO - Pausing for 30 seconds before next model...
+2025-12-22 13:08:09,390 - INFO - [12/12] Training efficientnet
+2025-12-22 13:08:09,391 - INFO - Starting training for efficientnet using config: configs/efficientnet_confidence.yaml
+2025-12-22 13:08:09,393 - INFO - Running command: yolo train task=detect mode=train data=enhanced_dataset/data.yaml epochs=100 patience=20 batch=16 imgsz=416 save=True save_period=10 cache=disk device=0 workers=4 project=output name=efficientnet_confidence exist_ok=True pretrained=True optimizer=AdamW verbose=True seed=42 deterministic=True cos_lr=True close_mosaic=15 amp=True fraction=1.0 multi_scale=True overlap_mask=True mask_ratio=4 dropout=0.1 val=True split=val conf=0.1 iou=0.6 max_det=300 half=True plots=True vid_stride=1 augment=True save_txt=True save_conf=True show_labels=True show_conf=True show_boxes=True format=torchscript simplify=True lr0=0.001 lrf=0.1 momentum=0.937 weight_decay=0.0005 warmup_epochs=5.0 warmup_momentum=0.8 warmup_bias_lr=0.1 box=4.0 cls=2.0 dfl=1.5 pose=12.0 kobj=1.0 nbs=64 hsv_h=0.01 hsv_s=0.5 hsv_v=0.3 degrees=0.0 translate=0.05 scale=0.3 shear=0.0 perspective=0.0 flipud=0.0 fliplr=0.5 bgr=0.0 mosaic=0.8 mixup=0.1 cutmix=0.0 copy_paste=0.0 copy_paste_mode=flip auto_augment=randaugment erasing=0.3 tracker=botsort.yaml model=models/yolov8s.pt
+2025-12-22 13:08:12,101 - ERROR - Training failed for efficientnet
+2025-12-22 13:08:12,101 - ERROR - Return code: 1
+2025-12-22 13:08:12,101 - ERROR - Stderr: Traceback (most recent call last):
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\engine\trainer.py", line 649, in get_dataset
+    data = check_det_dataset(self.args.data)
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\data\utils.py", line 400, in check_det_dataset
+    file = check_file(dataset)
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\utils\checks.py", line 621, in check_file
+    raise FileNotFoundError(f"'{file}' does not exist")
+FileNotFoundError: 'enhanced_dataset/data.yaml' does not exist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Scripts\yolo.exe\__main__.py", line 6, in <module>
+    sys.exit(entrypoint())
+             ~~~~~~~~~~^^
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\cfg\__init__.py", line 985, in entrypoint
+    getattr(model, mode)(**overrides)  # default args from model
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\engine\model.py", line 768, in train
+    self.trainer = (trainer or self._smart_load("trainer"))(overrides=args, _callbacks=self.callbacks)
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\models\yolo\detect\train.py", line 63, in __init__
+    super().__init__(cfg, overrides, _callbacks)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\engine\trainer.py", line 163, in __init__
+    self.data = self.get_dataset()
+                ~~~~~~~~~~~~~~~~^^
+  File "C:\Users\kaddo\AppData\Local\Programs\Python\Python313\Lib\site-packages\ultralytics\engine\trainer.py", line 653, in get_dataset
+    raise RuntimeError(emojis(f"Dataset '{clean_url(self.args.data)}' error \u274c {e}")) from e
+RuntimeError: Dataset 'enhanced_dataset/data.yaml' error  'enhanced_dataset/data.yaml' does not exist
+
+2025-12-22 13:08:12,101 - ERROR - Stdout: New https://pypi.org/project/ultralytics/8.3.241 available  Update with 'pip install -U ultralytics'
+Ultralytics 8.3.240  Python-3.13.9 torch-2.6.0+cu124 CUDA:0 (NVIDIA GeForce RTX 4060 Ti, 16380MiB)
+[34m[1mengine\trainer: [0magnostic_nms=False, amp=True, augment=True, auto_augment=randaugment, batch=16, bgr=0.0, box=4.0, cache=disk, cfg=None, classes=None, close_mosaic=15, cls=2.0, compile=False, conf=0.1, copy_paste=0.0, copy_paste_mode=flip, cos_lr=True, cutmix=0.0, data=enhanced_dataset/data.yaml, degrees=0.0, deterministic=True, device=0, dfl=1.5, dnn=False, dropout=0.1, dynamic=False, embed=None, epochs=100, erasing=0.3, exist_ok=True, fliplr=0.5, flipud=0.0, format=torchscript, fraction=1.0, freeze=None, half=True, hsv_h=0.01, hsv_s=0.5, hsv_v=0.3, imgsz=416, int8=False, iou=0.6, keras=False, kobj=1.0, line_width=None, lr0=0.001, lrf=0.1, mask_ratio=4, max_det=300, mixup=0.1, mode=train, model=models/yolov8s.pt, momentum=0.937, mosaic=0.8, multi_scale=True, name=efficientnet_confidence, nbs=64, nms=False, opset=None, optimize=False, optimizer=AdamW, overlap_mask=True, patience=20, perspective=0.0, plots=True, pose=12.0, pretrained=True, profile=False, project=output, rect=False, resume=False, retina_masks=False, save=True, save_conf=True, save_crop=False, save_dir=K:\AI\urc-Espresso-2026\output\efficientnet_confidence, save_frames=False, save_json=False, save_period=10, save_txt=True, scale=0.3, seed=42, shear=0.0, show=False, show_boxes=True, show_conf=True, show_labels=True, simplify=True, single_cls=False, source=None, split=val, stream_buffer=False, task=detect, time=None, tracker=botsort.yaml, translate=0.05, val=True, verbose=True, vid_stride=1, visualize=False, warmup_bias_lr=0.1, warmup_epochs=5.0, warmup_momentum=0.8, weight_decay=0.0005, workers=4, workspace=None
+
+2025-12-22 13:08:12,101 - INFO - ================================================================================
+2025-12-22 13:08:12,101 - INFO - TRAINING COMPLETED
+2025-12-22 13:08:12,101 - INFO - ================================================================================
+2025-12-22 13:08:12,101 - INFO - Total time: 1919.68 seconds
+2025-12-22 13:08:12,101 - INFO - Results: 3/12 models trained successfully
+2025-12-22 13:08:12,101 - INFO -   yolov8n_160: SUCCESS
+2025-12-22 13:08:12,101 - INFO -   yolov8n_192: SUCCESS
+2025-12-22 13:08:12,101 - INFO -   yolov8n_224: SUCCESS
+2025-12-22 13:08:12,101 - INFO -   yolov8s: FAILED
+2025-12-22 13:08:12,101 - INFO -   yolov8s_cbam: FAILED
+2025-12-22 13:08:12,101 - INFO -   yolov8m: FAILED
+2025-12-22 13:08:12,101 - INFO -   yolov8l: FAILED
+2025-12-22 13:08:12,101 - INFO -   mobilenet_160: FAILED
+2025-12-22 13:08:12,101 - INFO -   mobilenet_192: FAILED
+2025-12-22 13:08:12,101 - INFO -   mobilenet_224: FAILED
+2025-12-22 13:08:12,101 - INFO -   mobilenet: FAILED
+2025-12-22 13:08:12,101 - INFO -   efficientnet: FAILED
+2025-12-22 13:08:12,102 - INFO - Summary written to output/full_training_from_scratch_summary.txt

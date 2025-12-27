@@ -65,7 +65,7 @@ output:
   visualizations: "output/visualizations"
 
 # Device configuration
-device: "cpu"  # Use CPU by default (change to "cuda" if GPU available)
+device: "cuda"  # Use GPU for training (fallback to CPU if not available)
 
 # Evaluation settings
 evaluation:
