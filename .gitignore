@@ -152,6 +152,9 @@ training_*.log
 *.svg
 *.bmp
 
+# Deployment artifacts
+deployment_package/
+
 # Large result files (JSON, except essential configs)
 *.json
 !pyproject.toml

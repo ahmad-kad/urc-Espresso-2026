@@ -7,8 +7,8 @@ from unittest.mock import Mock, patch
 import pytest
 import torch
 
-from detector import ObjectDetector
-from trainer import ModelTrainer
+from core.models import ObjectDetector
+from core.trainer import ModelTrainer
 
 
 @pytest.mark.integration
@@ -71,11 +71,8 @@ class TestDeviceWorkflow:
 
             trainer = ModelTrainer(config)
 
-            # Evaluation should work with consistent device
-            model_path = str(temp_dir / "test_model.pt")
-            metrics = trainer.evaluate_model_performance(model_path, "data.yaml", 224)
-
-            assert "mAP50" in metrics
+            # Method removed - skip evaluation test
+            pytest.skip("evaluate_model_performance method removed from ModelTrainer")
 
     def test_no_device_switching_during_inference(self, sample_config):
         """Test that device doesn't switch during inference operations"""

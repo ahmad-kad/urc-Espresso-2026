@@ -72,3 +72,31 @@ def mock_model_path(tmp_path):
     model_dir = tmp_path / "models"
     model_dir.mkdir()
     return str(model_dir / "test_model.pt")
+
+
+@pytest.fixture
+def mock_data_yaml(tmp_path):
+    """Create a mock data.yaml file for training tests"""
+    data_yaml = tmp_path / "data.yaml"
+    data_yaml.write_text(
+        """
+path: ./data
+train: images/train
+val: images/val
+test: images/test
+
+nc: 2
+names: ['class0', 'class1']
+"""
+    )
+    return str(data_yaml)
+
+
+@pytest.fixture(autouse=True)
+def clear_model_cache():
+    """Clear the model cache before each test to ensure clean state"""
+    from core.models.detector import model_cache
+
+    model_cache._cache.clear()
+    model_cache._access_times.clear()
+    yield

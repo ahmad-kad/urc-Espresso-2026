@@ -6,6 +6,7 @@ show_class_samples.py, analyze_per_class_performance.py, create_model_class_matr
 create_per_class_comparison.py, recall_comparison.py, and create_comparison_tables.py
 """
 
+import logging
 import random
 from collections import defaultdict
 from pathlib import Path
@@ -17,6 +18,8 @@ import pandas as pd
 import seaborn as sns
 import yaml
 from PIL import Image, ImageDraw, ImageFont
+
+logger = logging.getLogger(__name__)
 
 
 class DatasetVisualizer:
@@ -56,7 +59,8 @@ class DatasetVisualizer:
                             image_path = self.train_images / f"{image_name}.jpg"
                             if image_path.exists() and "_aug_" not in image_name:
                                 class_samples.append((image_path, image_name))
-                except:
+                except Exception as e:
+                    logger.warning(f"Error processing class {class_id}: {e}")
                     continue
 
             if class_samples:
@@ -84,7 +88,8 @@ class DatasetVisualizer:
         # Try to load a font
         try:
             font = ImageFont.truetype("arial.ttf", 16)
-        except:
+        except Exception as e:
+            logger.debug(f"Could not load arial font: {e}")
             font = ImageFont.load_default()
 
         # Add images to grid
@@ -184,7 +189,8 @@ class DatasetVisualizer:
                                     class_samples[class_id].append(
                                         (image_path, image_name)
                                     )
-            except:
+            except Exception as e:
+                logger.warning(f"Error processing class {class_id}: {e}")
                 continue
 
         # Create detailed grid
@@ -213,7 +219,8 @@ class DatasetVisualizer:
         try:
             class_font = ImageFont.truetype("arial.ttf", 18)
             sample_font = ImageFont.truetype("arial.ttf", 12)
-        except:
+        except Exception as e:
+            logger.debug(f"Could not load arial fonts: {e}")
             class_font = ImageFont.load_default()
             sample_font = ImageFont.load_default()
 

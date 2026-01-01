@@ -2,17 +2,17 @@
 Unit tests for ObjectDetector
 """
 
-from unittest.mock import MagicMock, Mock, patch
+from unittest.mock import Mock, patch
 
 import pytest
 
-from detector import ObjectDetector
+from core.models import ObjectDetector
 
 
 class TestObjectDetector:
     """Test ObjectDetector class"""
 
-    @patch("detector.YOLO")
+    @patch("core.models.detector.YOLO")
     def test_init_with_yolov8(self, mock_yolo, sample_config):
         """Test detector initialization with YOLOv8"""
         mock_model = Mock()
@@ -25,7 +25,7 @@ class TestObjectDetector:
         assert detector.model is not None
         mock_yolo.assert_called_once()
 
-    @patch("detector.YOLO")
+    @patch("core.models.detector.YOLO")
     def test_predict_yolo(self, mock_yolo, sample_config):
         """Test prediction with YOLO model"""
         mock_model = Mock()
@@ -38,23 +38,24 @@ class TestObjectDetector:
         result = detector.predict("test_image.jpg")
 
         assert result is not None
-        mock_model.predict.assert_called_once()
+        # predict is called twice: once for validation, once for actual prediction
+        assert mock_model.predict.call_count == 2
 
-    @patch("detector.YOLO")
-    def test_train_yolo(self, mock_yolo, sample_config, temp_dir):
+    @patch("core.models.detector.YOLO")
+    def test_train_yolo(self, mock_yolo, sample_config, temp_dir, mock_data_yaml):
         """Test training with YOLO model"""
         mock_model = Mock()
         mock_model.train.return_value = Mock(save_dir=str(temp_dir))
         mock_yolo.return_value = mock_model
 
         detector = ObjectDetector(sample_config)
-        result = detector.train("data.yaml", model_name="test")
+        result = detector.train(mock_data_yaml, model_name="test")
 
         assert result is not None
         mock_model.train.assert_called_once()
 
     @pytest.mark.debug
-    @patch("detector.YOLO")
+    @patch("core.models.detector.YOLO")
     def test_debug_mode(self, mock_yolo, sample_config, debug_mode):
         """Test debug mode functionality"""
         mock_model = Mock()

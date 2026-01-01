@@ -10,6 +10,13 @@ import pandas as pd
 import numpy as np
 import onnxruntime as ort
 
+# Import cv2 with fallback
+try:
+    import cv2
+except ImportError:
+    print("Warning: OpenCV not available. ONNX evaluation will not work.")
+    cv2 = None
+
 
 def load_ground_truth_labels(
     data_yaml: str, image_paths: List[str]
@@ -57,7 +64,7 @@ def evaluate_onnx_model(
     image_paths: List[str],
     input_size: int = 416,
     conf_threshold: float = 0.25,
-) -> Dict[str, List[Dict]]:
+) -> Dict[str, Dict]:
     """
     Evaluate ONNX model predictions
 
@@ -77,34 +84,97 @@ def evaluate_onnx_model(
     predictions = {}
 
     for img_path in image_paths:
-        # Load and preprocess image
-        img = cv2.imread(img_path)
-        if img is None:
+        try:
+            # Load and preprocess image
+            if cv2 is None:
+                predictions[img_path] = {"boxes": [], "classes": [], "scores": []}
+                continue
+
+            img = cv2.imread(img_path)
+            if img is None:
+                predictions[img_path] = {"boxes": [], "classes": [], "scores": []}
+                continue
+
+            original_height, original_width = img.shape[:2]
+
+            # Preprocess
+            img_resized = cv2.resize(img, (input_size, input_size))
+            img_normalized = img_resized.astype(np.float32) / 255.0
+            img_transposed = np.transpose(img_normalized, (2, 0, 1))
+            img_batch = np.expand_dims(img_transposed, axis=0)
+
+            # Run inference
+            outputs = session.run(None, {input_name: img_batch})
+
+            # Parse YOLOv8 ONNX outputs (simplified)
+            # YOLOv8 typically outputs a single tensor with shape [1, 84, 8400] for COCO
+            # or [1, 30, 8400] for custom models (6 classes * 5 + 0 = 30)
+            if len(outputs) == 0:
+                predictions[img_path] = {"boxes": [], "classes": [], "scores": []}
+                continue
+
+            # Convert to numpy array if needed
+            output_tensor = outputs[0]
+            try:
+                # Try to convert to numpy - works for most tensor types
+                if hasattr(output_tensor, "numpy"):
+                    output = output_tensor.numpy()
+                else:
+                    output = np.array(output_tensor)
+            except Exception:
+                # Fallback: assume it's already a numpy array
+                output = np.asarray(output_tensor)
+
+            output = output[0]  # Remove batch dimension
+
+            boxes = []
+            classes = []
+            scores = []
+
+            # Parse detections (simplified - assumes YOLO format)
+            for detection in output.T:  # Transpose to iterate over detections
+                if len(detection) >= 6:  # x, y, w, h, conf, class_scores...
+                    x, y, w, h, conf = detection[:5]
+
+                    if conf > conf_threshold:
+                        # Get class with highest score
+                        class_scores = detection[5:]
+                        class_id = np.argmax(class_scores)
+                        class_score = class_scores[class_id]
+
+                        if class_score > conf_threshold:
+                            # Convert from center format to corner format
+                            x1 = max(0, x - w / 2)
+                            y1 = max(0, y - h / 2)
+                            x2 = min(1, x + w / 2)
+                            y2 = min(1, y + h / 2)
+
+                            # Scale to original image size
+                            x1 *= original_width
+                            y1 *= original_height
+                            x2 *= original_width
+                            y2 *= original_height
+
+                            boxes.append([x1, y1, x2, y2])
+                            classes.append(int(class_id))
+                            scores.append(float(class_score))
+
+            predictions[img_path] = {
+                "boxes": boxes,
+                "classes": classes,
+                "scores": scores,
+            }
+
+        except Exception as e:
+            print(f"Error processing {img_path}: {e}")
             predictions[img_path] = {"boxes": [], "classes": [], "scores": []}
-            continue
-
-        # Preprocess
-        img_resized = cv2.resize(img, (input_size, input_size))
-        img_normalized = img_resized.astype(np.float32) / 255.0
-        img_transposed = np.transpose(img_normalized, (2, 0, 1))
-        img_batch = np.expand_dims(img_transposed, axis=0)
-
-        # Run inference
-        session.run(None, {input_name: img_batch})
-
-        # Parse outputs (simplified - assuming YOLO format)
-        predictions[img_path] = {
-            "boxes": [],  # Would need proper parsing
-            "classes": [],
-            "scores": [],
-        }
 
     return predictions
 
 
 def calculate_per_class_metrics(
-    predictions: Dict[str, List[Dict]],
-    ground_truth: Dict[str, List[Dict]],
+    predictions: Dict[str, Dict[str, List]],
+    ground_truth: Dict[str, Dict[str, List]],
     class_names: List[str],
     iou_threshold: float = 0.5,
 ) -> pd.DataFrame:
@@ -132,11 +202,13 @@ def calculate_per_class_metrics(
             # Get predictions and ground truth for this class
             pred_boxes = [
                 box
-                for box, cls in zip(pred["boxes"], pred["classes"])
+                for box, cls in zip(pred.get("boxes", []), pred.get("classes", []))
                 if cls == class_idx
             ]
             gt_boxes = [
-                box for box, cls in zip(gt["boxes"], gt["classes"]) if cls == class_idx
+                box
+                for box, cls in zip(gt.get("boxes", []), gt.get("classes", []))
+                if cls == class_idx
             ]
 
             # Calculate matches (simplified)
@@ -215,7 +287,9 @@ def print_comparison_results(results_df: pd.DataFrame, title: str = "Model Compa
     print("-" * 80)
 
     for _, row in results_df.iterrows():
-        print(f"{row['class']:<12} {row['precision']:.3f} {row['recall']:.3f} {row['f1_score']:.3f}")
+        print(
+            f"{row['class']:<12} {row['precision']:.3f} {row['recall']:.3f} {row['f1_score']:.3f}"
+        )
 
     print(f"{'='*80}")
 
@@ -254,10 +328,3 @@ def calculate_iou(box1: List[float], box2: List[float]) -> float:
     union = area1 + area2 - intersection
 
     return intersection / union if union > 0 else 0.0
-
-
-# Import cv2 at the end to avoid import issues
-try:
-    import cv2
-except ImportError:
-    cv2 = None

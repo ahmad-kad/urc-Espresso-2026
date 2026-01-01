@@ -8,8 +8,8 @@ from unittest.mock import Mock, patch
 import pytest
 import torch
 
-from detector import ObjectDetector
-from trainer import ModelTrainer
+from core.models import ObjectDetector
+from core.trainer import ModelTrainer
 
 
 class TestDeviceConsistency:
@@ -180,7 +180,6 @@ class TestDeviceConsistency:
             mock_yolo.return_value = mock_model
 
             detector = ObjectDetector(config)
-            initial_device = config.get("device")
 
             # Perform multiple operations
             detector._build_training_kwargs("test1")

@@ -5,19 +5,109 @@ Supports YOLOv8 models
 """
 
 import argparse
-import logging
-import os
 import sys
 from pathlib import Path
-
+from typing import Optional
 import torch
 import torch.onnx
-from ultralytics import YOLO
+from ultralytics import YOLO  # type: ignore
+import logging
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
+
+
+def convert_onnx_to_int8(fp32_model_path: str, output_path: str) -> str:
+    """Convert ONNX FP32 model to INT8 using onnxruntime quantization"""
+    logger.info(f"Converting ONNX FP32 to INT8: {fp32_model_path}")
+
+    try:
+        from onnxruntime.quantization import quantize_dynamic, QuantType
+
+        logger.info("Quantizing ONNX model to INT8...")
+
+        # Try dynamic quantization first (more compatible)
+        try:
+            quantize_dynamic(
+                model_input=fp32_model_path,
+                model_output=output_path,
+                weight_type=QuantType.QInt8,
+                # Use more compatible quantization settings
+                per_channel=False,  # Use per-tensor quantization for compatibility
+            )
+            logger.info("Dynamic quantization successful")
+        except Exception as dynamic_error:
+            logger.warning(
+                f"Dynamic quantization failed ({dynamic_error}), trying static quantization..."
+            )
+
+            # Fallback to static quantization if dynamic fails
+            try:
+                from onnxruntime.quantization import (
+                    quantize_static,
+                    CalibrationDataReader,
+                )
+
+                # Create a simple calibration data reader
+                class SimpleCalibrationDataReader(CalibrationDataReader):
+                    def __init__(self, model_path, num_samples=10):
+                        super().__init__()
+                        self.model_path = model_path
+                        self.num_samples = num_samples
+                        self.current_sample = 0
+
+                    def get_next(self):
+                        if self.current_sample >= self.num_samples:
+                            return None
+
+                        # Generate dummy calibration data
+                        import numpy as np
+
+                        dummy_input = np.random.randn(1, 3, 224, 224).astype(np.float32)
+                        self.current_sample += 1
+                        return {"images": dummy_input}
+
+                # Use static quantization
+                calibrate_reader = SimpleCalibrationDataReader(fp32_model_path)
+                quantize_static(
+                    model_input=fp32_model_path,
+                    model_output=output_path,
+                    calibration_data_reader=calibrate_reader,
+                    weight_type=QuantType.QInt8,
+                    activation_type=QuantType.QInt8,
+                    per_channel=False,
+                    reduce_range=False,
+                )
+                logger.info("Static quantization successful")
+            except Exception as static_error:
+                logger.error(
+                    f"Both dynamic and static quantization failed. Dynamic: {dynamic_error}, Static: {static_error}"
+                )
+                raise Exception(f"Quantization failed: {static_error}")
+
+        if Path(output_path).exists():
+            int8_size = Path(output_path).stat().st_size / (1024 * 1024)
+            fp32_size = Path(fp32_model_path).stat().st_size / (1024 * 1024)
+            size_reduction = ((fp32_size - int8_size) / fp32_size) * 100
+
+            logger.info(f"INT8 ONNX model saved to: {output_path} ({int8_size:.2f} MB)")
+            logger.info(
+                f"Size reduction: {size_reduction:.1f}% (FP32: {fp32_size:.2f} MB)"
+            )
+            return output_path
+        else:
+            raise Exception(f"INT8 quantization failed: {output_path} not created")
+
+    except ImportError:
+        logger.warning(
+            "onnxruntime not available for INT8 quantization. Install with: pip install onnxruntime"
+        )
+        raise ImportError("onnxruntime required for INT8 quantization")
+    except Exception as e:
+        logger.error(f"INT8 quantization failed: {e}")
+        raise
 
 
 def convert_yolo_to_onnx(
@@ -37,22 +127,38 @@ def convert_yolo_to_onnx(
             imgsz=input_size,
             opset=opset_version,
             simplify=False,  # Don't simplify to preserve structure
-            dynamic=False,  # Static batch size
+            dynamic=False,   # Static batch size
         )
 
         # YOLO export returns the path to the exported model
         if export_result:
-            # Find the exported file (YOLO puts it in the same directory as the model)
+            # Check if YOLO saved directly to our desired output path
+            if Path(output_path).exists():
+                logger.info(
+                    f"YOLO model exported with raw outputs and saved to: {output_path}"
+                )
+                return output_path
+
+            # Otherwise, find the exported file (YOLO puts it in the same directory as the model)
             exported_path = Path(model_path).parent / f"{Path(model_path).stem}.onnx"
             if exported_path.exists():
                 import shutil
-
+                # Ensure destination directory exists
+                Path(output_path).parent.mkdir(parents=True, exist_ok=True)
                 shutil.move(str(exported_path), output_path)
                 logger.info(
                     f"YOLO model exported with raw outputs and saved to: {output_path}"
                 )
+                return output_path
             else:
-                raise Exception("YOLO export completed but expected file not found")
+                # Check if the export_result is actually the path
+                if isinstance(export_result, str) and Path(export_result).exists():
+                    shutil.move(export_result, output_path)
+                    logger.info(
+                        f"YOLO model exported with raw outputs and saved to: {output_path}"
+                    )
+                    return output_path
+                raise Exception(f"YOLO export completed but expected file not found at {exported_path} or {export_result}")
         else:
             raise Exception("YOLO export returned None")
 
@@ -61,19 +167,28 @@ def convert_yolo_to_onnx(
 
         # Alternative: Try to export just the model backbone without detection head
         try:
+            if model is None:
+                raise Exception("Model failed to load")
+            
             # Get the model without the detection head (just the backbone)
-            backbone_model = model.model.model  # The actual neural network
+            if hasattr(model, "model") and hasattr(model.model, "model"):
+                backbone_model = model.model.model  # The actual neural network
+            elif hasattr(model, "model"):
+                backbone_model = model.model  # Fallback for different model structures
+            else:
+                raise Exception("Model structure not compatible with backbone extraction")
 
             # Create dummy input
             dummy_input = torch.randn(1, 3, input_size, input_size)
 
             # Set to eval mode
-            backbone_model.eval()
+            if hasattr(backbone_model, "eval"):
+                backbone_model.eval()
 
             # Export just the backbone
             torch.onnx.export(
                 backbone_model,
-                dummy_input,
+                (dummy_input,),
                 output_path,
                 opset_version=opset_version,
                 input_names=["images"],
@@ -97,50 +212,76 @@ def convert_yolo_to_onnx(
 
 
 def detect_model_type(model_path: str) -> str:
-    """Detect the model type based on the path or model name"""
+    """Detect the model type based on the path, model name, or model inspection"""
     path_obj = Path(model_path)
-    model_name = path_obj.name.lower()
-
-    # Check the full path for model type keywords
     full_path = str(path_obj).lower()
 
-    # All models are YOLO models
+    # Check path/name first
     if "yolo" in full_path:
         return "yolo"
-    else:
-        return "unknown"
+
+    # Try to inspect the model file to detect YOLO models
+    try:
+        # Load the model state dict to check for YOLO-specific keys
+        if model_path.endswith('.pt'):
+            state_dict = torch.load(model_path, map_location='cpu', weights_only=False)
+            if isinstance(state_dict, dict):
+                # Check for YOLO-specific keys in state dict
+                state_keys = set(state_dict.keys())
+                yolo_indicators = [
+                    'model',  # YOLO models have a 'model' key
+                    'epoch', 'best_fitness', 'date'  # YOLO training metadata
+                ]
+                if any(key in state_keys for key in yolo_indicators):
+                    return "yolo"
+
+                # Check if the model dict contains YOLO architecture markers
+                if 'model' in state_dict and isinstance(state_dict['model'], dict):
+                    model_dict = state_dict['model']
+                    if 'type' in model_dict and model_dict['type'] == 'yolov8':
+                        return "yolo"
+
+            # Try loading as YOLO model directly
+            try:
+                from ultralytics import YOLO
+                model = YOLO(model_path)
+                # If we can load it with YOLO, it's a YOLO model
+                return "yolo"
+            except Exception:
+                pass
+
+    except Exception as e:
+        logger.debug(f"Could not inspect model file: {e}")
+
+    # Default fallback
+    return "unknown"
 
 
 def convert_model(
     model_path: str,
-    output_path: str = None,
-    model_type: str = None,
+    output_path: Optional[str] = None,
+    model_type: Optional[str] = None,
     input_size: int = 416,
-    opset_versions: list = None,
+    opset_versions: Optional[list] = None,
 ):
     """Convert a model to ONNX format, trying multiple opset versions if needed"""
     if not Path(model_path).exists():
         raise FileNotFoundError(f"Model file not found: {model_path}")
 
-    # Auto-detect model type if not specified
     if model_type is None:
         model_type = detect_model_type(model_path)
 
-    # Generate output path if not specified
     if output_path is None:
         model_name = Path(model_path).stem
         output_path = f"output/onnx/{model_name}.onnx"
 
-    # Create output directory
     Path(output_path).parent.mkdir(parents=True, exist_ok=True)
 
-    # Try multiple opset versions if not specified
     if opset_versions is None:
-        opset_versions = [11, 13, 17, 9]  # Try common versions
+        opset_versions = [11, 13, 17, 9]
 
     logger.info(f"Converting {model_type} model from {model_path} to {output_path}")
-    logger.info(f"Trying opset versions: {opset_versions}")
-
+    
     success = False
     last_error = None
 
@@ -148,122 +289,68 @@ def convert_model(
         try:
             logger.info(f"Attempting conversion with opset {opset_version}")
 
-            # Convert based on model type
             if model_type == "yolo":
                 convert_yolo_to_onnx(model_path, output_path, input_size, opset_version)
             else:
-                raise ValueError(
-                    f"Unsupported model type: {model_type}. Only YOLO models are supported."
-                )
+                raise ValueError(f"Unsupported model type: {model_type}.")
 
-            # Verify the ONNX file was created and has reasonable size
             if Path(output_path).exists():
-                file_size = Path(output_path).stat().st_size / (
-                    1024 * 1024
-                )  # Size in MB
-                if file_size > 1:  # Must be at least 1MB to be valid
-                    logger.info(
-                        f"ONNX model converted successfully with opset {opset_version}. Size: {file_size:.2f} MB"
-                    )
+                file_size = Path(output_path).stat().st_size / (1024 * 1024)
+                if file_size > 1:
+                    logger.info(f"Converted successfully with opset {opset_version}. Size: {file_size:.2f} MB")
                     success = True
                     break
                 else:
-                    logger.warning(
-                        f"ONNX file created but too small ({file_size:.2f} MB), trying next opset"
-                    )
-                    Path(output_path).unlink()  # Remove invalid file
-            else:
-                logger.warning(f"ONNX file not created with opset {opset_version}")
-
+                    logger.warning(f"File too small ({file_size:.2f} MB), trying next opset")
+                    Path(output_path).unlink()
         except Exception as e:
             last_error = e
             logger.warning(f"Failed with opset {opset_version}: {e}")
-            # Clean up failed file if it exists
             if Path(output_path).exists():
                 Path(output_path).unlink()
 
     if not success:
-        error_msg = f"ONNX conversion failed for all opset versions {opset_versions}"
-        if last_error:
-            error_msg += f". Last error: {last_error}"
-        raise RuntimeError(error_msg)
+        raise RuntimeError(f"Conversion failed. Last error: {last_error}")
 
 
-def batch_convert_models(
-    models_dir: str = "output/models", output_dir: str = "output/onnx"
-):
+def batch_convert_models(models_dir: str = "output/models", output_dir: str = "output/onnx"):
     """Convert all models in the output/models directory to ONNX"""
     models_path = Path(models_dir)
-
     if not models_path.exists():
-        raise FileNotFoundError(f"Models directory not found: {models_dir}")
-
-    logger.info(f"Batch converting models from {models_dir} to {output_dir}")
+        raise FileNotFoundError(f"Directory not found: {models_dir}")
 
     converted_count = 0
-
-    # Find all best.pt files
     for model_dir in models_path.iterdir():
         if model_dir.is_dir():
             best_model_path = model_dir / "weights" / "best.pt"
             if best_model_path.exists():
                 model_name = model_dir.name
                 output_path = Path(output_dir) / f"{model_name}.onnx"
-
-                # Extract correct input size from model name
-                input_size = 416  # default
+                input_size = 416
                 for size in [160, 192, 224, 320]:
                     if str(size) in model_name:
                         input_size = size
                         break
 
-                logger.info(f"Converting {model_name} with input size {input_size}")
-
                 try:
-                    convert_model(
-                        str(best_model_path),
-                        str(output_path),
-                        input_size=input_size,
-                        opset_versions=[11, 13, 17, 9],
-                    )
+                    convert_model(str(best_model_path), str(output_path), input_size=input_size)
                     converted_count += 1
                 except Exception as e:
                     logger.error(f"Failed to convert {model_name}: {e}")
-                    continue
-
-    logger.info(f"Successfully converted {converted_count} models to ONNX format")
+    
+    logger.info(f"Successfully converted {converted_count} models")
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Convert PyTorch models to ONNX format"
-    )
+    parser = argparse.ArgumentParser(description="Convert PyTorch models to ONNX format")
     parser.add_argument("--model_path", type=str, help="Path to PyTorch model file")
     parser.add_argument("--output_path", type=str, help="Path for ONNX output file")
-    parser.add_argument(
-        "--model_type",
-        type=str,
-        choices=["yolo"],
-        help="Model type (auto-detected if not specified, only YOLO supported)",
-    )
+    parser.add_argument("--model_type", type=str, choices=["yolo"], help="Model type")
     parser.add_argument("--input_size", type=int, default=416, help="Model input size")
-    parser.add_argument(
-        "--batch_convert",
-        action="store_true",
-        help="Convert all models in output/models directory",
-    )
-    parser.add_argument(
-        "--models_dir",
-        type=str,
-        default="output/models",
-        help="Directory containing models for batch conversion",
-    )
-    parser.add_argument(
-        "--output_dir",
-        type=str,
-        default="output/onnx",
-        help="Output directory for ONNX files",
-    )
+    parser.add_argument("--batch_convert", action="store_true", help="Batch convert mode")
+    parser.add_argument("--models_dir", type=str, default="output/models")
+    parser.add_argument("--output_dir", type=str, default="output/onnx")
+    parser.add_argument("--int8", action="store_true", help="Create INT8 quantized version")
 
     args = parser.parse_args()
 
@@ -271,19 +358,20 @@ def main():
         if args.batch_convert:
             batch_convert_models(args.models_dir, args.output_dir)
         elif args.model_path:
-            convert_model(
-                args.model_path, args.output_path, args.model_type, args.input_size
-            )
-        else:
-            print("Usage:")
-            print(
-                "  Convert single model: python convert_to_onnx.py --model_path path/to/model.pt"
-            )
-            print(
-                "  Batch convert all models: python convert_to_onnx.py --batch_convert"
-            )
-            sys.exit(1)
+            fp32_output = args.output_path or f"output/onnx/{Path(args.model_path).stem}.onnx"
+            convert_model(args.model_path, fp32_output, args.model_type, args.input_size)
 
+            if args.int8:
+                fp32_path = Path(fp32_output)
+                suffix = "_int8.onnx"
+                if fp32_path.stem.endswith("_fp32"):
+                    int8_output = str(fp32_path.with_name(f"{fp32_path.stem[:-5]}{suffix}"))
+                else:
+                    int8_output = str(fp32_path.with_name(f"{fp32_path.stem}{suffix}"))
+                convert_onnx_to_int8(fp32_output, int8_output)
+        else:
+            parser.print_help()
+            sys.exit(1)
     except Exception as e:
         logger.error(f"Conversion failed: {e}")
         sys.exit(1)

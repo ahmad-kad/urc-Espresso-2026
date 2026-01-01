@@ -32,8 +32,8 @@ class TestCompletePipeline:
         mock_detector_yolo.return_value = mock_model
 
         # Import here to use mocked YOLO
-        from detector import ObjectDetector
-        from trainer import ModelTrainer
+        from core.models import ObjectDetector
+        from core.trainer import ModelTrainer
 
         # Step 1: Train model
         trainer = ModelTrainer(sample_config)
