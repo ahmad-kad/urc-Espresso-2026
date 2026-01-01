@@ -1,213 +1,251 @@
 # Project Structure and Organization
 
-This document explains the reorganized project structure and how to use the generalized object detection framework.
+**YOLO AI Camera Production System** - Complete deployment-ready object detection framework for Raspberry Pi.
 
 ## Directory Structure
 
 ```
 urc-espresso-2026/
-├── configs/                       # All configuration files (flattened)
-│   ├── default.yaml               # Default framework configuration
-│   ├── embedded.yaml              # Embedded device settings
-│   ├── robotics.yaml              # Robotics-optimized settings
-│   ├── yolov8s_confidence.yaml    # YOLOv8s training config
-│   └── ...                        # Other training configurations
-├── consolidated_dataset/          # Dataset for training/benchmarking
-│   ├── data.yaml                  # Dataset configuration
-│   ├── train/                     # Training data
-│   ├── val/                       # Validation data
-│   └── test/                      # Test data
-├── docs/                          # Documentation
-├── models/                        # Pretrained model weights
-├── scripts/                       # All executable scripts (flattened)
-│   ├── run_rover_optimization.py  # Main optimization pipeline
-│   ├── benchmark_models.py        # Model benchmarking
-│   ├── quantize_models.py         # Model quantization
-│   ├── analyze_memory.py          # Memory analysis
-│   └── ...                        # Other utility scripts
-├── output/                        # Generated outputs (auto-created)
-│   ├── models/                    # Trained models
-│   ├── results/                   # Test results and reports
-│   ├── logs/                      # Training logs
-│   └── quantized/                 # Quantized models
-├── config.py                      # Configuration management
-├── data_utils.py                  # Data processing utilities
-├── detector.py                    # Generic YOLO detector class
-├── efficientnet.py                # EfficientNet model architecture
-├── evaluator.py                   # Model evaluation tools
-├── metrics.py                     # Performance metrics
-├── mobilevit.py                   # MobileViT model architecture
-├── trainer.py                     # Training framework
-├── visualization.py               # Plotting and visualization
-├── requirements.txt               # Python dependencies
-└── README.md                      # Project documentation
+├──  deployment_package/         # PRODUCTION deployment system
+│   ├──  scripts/                # Production inference & ROS2 scripts
+│   │   ├── detector_service.py   # Main production service
+│   │   ├── alert_manager.py      # ROS2 alert system
+│   │   ├── listen_detections.py  # Remote testing listener
+│   │   └── ros2_listener.py     # Flexible ROS2 listener
+│   ├──  config/                 # Service & alert configuration
+│   ├──  models/                 # (ONNX model copied here)
+│   ├── install.sh                # Installation script
+│   ├── raspberry_pi_setup.sh     # Initial Pi setup
+│   ├── yolo-detector.service     # Systemd service
+│   └── requirements_pi.txt       # Pi dependencies
+│
+├──  configs/                    # Model training configurations
+│   ├── default.yaml              # Default framework configuration
+│   ├── embedded.yaml             # Embedded device settings
+│   ├── robotics.yaml             # Robotics-optimized settings
+│   └── yolov8n_224.yaml          # Production model training config
+│
+├──  scripts/                    # Development & maintenance utilities
+│   ├── evaluation/              # Model evaluation scripts
+│   │   ├── model_evaluator.py     # Core evaluation framework
+│   │   ├── compare_fp32_int8_accuracy.py
+│   │   ├── run_comparison.py     # Benchmark comparisons
+│   │   ├── evaluator.py          # Evaluation utilities
+│   │   └── webcam_testing.py     # Live webcam testing
+│   ├── training/                # Training scripts
+│   │   ├── train_and_deploy.py   # Complete training pipeline
+│   │   ├── run_training_pipeline.py
+│   │   └── retraining_manager.py # Model retraining utilities
+│   ├── models/                  # Model architecture definitions (if needed)
+│   ├── config/                  # Configuration utilities
+│   │   └── training_config_generator.py
+│   ├── benchmark_models.py       # Performance benchmarking
+│   ├── convert_to_onnx.py       # ONNX conversion
+│   ├── dataset_utils.py         # Dataset management
+│   ├── evaluate_per_class_accuracy.py
+│   ├── training_utils.py         # Training helpers
+│   └── validation_utils.py      # Validation utilities
+│
+├──  output/                     # Training outputs & results
+│   ├── models/                   # Trained model weights
+│   ├── evaluation/               # Evaluation results & metrics
+│   ├── visualization/            # Performance plots
+│   ├── testing/                  # Test coverage reports
+│   └── benchmarking/             # Benchmark results
+│
+├──  consolidated_dataset/       # Training dataset (6 classes)
+│   ├── data.yaml                 # Dataset configuration
+│   ├── train/                    # Training images & labels
+│   ├── val/                      # Validation images & labels
+│   └── test/                     # Test images & labels
+│
+├──  docs/                       # Documentation
+│   └── STRUCTURE.md              # This file
+│
+├──  utils/                      # Utility modules
+│   ├── config.py                 # Configuration utilities
+│   ├── data_utils.py             # Data processing utilities
+│   ├── detection_utils.py        # Detection post-processing
+│   ├── device_utils.py           # Device management
+│   ├── logger_config.py          # Logging configuration
+│   ├── metrics.py                # Performance metrics
+│   ├── output_utils.py           # Output management
+│   └── visualization.py          # Plotting and visualization
+│
+├──  tests/                      # Test suite
+│   ├── unit/                     # Unit tests
+│   ├── integration/              # Integration tests
+│   └── e2e/                      # End-to-end tests
+│
+├──  Core Framework Files        # Main application modules
+│   ├── detector.py               # ObjectDetector class
+│   ├── trainer.py                # ModelTrainer class
+│   └── setup_dev.py              # Development setup
+│
+├──  Configuration Files         # Project configuration
+│   ├── pyproject.toml            # Python project config
+│   ├── pytest.ini               # Test configuration
+│   ├── pyrightconfig.json        # Type checking config
+│   └── Makefile                  # Build automation
+│
+└──  Documentation               # Project documentation
+    ├── README.md                 # Project overview
+    ├── MAINTENANCE.md            # Maintenance procedures
+    ├── TESTING.md                # Testing guide
+    └── CODE_QUALITY.md           # Code quality standards
 ```
 
 ## Key Features
 
-### 1. **Flattened Directory Structure**
-- All core modules moved to root level for easier navigation
-- Scripts consolidated in single `scripts/` directory
-- Configuration files flattened into `configs/`
-- Removed unnecessary nesting (src/core/ → core/, etc.)
+### 1. **Production-Ready Deployment System**
+- **deployment_package/**: Complete turnkey Raspberry Pi deployment
+- **ROS2 Integration**: Native ROS2 alerts with confidence-based routing
+- **Automated Startup**: Systemd service with auto-restart
+- **Remote Testing**: Listener scripts for remote monitoring
 
-### 2. **ML Training, Benchmarking, and Conversion Focus**
-- Removed all deployment/inference code
-- Focused on model training workflows
-- Comprehensive benchmarking capabilities
-- Model quantization for deployment preparation
+### 2. **Clean Organization**
+- **Root Directory**: Only core modules and essential config files
+- **Scripts Organized**: Evaluation, training, and model scripts in subdirectories
+- **Output Centralized**: All results in `output/` directory
+- **Clear Separation**: Development vs production code
 
-### 3. **Modular Architecture**
-- **Core modules**: trainer.py, detector.py, evaluator.py at root level
-- **Model architectures**: efficientnet.py, mobilevit.py
-- **Utilities**: config.py, data_utils.py, metrics.py, visualization.py
-- **Scripts**: Organized by function in single directory
-
-### 4. **Configuration-Driven**
-- YAML-based configuration system
-- Environment-specific settings
-- Easy to customize for different use cases
+### 3. **Maintainability**
+- **Modular Design**: Easy to extend and customize
+- **Comprehensive Tests**: Unit, integration, and E2E test coverage
+- **Documentation-Driven**: Guides for all procedures
+- **LTS Ready**: Clean structure for long-term maintenance
 
 ## Usage Examples
 
-### Basic Training
+### Production Deployment
 
 ```bash
-# Train baseline model
-python scripts/train.py --data_yaml data/data.yaml --train_baseline --epochs 50
+# Copy deployment package to Pi
+scp -r deployment_package pi@raspberrypi.local:~
 
-# Train attention-enhanced model
-python scripts/train.py --data_yaml data/data.yaml --train_attention --attention_type cbam --epochs 50
+# On Pi, install
+cd ~/deployment_package
+chmod +x install.sh && ./install.sh
 
-# Use custom configuration
-python scripts/train.py --config configs/framework/environments/embedded.yaml --data_yaml data/data.yaml
+# Start service
+sudo systemctl enable yolo-detector
+sudo systemctl start yolo-detector
+```
+
+### Model Training
+
+```bash
+# Run complete training pipeline
+python scripts/training/run_training_pipeline.py
+
+# Or use individual components
+python scripts/training/train_and_deploy.py
 ```
 
 ### Model Evaluation
 
 ```bash
-# Compare multiple models
-python scripts/evaluate.py \
-    --models output/models/baseline/weights/best.pt output/models/cbam_enhanced/weights/best.pt \
-    --data_yaml data/data.yaml \
-    --comprehensive
+# Compare model performance
+python scripts/evaluation/run_comparison.py
+
+# Evaluate per-class accuracy
+python scripts/evaluate_per_class_accuracy.py
+
+# Compare FP32 vs INT8
+python scripts/evaluation/compare_fp32_int8_accuracy.py
 ```
 
-### Real-time Demo
+### Remote Testing
 
 ```bash
-# Webcam detection demo
-python scripts/webcam_demo.py \
-    --model output/models/cbam_enhanced/weights/best.pt \
-    --config configs/framework/environments/robotics.yaml
-```
-
-### ROS2 Integration
-
-```bash
-# Build ROS2 package
-cd ros2_ws
-colcon build
-source install/setup.bash
-
-# Launch detector
-ros2 run object_detection camera_detector \
-    --ros-args -p model_path:=output/models/cbam_enhanced/weights/best.pt
+# On remote machine with ROS2
+source /opt/ros/humble/setup.bash
+export ROS_DOMAIN_ID=0
+python deployment_package/scripts/listen_detections.py
 ```
 
 ## Configuration System
 
-The framework uses YAML-based configuration for flexibility:
+### Training Configurations (`configs/`)
+- **yolov8n_224.yaml**: Production model training settings
+- **default.yaml**: Baseline framework configuration
+- **embedded.yaml**: Optimized for Raspberry Pi deployment
+- **robotics.yaml**: Settings for robotics applications
 
-### Default Configuration (`configs/framework/default.yaml`)
-- Baseline settings for general use
-- Can be extended for specific environments
+### Deployment Configurations (`deployment_package/config/`)
+- **service_config.json**: Production service settings
+- **alert_config.json**: ROS2 alert configuration with confidence levels
 
-### Environment Configurations
-- **robotics.yaml**: Optimized for robotics applications
-- **embedded.yaml**: Optimized for Raspberry Pi/embedded devices
-
-### Configuration Inheritance
-```yaml
-# Example: robotics.yaml extends default.yaml
-extends: ../default.yaml
-
-model:
-  input_size: 416  # Higher resolution for robotics
-
-ros2:
-  enabled: true
-```
+### Utility Configuration (`utils/config.py`)
+- Centralized configuration management
+- Environment variable support
+- YAML configuration loading
 
 ## Output Organization
 
-All outputs are now centralized in the `output/` directory:
-
+### Training Outputs (`output/`)
 - **models/**: Trained model weights and configurations
-- **results/**: Evaluation reports, metrics, confusion matrices
-- **logs/**: Training logs and tensorboard data
-- **visualizations/**: Performance plots, detection examples
+- **evaluation/**: Accuracy metrics and comparison results
+- **visualization/**: Performance plots and detection examples
+- **testing/**: Coverage reports and test results
+- **benchmarking/**: Performance benchmark data
 
-## Migration Guide
+### Deployment Package (`deployment_package/`)
+- **scripts/**: Production inference and monitoring scripts
+- **config/**: Service and alert configurations
+- **models/**: Production ONNX model (optimized for 252 FPS)
 
-### From Old Structure
+## Development Workflow
 
-1. **Scripts**: Move from root level to `scripts/`
-   - `train_and_test.py` → `scripts/train.py`
-   - `test_deployment.py` → `scripts/evaluate.py`
+### Adding New Features
 
-2. **Configuration**: Create `data/data.yaml` for your dataset
-   ```yaml
-   train: data/train
-   val: data/valid
-   test: data/test
-   nc: 3
-   names: ['class1', 'class2', 'class3']
-   ```
+1. **Core Modules**: Add to root-level files (`detector.py`, `trainer.py`)
+2. **Utilities**: Add to `utils/` directory
+3. **Scripts**: Organize by purpose in `scripts/` subdirectories
+4. **Tests**: Add corresponding tests in `tests/` directory
+5. **Documentation**: Update relevant docs
 
-3. **ROS2 Package**: Updated from `hammer_detection` to `object_detection`
-   - Update launch files and documentation
+### Code Organization Principles
 
-4. **Outputs**: Now saved to `output/` instead of `runs/` or scattered locations
+- **Root Directory**: Only core framework files and essential configs
+- **Scripts**: Organized by function (evaluation, training, models)
+- **Output**: All generated files in `output/` directory
+- **Utils**: Reusable utility functions
+- **Tests**: Mirror source structure
 
-## Customization
+## Maintenance
 
-### Adding New Attention Mechanisms
+### Regular Tasks
 
-1. Implement in `src/models/attention_modules.py`
-2. Update configuration options
-3. Add to trainer logic in `src/core/trainer.py`
+1. **Model Updates**: Use `scripts/training/` for retraining
+2. **Performance Monitoring**: Run evaluation scripts regularly
+3. **Deployment Updates**: Update `deployment_package/` as needed
+4. **Documentation**: Keep docs current with code changes
 
-### Adding New Model Architectures
+### Best Practices
 
-1. Create new detector class in `src/core/detector.py`
-2. Add configuration options
-3. Update training and evaluation scripts
-
-### Custom Metrics
-
-1. Add to `src/utils/metrics.py`
-2. Update `src/core/evaluator.py` to use new metrics
-3. Add visualization support in `src/utils/visualization.py`
-
-## Best Practices
-
-1. **Configuration**: Use environment-specific configs for different deployment scenarios
-2. **Outputs**: Always use the `output/` directory structure
-3. **Modularity**: Extend core classes rather than modifying them
-4. **Documentation**: Update this document when making structural changes
+- **Version Control**: Use Git for all changes
+- **Testing**: Run test suite before commits
+- **Documentation**: Update docs with code changes
+- **Clean Commits**: Use .gitignore to avoid committing unnecessary files
 
 ## Troubleshooting
 
-### Common Issues
+### Import Errors
 
-1. **Import Errors**: Ensure `PYTHONPATH` includes `src/` directory
-2. **Configuration Not Found**: Check file paths in `configs/framework/` directory
-3. **ROS2 Build Failures**: Ensure package name updated in all files
-4. **Output Paths**: Use absolute paths or ensure `output/` directory exists
+If imports fail after reorganization:
+- Ensure `sys.path` includes project root
+- Check relative imports in moved files
+- Verify `__init__.py` files exist in packages
 
-### Getting Help
+### Deployment Issues
 
-- Check the main README.md for usage examples
-- Review configuration files for available options
-- Examine existing scripts for implementation patterns
+- Check `deployment_package/README.md` for deployment-specific guidance
+- Verify ROS2 installation on Pi
+- Check service logs: `sudo journalctl -u yolo-detector -f`
+
+### Performance Issues
+
+- Run benchmarks: `python scripts/benchmark_models.py`
+- Check evaluation results in `output/evaluation/`
+- Review visualization outputs in `output/visualization/`

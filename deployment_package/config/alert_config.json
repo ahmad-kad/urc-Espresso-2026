@@ -1,0 +1,67 @@
+{
+  "confidence_levels": {
+    "low": 0.3,
+    "medium": 0.5,
+    "high": 0.7,
+    "critical": 0.9
+  },
+  "class_names": [
+    "ArUcoTag",
+    "Bottle",
+    "BrickHammer",
+    "OrangeHammer",
+    "USB-A",
+    "USB-C"
+  ],
+  "alert_rules": [
+    {
+      "name": "bottle_detected",
+      "type": "object_detected",
+      "target_classes": ["Bottle"],
+      "min_confidence": 0.7,
+      "cooldown": 30,
+      "message": "Bottle detected in camera view"
+    },
+    {
+      "name": "multiple_hammers",
+      "type": "object_count",
+      "target_classes": ["BrickHammer", "OrangeHammer"],
+      "condition": "greater_than",
+      "threshold": 2,
+      "cooldown": 60,
+      "message": "Multiple hammers detected (>2) - potential safety concern"
+    },
+    {
+      "name": "aruco_persistence",
+      "type": "object_persistence",
+      "target_classes": ["ArUcoTag"],
+      "duration": 5,
+      "cooldown": 120,
+      "message": "ArUco tag present for 5+ seconds - monitoring active"
+    },
+    {
+      "name": "restricted_zone",
+      "type": "zone_intrusion",
+      "target_classes": ["BrickHammer", "OrangeHammer"],
+      "zone": [0.1, 0.1, 0.4, 0.4],
+      "cooldown": 15,
+      "message": "Hammer detected in restricted zone - immediate attention required"
+    },
+    {
+      "name": "usb_device_detected",
+      "type": "object_detected",
+      "target_classes": ["USB-A", "USB-C"],
+      "min_confidence": 0.8,
+      "cooldown": 45,
+      "message": "USB device detected - potential data transfer activity"
+    }
+  ],
+  "ros2_topics": {
+    "low_confidence": "/yolo_detector/alerts/low_confidence",
+    "medium_confidence": "/yolo_detector/alerts/medium_confidence",
+    "high_confidence": "/yolo_detector/alerts/high_confidence",
+    "critical": "/yolo_detector/alerts/critical",
+    "detections": "/yolo_detector/detections",
+    "alert_messages": "/yolo_detector/alert_messages"
+  }
+}

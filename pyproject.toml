@@ -7,18 +7,62 @@ name = "robotics-obj-detection"
 version = "0.1.0"
 description = "General-purpose YOLO object detection framework for robotics with ROS2 integration"
 dependencies = [
+    # Core ML libraries
     "torch>=2.0.0",
     "torchvision>=0.15.0",
     "ultralytics>=8.0.0",
+
+    # Computer vision
     "opencv-python>=4.8.0",
-    "numpy>=1.24.0",
     "pillow>=10.0.0",
     "albumentations>=1.3.0",
-    "tqdm>=4.65.0",
-    "matplotlib>=3.7.0",
+
+    # Data science and visualization
+    "numpy>=1.24.0",
     "pandas>=2.0.0",
+    "matplotlib>=3.7.0",
+    "seaborn>=0.12.0",
     "scipy>=1.10.0",
-    "seaborn>=0.12.0"
+    "tqdm>=4.65.0",
+    "einops>=0.7.0",
+
+    # Model optimization and deployment
+    "onnx>=1.14.0",
+    "onnxruntime>=1.15.0",
+    "onnxmltools>=1.12.0",
+
+    # Raspberry Pi specific
+    "picamera2>=0.3.0; sys_platform == 'linux'",
+
+    # Alert system
+    "requests>=2.28.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    # Code quality and development tools
+    "black>=23.0.0",
+    "isort>=5.12.0",
+    "flake8>=6.0.0",
+    "mypy>=1.0.0",
+    "pre-commit>=3.0.0",
+    "vulture>=2.14.0",
+
+    # Testing
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "pytest-mock>=3.10.0",
+    "pytest-xdist>=3.0.0",
+
+    # Documentation
+    "sphinx>=5.0.0",
+    "sphinx-rtd-theme>=1.2.0",
+]
+
+gpu = [
+    # GPU-specific packages
+    "torch[cu118]>=2.0.0; sys_platform == 'linux'",
+    "torchvision[cu118]>=0.15.0; sys_platform == 'linux'",
 ]
 
 [tool.setuptools.packages.find]

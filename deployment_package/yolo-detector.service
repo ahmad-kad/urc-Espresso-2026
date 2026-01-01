@@ -1,0 +1,32 @@
+[Unit]
+Description=YOLO Object Detection Service with ROS2 Alerts
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/yolo-detector
+ExecStart=/bin/bash -c 'source /opt/ros/humble/setup.bash && /home/pi/yolo-detector/venv/bin/python3 /home/pi/yolo-detector/detector_service.py'
+Restart=always
+RestartSec=10
+StandardOutput=append:/home/pi/yolo-detector/logs/service.log
+StandardError=append:/home/pi/yolo-detector/logs/error.log
+
+# Environment variables
+Environment=PYTHONPATH=/home/pi/yolo-detector
+Environment=PYTHONUNBUFFERED=1
+
+# Resource limits
+MemoryLimit=512M
+CPUQuota=80%
+
+# Security
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=/home/pi/yolo-detector
+ProtectHome=false
+
+[Install]
+WantedBy=multi-user.target

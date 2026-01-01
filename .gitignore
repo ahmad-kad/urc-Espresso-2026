@@ -1,14 +1,10 @@
-# Python
-consolidated_dataset/
-simple_aruco/
-data/
-assets/
-data/
-balanced_data/
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
+
+# Distribution / packaging
 .Python
 build/
 develop-eggs/
@@ -22,61 +18,160 @@ parts/
 sdist/
 var/
 wheels/
+pip-wheel-metadata/
+share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+MANIFEST
 
-# Virtual Environments
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Flask stuff
+instance/
+.webassets-cache
+
+# Scrapy stuff
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# PEP 582
+__pypackages__/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
 .env
 .venv
-venv/
 env/
+venv/
+ENV/
+env.bak/
+venv.bak/
 mobilenet_venv/
-*/venv/
-*/env/
+efficientnet_env/
+yolo_env/
+pi_env/
 
-# PyTorch & ML Models
-*.pth
-*.pt
-*.ckpt
-#*.onnx
-*.engine
-*.rpk
-*.tflite
-*.pb
+# Spyder project settings
+.spyderproject
+.spyproject
 
-# Generated Outputs & Results
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# Project specific - Generated files
+# All output directories (models, results, visualizations)
 output/
-output_confidence/
+!output/.gitkeep
+
+# Model files (large, should not be committed)
+*.onnx
+*.pt
+*.pth
+*.h5
+*.pb
+*.weights
+*.ckpt
+
+# Dataset (large, should not be committed)
+consolidated_dataset/
 runs/
-test_results/
-memory_analysis_results.csv
-rover_final_benchmark_results.csv
-rover_optimization.log
-*.csv
+
+# Training artifacts and logs
+training_*.txt
+training_*.log
+*.log
+
+# Generated images and visualizations
 *.png
 *.jpg
 *.jpeg
 *.gif
+*.svg
+*.bmp
 
-# Logs
-*.log
-logs/
-wandb/
-tensorboard/
+# Large result files (JSON, except essential configs)
+*.json
+!pyproject.toml
+!pytest.ini
+!pyrightconfig.json
+!deployment_package/config/*.json
 
-# IDE & Editor Files
+# Generated documentation
+docs/_build/
+*.html
+
+# IDE and editor files
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
+*.sublime-*
 
-# Cursor IDE
-.cursor/
-.cursorignore
-
-# OS Generated Files
+# OS generated files
 .DS_Store
 .DS_Store?
 ._*
@@ -86,100 +181,19 @@ ehthumbs.db
 Thumbs.db
 Desktop.ini
 
-# Windows
-*.stackdump
-*.lnk
-*.sys
-*.dll
-
-# Linux
-*~
-.fuse_hidden*
-.directory
-.Trash-*
-.nfs*
-
-# macOS
-.AppleDouble
-.LSOverride
-Icon
-._*
-.DocumentRevisions-V100
-.fseventsd
-.Spotlight-V100
-.TemporaryItems
-.Trashes
-.VolumeIcon.icns
-.com.apple.timemachine.donotpresent
-
-# ROS2
-ros2_ws/install/
-ros2_ws/log/
-ros2_ws/build/
-
-# Jupyter Notebooks
-.ipynb_checkpoints/
-*.ipynb_checkpoints/
-
-# ML Experiment Tracking
-mlruns/
-comet.ml/
-dvc/
-dvc.lock
-dvc.yaml
-
-# CUDA/GPU
-*.nvprof
-*.nvvp
-*.cupti
-.cupy/
-.nv/
-
-# Docker
-.dockerignore
-docker-compose.override.yml
-Dockerfile.*
-docker/
-.docker/
-
-# Temporary & Cache Files
+# Temporary and debug files
+debug_*.py
+temp_*/
 *.tmp
-*.temp
-.cache/
-.pytest_cache/
-.mypy_cache/
-.dmypy.json
-dmypy.json
 *.bak
-*.backup
 
-# Utility Scripts (remove after use)
-scripts/remove_emojis.py
+# Build artifacts
+build/
+dist/
 
-# Coverage & Testing
-.coverage
-coverage.xml
-*.cover
-.hypothesis/
-.coverage.*
-coverage-*.xml
-*.lcov
+# Cursor IDE specific
+.cursor/
+.cursorignore
 
-# Documentation Build
-docs/_build/
-*.doctree
-
-# Node.js (if any)
+# Node modules (if any JS is added)
 node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Large Datasets (uncomment to ignore)
-# consolidated_dataset/
-# simple_aruco/
-# data/
-# balanced_data/
-# *.zip
-# *.tar.gz
-# *.7z

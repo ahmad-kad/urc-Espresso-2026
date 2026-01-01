@@ -1,0 +1,22 @@
+{
+  "include": [
+    "."
+  ],
+  "exclude": [
+    "**/__pycache__",
+    "**/node_modules",
+    "deployment_package/",
+    "output/"
+  ],
+  "reportMissingImports": "warning",
+  "reportMissingTypeStubs": "warning",
+  "reportImportCycles": "error",
+  "reportUnusedImport": "warning",
+  "reportUnusedClass": "warning",
+  "reportUnusedFunction": "warning",
+  "reportUnusedVariable": "warning",
+  "reportDuplicateImport": "warning",
+  "pythonVersion": "3.8",
+  "typeCheckingMode": "basic",
+  "useLibraryCodeForTypes": true
+}

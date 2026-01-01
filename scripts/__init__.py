@@ -9,6 +9,3 @@ This package contains modular scripts for:
 """
 
 __version__ = "1.0.0"
-
-
-

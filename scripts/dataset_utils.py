@@ -7,16 +7,17 @@ and simple_aruco_generator.py
 """
 
 import os
-import shutil
 import random
-import numpy as np
+import shutil
+from collections import defaultdict
 from pathlib import Path
-from collections import defaultdict, Counter
-import yaml
-from sklearn.model_selection import train_test_split
+
 import albumentations as A
-from PIL import Image
 import cv2
+import numpy as np
+import yaml
+from PIL import Image
+from sklearn.model_selection import train_test_split
 
 
 class YOLODataBalancer:
@@ -48,11 +49,11 @@ class YOLODataBalancer:
         label_files = list(self.labels_dir.glob("*.txt"))
 
         for label_file in label_files:
-            image_name = label_file.stem.replace('.txt', '')
+            image_name = label_file.stem.replace(".txt", "")
             classes_in_image = set()
 
             try:
-                with open(label_file, 'r') as f:
+                with open(label_file, "r") as f:
                     for line in f:
                         if line.strip():
                             parts = line.strip().split()
@@ -70,7 +71,9 @@ class YOLODataBalancer:
 
         return class_counts, image_class_map
 
-    def create_balanced_split(self, class_counts, image_class_map, target_samples_per_class=200):
+    def create_balanced_split(
+        self, class_counts, image_class_map, target_samples_per_class=200
+    ):
         """Create balanced train/val/test splits"""
         print("Creating balanced splits...")
 
@@ -86,8 +89,12 @@ class YOLODataBalancer:
                 continue
 
             # Use stratification for better balance
-            class_train, temp = train_test_split(images, train_size=train_ratio, random_state=42)
-            class_val, class_test = train_test_split(temp, test_size=test_ratio/(test_ratio+val_ratio), random_state=42)
+            class_train, temp = train_test_split(
+                images, train_size=train_ratio, random_state=42
+            )
+            class_val, class_test = train_test_split(
+                temp, test_size=test_ratio / (test_ratio + val_ratio), random_state=42
+            )
 
             train_images.update(class_train)
             val_images.update(class_val)
@@ -102,7 +109,7 @@ class YOLODataBalancer:
 
         for image_name in images:
             # Copy image
-            for ext in ['.jpg', '.jpeg', '.png']:
+            for ext in [".jpg", ".jpeg", ".png"]:
                 src_image = self.images_dir / f"{image_name}{ext}"
                 if src_image.exists():
                     shutil.copy2(src_image, images_dir / f"{image_name}{ext}")
@@ -116,19 +123,14 @@ class YOLODataBalancer:
     def create_data_yaml(self):
         """Create data.yaml for the balanced dataset"""
         data_yaml = {
-            'path': str(self.output_dir.absolute()),
-            'train': 'train/images',
-            'val': 'val/images',
-            'test': 'test/images',
-            'names': {
-                0: 'ArUcoTag',
-                1: 'Bottle',
-                2: 'BrickHammer',
-                3: 'OrangeHammer'
-            }
+            "path": str(self.output_dir.absolute()),
+            "train": "train/images",
+            "val": "val/images",
+            "test": "test/images",
+            "names": {0: "ArUcoTag", 1: "Bottle", 2: "BrickHammer", 3: "OrangeHammer"},
         }
 
-        with open(self.output_dir / 'data.yaml', 'w') as f:
+        with open(self.output_dir / "data.yaml", "w") as f:
             yaml.dump(data_yaml, f, default_flow_style=False)
 
         print(f"Created data.yaml at {self.output_dir / 'data.yaml'}")
@@ -145,9 +147,13 @@ class YOLODataBalancer:
             print(f"  Class {class_id}: {count} samples")
 
         # Create balanced splits
-        train_images, val_images, test_images = self.create_balanced_split(class_counts, image_class_map)
+        train_images, val_images, test_images = self.create_balanced_split(
+            class_counts, image_class_map
+        )
 
-        print(f"Balanced split: {len(train_images)} train, {len(val_images)} val, {len(test_images)} test")
+        print(
+            f"Balanced split: {len(train_images)} train, {len(val_images)} val, {len(test_images)} test"
+        )
 
         # Copy files
         self.copy_files_to_split(train_images, self.train_dir)
@@ -175,48 +181,52 @@ class EnhancedDataAugmenter:
             (self.output_dir / split / "images").mkdir(parents=True, exist_ok=True)
             (self.output_dir / split / "labels").mkdir(parents=True, exist_ok=True)
 
-    def get_class_distribution(self):
-        """Get current class distribution"""
-        class_counts = defaultdict(int)
-
-        for label_file in self.source_labels_dir.glob("*.txt"):
-            try:
-                with open(label_file, 'r') as f:
-                    for line in f:
-                        if line.strip():
-                            class_id = int(line.split()[0])
-                            class_counts[class_id] += 1
-            except:
-                continue
-
-        return class_counts
+    # get_class_distribution method removed - unused
 
     def create_confidence_focused_augmentations(self):
         """Create confidence-focused augmentations for distance, occlusion, and partial visibility"""
-        return A.Compose([
-            # === DISTANCE SIMULATION (Critical for confidence at varying ranges) ===
-            A.RandomScale(scale_limit=0.9, p=0.8),  # Extreme scale changes for far/close objects
-            A.Resize(width=640, height=640, p=1.0),  # Consistent output size
+        return A.Compose(
+            [
+                # === DISTANCE SIMULATION (Critical for confidence at varying ranges) ===
+                A.RandomScale(
+                    scale_limit=0.9, p=0.8
+                ),  # Extreme scale changes for far/close objects
+                A.Resize(width=640, height=640, p=1.0),  # Consistent output size
+                # === OCCLUSION SIMULATION ===
+                A.CoarseDropout(
+                    max_holes=8, max_height=50, max_width=50, p=0.3
+                ),  # Random occlusions
+                A.GridDropout(ratio=0.3, p=0.2),  # Structured occlusions
+                # === ROBOTICS-SPECIFIC AUGMENTATIONS ===
+                A.GaussNoise(var_limit=(10, 50), p=0.3),  # Camera noise
+                A.ISONoise(
+                    color_shift=(0.01, 0.05), intensity=(0.1, 0.5), p=0.3
+                ),  # Sensor noise
+                A.ImageCompression(
+                    quality_lower=70, quality_upper=100, p=0.3
+                ),  # Compression artifacts
+                # === LIGHTING VARIATIONS ===
+                A.RandomBrightnessContrast(
+                    brightness_limit=0.3, contrast_limit=0.3, p=0.5
+                ),
+                A.HueSaturationValue(
+                    hue_shift_limit=20, sat_shift_limit=30, val_shift_limit=20, p=0.3
+                ),
+                # === GEOMETRIC TRANSFORMATIONS ===
+                A.Rotate(limit=15, p=0.5),
+                A.Perspective(scale=(0.05, 0.1), p=0.3),  # Slight perspective changes
+            ],
+            bbox_params=A.BboxParams(format="yolo", label_fields=["class_labels"]),
+        )
 
-            # === OCCLUSION SIMULATION ===
-            A.CoarseDropout(max_holes=8, max_height=50, max_width=50, p=0.3),  # Random occlusions
-            A.GridDropout(ratio=0.3, p=0.2),  # Structured occlusions
-
-            # === ROBOTICS-SPECIFIC AUGMENTATIONS ===
-            A.GaussNoise(var_limit=(10, 50), p=0.3),  # Camera noise
-            A.ISONoise(color_shift=(0.01, 0.05), intensity=(0.1, 0.5), p=0.3),  # Sensor noise
-            A.ImageCompression(quality_lower=70, quality_upper=100, p=0.3),  # Compression artifacts
-
-            # === LIGHTING VARIATIONS ===
-            A.RandomBrightnessContrast(brightness_limit=0.3, contrast_limit=0.3, p=0.5),
-            A.HueSaturationValue(hue_shift_limit=20, sat_shift_limit=30, val_shift_limit=20, p=0.3),
-
-            # === GEOMETRIC TRANSFORMATIONS ===
-            A.Rotate(limit=15, p=0.5),
-            A.Perspective(scale=(0.05, 0.1), p=0.3),  # Slight perspective changes
-        ], bbox_params=A.BboxParams(format='yolo', label_fields=['class_labels']))
-
-    def apply_augmentation_safe(self, image_path, label_path, output_image_path, output_label_path, augmentations):
+    def apply_augmentation_safe(
+        self,
+        image_path,
+        label_path,
+        output_image_path,
+        output_label_path,
+        augmentations,
+    ):
         """Safely apply augmentations with error handling"""
         try:
             # Read image
@@ -231,7 +241,7 @@ class EnhancedDataAugmenter:
             bboxes = []
             class_labels = []
 
-            with open(label_path, 'r') as f:
+            with open(label_path, "r") as f:
                 for line in f:
                     if line.strip():
                         parts = line.strip().split()
@@ -244,24 +254,32 @@ class EnhancedDataAugmenter:
 
             if not bboxes:
                 # No objects to augment, just copy
-                cv2.imwrite(str(output_image_path), cv2.cvtColor(image, cv2.COLOR_RGB2BGR))
+                cv2.imwrite(
+                    str(output_image_path), cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+                )
                 shutil.copy2(label_path, output_label_path)
                 return True
 
             # Apply augmentations
-            augmented = augmentations(image=image, bboxes=bboxes, class_labels=class_labels)
-            aug_image = augmented['image']
-            aug_bboxes = augmented['bboxes']
-            aug_labels = augmented['class_labels']
+            augmented = augmentations(
+                image=image, bboxes=bboxes, class_labels=class_labels
+            )
+            aug_image = augmented["image"]
+            aug_bboxes = augmented["bboxes"]
+            aug_labels = augmented["class_labels"]
 
             # Save augmented image
-            cv2.imwrite(str(output_image_path), cv2.cvtColor(aug_image, cv2.COLOR_RGB2BGR))
+            cv2.imwrite(
+                str(output_image_path), cv2.cvtColor(aug_image, cv2.COLOR_RGB2BGR)
+            )
 
             # Save augmented labels
-            with open(output_label_path, 'w') as f:
+            with open(output_label_path, "w") as f:
                 for label, bbox in zip(aug_labels, aug_bboxes):
                     x_center, y_center, width, height = bbox
-                    f.write(f"{label} {x_center:.6f} {y_center:.6f} {width:.6f} {height:.6f}\n")
+                    f.write(
+                        f"{label} {x_center:.6f} {y_center:.6f} {width:.6f} {height:.6f}\n"
+                    )
 
             return True
 
@@ -274,7 +292,9 @@ class EnhancedDataAugmenter:
         print("Starting enhanced data augmentation...")
 
         # Get source files
-        image_files = list(self.source_images_dir.glob("*.jpg")) + list(self.source_images_dir.glob("*.png"))
+        image_files = list(self.source_images_dir.glob("*.jpg")) + list(
+            self.source_images_dir.glob("*.png")
+        )
         augmentations = self.create_confidence_focused_augmentations()
 
         total_augmented = 0
@@ -295,10 +315,26 @@ class EnhancedDataAugmenter:
 
             # Create augmentations
             for i in range(augmentation_factor):
-                output_image_path = self.output_dir / "train" / "images" / f"{image_path.stem}_aug_{i}{image_path.suffix}"
-                output_label_path = self.output_dir / "train" / "labels" / f"{image_path.stem}_aug_{i}.txt"
+                output_image_path = (
+                    self.output_dir
+                    / "train"
+                    / "images"
+                    / f"{image_path.stem}_aug_{i}{image_path.suffix}"
+                )
+                output_label_path = (
+                    self.output_dir
+                    / "train"
+                    / "labels"
+                    / f"{image_path.stem}_aug_{i}.txt"
+                )
 
-                if self.apply_augmentation_safe(image_path, label_path, output_image_path, output_label_path, augmentations):
+                if self.apply_augmentation_safe(
+                    image_path,
+                    label_path,
+                    output_image_path,
+                    output_label_path,
+                    augmentations,
+                ):
                     total_augmented += 1
 
         print(f"Created {total_augmented} augmented samples")
@@ -346,7 +382,7 @@ class OrangeHammerRelabeler:
         hsv = cv2.cvtColor(hammer_region, cv2.COLOR_BGR2HSV)
 
         # Define orange color range in HSV
-        lower_orange = np.array([5, 50, 50])   # Hue 5-15, Sat 50+, Val 50+
+        lower_orange = np.array([5, 50, 50])  # Hue 5-15, Sat 50+, Val 50+
         upper_orange = np.array([25, 255, 255])
 
         # Create mask for orange pixels
@@ -365,9 +401,11 @@ class OrangeHammerRelabeler:
         """Scan dataset and relabel hammers that appear orange"""
         print("Scanning for orange hammers to relabel...")
 
-        splits = [('train', self.train_images, self.train_labels),
-                 ('val', self.val_images, self.val_labels),
-                 ('test', self.test_images, self.test_labels)]
+        splits = [
+            ("train", self.train_images, self.train_labels),
+            ("val", self.val_images, self.val_labels),
+            ("test", self.test_images, self.test_labels),
+        ]
 
         total_relabeled = 0
 
@@ -381,7 +419,7 @@ class OrangeHammerRelabeler:
                     continue
 
                 try:
-                    with open(label_file, 'r') as f:
+                    with open(label_file, "r") as f:
                         lines = f.readlines()
 
                     modified_lines = []
@@ -393,21 +431,31 @@ class OrangeHammerRelabeler:
                             class_id = int(parts[0])
                             # Only check hammer classes (0, 2, 3)
                             if class_id in [0, 2, 3]:
-                                bbox = [float(parts[1]), float(parts[2]), float(parts[3]), float(parts[4])]
+                                bbox = [
+                                    float(parts[1]),
+                                    float(parts[2]),
+                                    float(parts[3]),
+                                    float(parts[4]),
+                                ]
                                 # Convert YOLO bbox to corner format for analysis
                                 x_center, y_center, w, h = bbox
-                                bbox_corners = [x_center - w/2, y_center - h/2, x_center + w/2, y_center + h/2]
+                                bbox_corners = [
+                                    x_center - w / 2,
+                                    y_center - h / 2,
+                                    x_center + w / 2,
+                                    y_center + h / 2,
+                                ]
 
                                 if self.is_orange_hammer(image_file, bbox_corners):
-                                    parts[0] = '3'  # Change to OrangeHammer class
+                                    parts[0] = "3"  # Change to OrangeHammer class
                                     changed = True
                                     relabeled_in_split += 1
 
-                        modified_lines.append(' '.join(parts))
+                        modified_lines.append(" ".join(parts))
 
                     if changed:
-                        with open(label_file, 'w') as f:
-                            f.write('\n'.join(modified_lines) + '\n')
+                        with open(label_file, "w") as f:
+                            f.write("\n".join(modified_lines) + "\n")
 
                 except Exception as e:
                     print(f"Error processing {label_file}: {e}")
@@ -452,7 +500,9 @@ class OrangeHammerGenerator:
         for i in range(num_samples):
             # Pick random hammer image
             source_image = random.choice(hammer_images)
-            source_label = self.data_dir / "train" / "labels" / f"{source_image.stem}.txt"
+            source_label = (
+                self.data_dir / "train" / "labels" / f"{source_image.stem}.txt"
+            )
 
             if not source_label.exists():
                 continue
@@ -478,15 +528,15 @@ class OrangeHammerGenerator:
             cv2.imwrite(str(output_image_path), image)
 
             # Modify label to OrangeHammer class (assuming class 3)
-            with open(source_label, 'r') as f:
+            with open(source_label, "r") as f:
                 labels = f.readlines()
 
-            with open(output_labels_dir / f"{output_name}.txt", 'w') as f:
+            with open(output_labels_dir / f"{output_name}.txt", "w") as f:
                 for label in labels:
                     parts = label.strip().split()
                     if parts:
-                        parts[0] = '3'  # OrangeHammer class
-                        f.write(' '.join(parts) + '\n')
+                        parts[0] = "3"  # OrangeHammer class
+                        f.write(" ".join(parts) + "\n")
 
             generated += 1
 
@@ -512,8 +562,8 @@ def create_industrial_background(width=640, height=640):
     # Add some geometric shapes
     for _ in range(5):
         # Random rectangles
-        pt1 = (random.randint(0, width//2), random.randint(0, height//2))
-        pt2 = (random.randint(pt1[0]+20, width), random.randint(pt1[1]+20, height))
+        pt1 = (random.randint(0, width // 2), random.randint(0, height // 2))
+        pt2 = (random.randint(pt1[0] + 20, width), random.randint(pt1[1] + 20, height))
         cv2.rectangle(background, pt1, pt2, (80, 80, 80), -1)
 
     return background
@@ -521,14 +571,16 @@ def create_industrial_background(width=640, height=640):
 
 def apply_robotics_augmentations(image, bbox):
     """Apply robotics-specific augmentations"""
-    augmented = A.Compose([
-        A.Rotate(limit=10, p=0.5),
-        A.GaussNoise(var_limit=(5, 20), p=0.3),
-        A.RandomBrightnessContrast(brightness_limit=0.2, contrast_limit=0.2, p=0.4),
-        A.Blur(blur_limit=3, p=0.2),
-    ])(image=image, bboxes=[bbox], class_labels=[0])
+    augmented = A.Compose(
+        [
+            A.Rotate(limit=10, p=0.5),
+            A.GaussNoise(var_limit=(5, 20), p=0.3),
+            A.RandomBrightnessContrast(brightness_limit=0.2, contrast_limit=0.2, p=0.4),
+            A.Blur(blur_limit=3, p=0.2),
+        ]
+    )(image=image, bboxes=[bbox], class_labels=[0])
 
-    return augmented['image'], augmented['bboxes'][0]
+    return augmented["image"], augmented["bboxes"][0]
 
 
 def generate_synthetic_aruco_sample(marker_id, sample_id, output_dir="synthetic_aruco"):
@@ -553,9 +605,11 @@ def generate_synthetic_aruco_sample(marker_id, sample_id, output_dir="synthetic_
     y = random.randint(20, max_y)
 
     # Overlay marker on background
-    roi = background[y:y+marker_size, x:x+marker_size]
+    roi = background[y : y + marker_size, x : x + marker_size]
     mask = (marker_resized > 128).astype(np.uint8) * 255
-    background[y:y+marker_size, x:x+marker_size] = np.where(mask, marker_resized, roi)
+    background[y : y + marker_size, x : x + marker_size] = np.where(
+        mask, marker_resized, roi
+    )
 
     # Apply augmentations
     bbox = [x, y, marker_size, marker_size]
@@ -567,12 +621,12 @@ def generate_synthetic_aruco_sample(marker_id, sample_id, output_dir="synthetic_
 
     # Save YOLO label (class 0 for ArUco)
     label_path = output_dir / f"aruco_{marker_id}_{sample_id:04d}.txt"
-    x_center = (aug_bbox[0] + aug_bbox[2]/2) / background.shape[1]
-    y_center = (aug_bbox[1] + aug_bbox[3]/2) / background.shape[0]
+    x_center = (aug_bbox[0] + aug_bbox[2] / 2) / background.shape[1]
+    y_center = (aug_bbox[1] + aug_bbox[3] / 2) / background.shape[0]
     width = aug_bbox[2] / background.shape[1]
     height = aug_bbox[3] / background.shape[0]
 
-    with open(label_path, 'w') as f:
+    with open(label_path, "w") as f:
         f.write(f"0 {x_center:.6f} {y_center:.6f} {width:.6f} {height:.6f}\n")
 
     return image_path, label_path
@@ -618,21 +672,24 @@ def merge_hammer_classes():
             modified = 0
             for label_file in labels_dir.glob("*.txt"):
                 try:
-                    with open(label_file, 'r') as f:
+                    with open(label_file, "r") as f:
                         lines = f.readlines()
 
                     modified_lines = []
                     changed = False
                     for line in lines:
                         parts = line.strip().split()
-                        if parts and parts[0] in ['2', '3']:  # BrickHammer (2) or OrangeHammer (3)
-                            parts[0] = '1'  # Merge to Hammer class (1)
+                        if parts and parts[0] in [
+                            "2",
+                            "3",
+                        ]:  # BrickHammer (2) or OrangeHammer (3)
+                            parts[0] = "1"  # Merge to Hammer class (1)
                             changed = True
-                        modified_lines.append(' '.join(parts))
+                        modified_lines.append(" ".join(parts))
 
                     if changed:
-                        with open(label_file, 'w') as f:
-                            f.write('\n'.join(modified_lines) + '\n')
+                        with open(label_file, "w") as f:
+                            f.write("\n".join(modified_lines) + "\n")
                         modified += 1
 
                 except Exception as e:
@@ -644,17 +701,17 @@ def merge_hammer_classes():
         yaml_path = data_path / "data.yaml"
         if yaml_path.exists():
             try:
-                with open(yaml_path, 'r') as f:
+                with open(yaml_path, "r") as f:
                     data = yaml.safe_load(f)
 
-                if 'names' in data:
-                    data['names'] = {
-                        0: 'ArUcoTag',
-                        1: 'Hammer',  # Merged class
-                        2: 'Bottle'
+                if "names" in data:
+                    data["names"] = {
+                        0: "ArUcoTag",
+                        1: "Hammer",  # Merged class
+                        2: "Bottle",
                     }
 
-                with open(yaml_path, 'w') as f:
+                with open(yaml_path, "w") as f:
                     yaml.dump(data, f, default_flow_style=False)
 
                 print(f"  Updated {yaml_path}")
@@ -667,38 +724,50 @@ def main():
     """Main function for dataset utilities"""
     import argparse
 
-    parser = argparse.ArgumentParser(description='Dataset utilities')
-    parser.add_argument('--action', choices=[
-        'balance', 'augment', 'generate_hammers', 'generate_aruco', 'merge_hammers', 'relabel_orange'
-    ], required=True, help='Action to perform')
-    parser.add_argument('--data_dir', default='data', help='Input data directory')
-    parser.add_argument('--output_dir', help='Output directory')
-    parser.add_argument('--num_samples', type=int, default=500, help='Number of samples to generate')
+    parser = argparse.ArgumentParser(description="Dataset utilities")
+    parser.add_argument(
+        "--action",
+        choices=[
+            "balance",
+            "augment",
+            "generate_hammers",
+            "generate_aruco",
+            "merge_hammers",
+            "relabel_orange",
+        ],
+        required=True,
+        help="Action to perform",
+    )
+    parser.add_argument("--data_dir", default="data", help="Input data directory")
+    parser.add_argument("--output_dir", help="Output directory")
+    parser.add_argument(
+        "--num_samples", type=int, default=500, help="Number of samples to generate"
+    )
 
     args = parser.parse_args()
 
-    if args.action == 'balance':
+    if args.action == "balance":
         balancer = YOLODataBalancer(args.data_dir)
         balancer.balance_dataset()
 
-    elif args.action == 'augment':
+    elif args.action == "augment":
         augmenter = EnhancedDataAugmenter(args.data_dir)
         augmenter.augment_dataset()
 
-    elif args.action == 'generate_hammers':
+    elif args.action == "generate_hammers":
         generator = OrangeHammerGenerator(args.data_dir)
         generator.generate_synthetic_hammers(args.num_samples)
 
-    elif args.action == 'generate_aruco':
+    elif args.action == "generate_aruco":
         generate_aruco_dataset(args.num_samples, args.output_dir or "synthetic_aruco")
 
-    elif args.action == 'merge_hammers':
+    elif args.action == "merge_hammers":
         merge_hammer_classes()
 
-    elif args.action == 'relabel_orange':
+    elif args.action == "relabel_orange":
         relabeler = OrangeHammerRelabeler(args.data_dir)
         relabeler.relabel_orange_hammers()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

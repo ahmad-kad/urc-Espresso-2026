@@ -1,0 +1,23 @@
+[flake8]
+max-line-length = 88
+extend-ignore = E203, W503, E501
+exclude =
+    .git,
+    __pycache__,
+    build,
+    dist,
+    *.egg-info,
+    .venv,
+    venv,
+    env,
+    deployment_package,
+    output,
+    utils/__pycache__
+per-file-ignores =
+    # Allow longer lines in documentation and configuration
+    docs/*.md:E501
+    *.yaml:E501
+    *.yml:E501
+    # Allow print statements in scripts and development tools
+    scripts/*.py:T201
+    deployment_package/**/*.py:T201

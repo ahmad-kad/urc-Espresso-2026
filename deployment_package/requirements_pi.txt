@@ -1,0 +1,14 @@
+# Raspberry Pi AI Camera Requirements
+# Install with: pip3 install -r requirements_pi.txt
+
+# Core dependencies
+numpy>=1.21.0
+opencv-python>=4.5.0
+onnxruntime>=1.12.0
+
+# Camera support
+picamera2>=0.3.0
+
+# ROS2 dependencies (install ROS2 Humble first: https://docs.ros.org/en/humble/Installation.html)
+# rclpy is installed with ROS2, but listed here for reference
+# After installing ROS2, source: source /opt/ros/humble/setup.bash

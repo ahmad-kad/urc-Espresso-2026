@@ -2,7 +2,7 @@
 
 Modular scripts for training, quantizing, and benchmarking object detection models for rover deployment.
 
-## 📁 Directory Structure
+##  Directory Structure
 
 ```
 scripts/
@@ -23,7 +23,7 @@ scripts/
     └── analyze_tradeoffs.py    # Input size trade-off analysis
 ```
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### Complete Rover Optimization Pipeline
 ```bash
@@ -46,7 +46,7 @@ python benchmarking/benchmark_models.py
 python utils/monitor_training.py
 ```
 
-## 📋 Script Categories
+##  Script Categories
 
 ### Training (`training/`)
 - **optimize_rover_models.py**: Complete pipeline training multiple architectures at different sizes with early stopping
@@ -62,18 +62,18 @@ python utils/monitor_training.py
 - **monitor_training.py**: Real-time monitoring of training progress and status
 - **analyze_tradeoffs.py**: Analysis of input size vs performance trade-offs
 
-## 🎯 Key Features
+##  Key Features
 
-- ✅ **Modular Design**: Each script has a single, clear purpose
-- ✅ **Comprehensive**: Covers training → quantization → benchmarking pipeline
-- ✅ **Memory-Aware**: All scripts include memory usage analysis
-- ✅ **Production-Ready**: Optimized for embedded/rover deployment
-- ✅ **Well-Documented**: Clear docstrings and usage examples
+-  **Modular Design**: Each script has a single, clear purpose
+-  **Comprehensive**: Covers training → quantization → benchmarking pipeline
+-  **Memory-Aware**: All scripts include memory usage analysis
+-  **Production-Ready**: Optimized for embedded/rover deployment
+-  **Well-Documented**: Clear docstrings and usage examples
 
-## 📊 Workflow
+##  Workflow
 
 1. **Training**: `training/optimize_rover_models.py`
-   - Trains YOLOv8s, MobileNet-ViT, EfficientNet at multiple sizes
+   - Trains YOLOv8s models at multiple sizes
    - Early stopping with patience=10
    - Automatic best model selection
 
@@ -93,7 +93,7 @@ python utils/monitor_training.py
    - Resource usage monitoring
    - Early problem detection
 
-## 🔧 Memory Considerations
+##  Memory Considerations
 
 All scripts are designed for systems with limited memory:
 - **Training**: Requires ~8GB GPU memory
@@ -101,14 +101,14 @@ All scripts are designed for systems with limited memory:
 - **Benchmarking**: Minimal memory requirements
 - **Deployment**: INT8 models use ~14MB runtime memory
 
-## 📈 Performance Targets
+##  Performance Targets
 
 - **Accuracy**: >85% mAP50 on espresso detection
 - **Speed**: >150 FPS for real-time operation
 - **Memory**: <50 MB runtime memory footprint
 - **Size**: <5 MB quantized model size
 
-## 🛠️ Development
+##  Development
 
 Scripts follow these quality standards:
 - **Black**: Consistent formatting
@@ -116,7 +116,7 @@ Scripts follow these quality standards:
 - **Mypy**: Type checking
 - **Modular**: Single responsibility principle
 
-## 📝 Usage Examples
+##  Usage Examples
 
 ### Python API
 ```python
@@ -145,6 +145,27 @@ python scripts/utils/monitor_training.py
 # Memory analysis
 python scripts/benchmarking/analyze_memory.py
 ```
+
+
+
+
+
+
+
+
+
+
+arking/analyze_memory.py
+```
+
+
+
+
+
+
+
+
+
 
 
 
