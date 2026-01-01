@@ -3,7 +3,6 @@ Device management utilities
 Ensures consistent device handling and prevents thrashing
 """
 
-import logging
 import os
 from typing import Optional
 

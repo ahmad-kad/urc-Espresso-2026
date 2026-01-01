@@ -5,7 +5,6 @@
   "exclude": [
     "**/__pycache__",
     "**/node_modules",
-    "deployment_package/",
     "output/"
   ],
   "reportMissingImports": "warning",

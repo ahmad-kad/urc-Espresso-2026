@@ -117,11 +117,6 @@ health = detector.health_check()
 - **Inference**: Raspberry Pi 5 with AI Camera or Raspberry Pi 4
 - **Storage**: 10GB+ free space for models and datasets
 
-### Deployment Package
-- **Location**: `deployment_package/` directory
-- **Ready-to-deploy**: Complete production system with ROS2 integration
-- **Installation**: See `deployment_package/README.md` for deployment instructions
-
 ### Software
 - **Python**: 3.8+
 - **PyTorch**: 2.0+
@@ -168,35 +163,6 @@ python cli/train.py --help
 - ️ **Validation**: Automatic configuration validation before execution
 - **Comprehensive Help**: Detailed usage examples and parameter descriptions
 
-### 3. Enhanced Object Detection API
-
-```python
-from core.models import ObjectDetector
-
-# Load configuration
-config = {
- "model": {"architecture": "yolov8s", "input_size": 224},
- "data": {"classes": ["bottle", "hammer", "tag"]}
-}
-
-# Create detector with advanced features
-detector = ObjectDetector(config)
-
-# Performance monitoring
-print("Health Check:", detector.health_check())
-print("Performance Stats:", detector.get_performance_stats())
-
-# Warm up for consistent performance
-detector.warmup()
-
-# Run inference with error handling
-try:
- results = detector.predict("image.jpg")
- print(f"Detected {len(results)} objects")
-except InferenceError as e:
- print(f"Inference failed: {e}")
-```
-
 ### 3. Dataset
 
 This project uses a consolidated dataset combining robotics objects and computer ports for comprehensive object detection training.
@@ -234,28 +200,6 @@ consolidated_dataset/
 
 The dataset is pre-processed and ready for training. See `consolidated_dataset/README.md` for detailed information.
 
-### 3. Advanced Benchmarking & Analysis
-
-```bash
-# Comprehensive model evaluation (NEW!)
-python scripts/benchmark_models.py
-
-# Features:
-# - Accuracy vs Speed vs Memory analysis
-# - PyTorch vs ONNX comparison
-# - Per-class performance breakdown
-# - Automated performance reporting
-# - Real-time FPS measurement
-# - Memory usage profiling
-```
-
-**New Benchmarking Features:**
-- **Comprehensive Metrics**: Accuracy, speed, and memory analysis
-- **Multi-Format Support**: Compare PyTorch and ONNX models
-- **Performance Visualization**: Automated result plotting
-- **Memory Profiling**: Detailed GPU/CPU memory usage
-- **Automated Reporting**: CSV exports and performance summaries
-
 ### 4. Train Models
 
 ** Using Pre-trained Weights for Fast Fine-tuning!**
@@ -263,12 +207,8 @@ python scripts/benchmark_models.py
 The training scripts now automatically use pre-trained YOLOv8s weights (`yolov8s.pt`) instead of training from scratch. This reduces training time from ~8-12 hours to ~2-3.5 hours while achieving excellent performance.
 
 ```bash
-# Run complete training pipeline (NEW CLI)
+# Run complete training pipeline
 python cli/train.py --data-yaml consolidated_dataset/data.yaml
-
-# Or use legacy training scripts
-python scripts/training/run_training_pipeline.py
-python scripts/training/train_and_deploy.py
 
 # Results saved to output/models/[model_name]/
 ```
@@ -282,12 +222,11 @@ python scripts/training/train_and_deploy.py
 ### 4. Test Performance
 
 ```bash
-# Run comprehensive evaluation (NEW CLI)
+# Run comprehensive evaluation
 python cli/evaluate.py --model output/models/best.pt --benchmark
 
-# Or use legacy evaluation scripts
-python scripts/evaluation/run_comparison.py
-python scripts/evaluate_per_class_accuracy.py
+# Compare different model formats
+python scripts/compare_model_accuracy.py --pytorch-model output/models/best.pt --fp32-onnx output/converted/best.onnx --data-yaml consolidated_dataset/data.yaml
 
 # Results saved to output/evaluation/
 ```
@@ -339,14 +278,6 @@ python rpi_conversion/convert_to_rpk.py output/models/cbam_enhanced/weights/best
 
 ```
 urc-espresso-2026/
-├── deployment_package/ # PRODUCTION-READY deployment system
-│ ├── scripts/ # Production inference & ROS2 integration
-│ ├── ️ config/ # Alert rules & service configuration
-│ ├── docs/ # Deployment guides & troubleshooting
-│ ├── ️ raspberry_pi_setup.sh # Pi-specific setup script
-│ ├── install.sh # System installation script
-│ └── yolo-detector.service # Systemd service configuration
-│
 ├── core/ # ️ Core framework modules
 │ ├── config/ # Configuration management
 │ │ ├── manager.py # ConfigManager with validation
