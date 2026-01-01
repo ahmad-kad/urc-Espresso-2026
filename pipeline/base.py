@@ -29,29 +29,6 @@ class PipelineError(Exception):
     pass
 
 
-class TrainingError(PipelineError):
-    """Training-specific errors"""
-
-    pass
-
-
-class EvaluationError(PipelineError):
-    """Evaluation-specific errors"""
-
-    pass
-
-
-class ConversionError(PipelineError):
-    """Model conversion errors"""
-
-    pass
-
-
-class DeploymentError(PipelineError):
-    """Deployment-specific errors"""
-
-    pass
-
 
 @dataclass
 class PipelineResult:

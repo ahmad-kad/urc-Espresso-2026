@@ -224,23 +224,11 @@ class UnifiedTrainer:
         Optuna objective function for hyperparameter optimization
         """
         # Suggest hyperparameters
-        lr0 = trial.suggest_float("lr0", 1e-5, 1e-2, log=True)
         weight_decay = trial.suggest_float("weight_decay", 1e-6, 1e-3, log=True)
         box_loss = trial.suggest_float("box_loss", 5.0, 10.0)
         cls_loss = trial.suggest_float("cls_loss", 0.1, 2.0)
         dfl_loss = trial.suggest_float("dfl_loss", 1.0, 3.0)
 
-        # Create trial configuration
-        trial_config = create_accuracy_training_config(
-            model=model,
-            input_size=input_size,
-            epochs=epochs,
-            learning_rate=lr0,
-            weight_decay=weight_decay,
-            box_loss=box_loss,
-            cls_loss=cls_loss,
-            dfl_loss=dfl_loss,
-        )
 
         try:
             # Train model

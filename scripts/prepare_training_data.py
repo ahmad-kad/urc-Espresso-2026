@@ -14,9 +14,6 @@ import yaml
 def create_data_yaml(
     dataset_path: str,
     classes: List[str],
-    train_split: float = 0.7,
-    val_split: float = 0.2,
-    test_split: float = 0.1,
 ) -> str:
     """
     Create data.yaml file for YOLO training
@@ -24,9 +21,6 @@ def create_data_yaml(
     Args:
         dataset_path: Path to dataset directory
         classes: List of class names
-        train_split: Training data proportion
-        val_split: Validation data proportion
-        test_split: Test data proportion
 
     Returns:
         Path to created data.yaml file

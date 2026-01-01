@@ -160,7 +160,7 @@ def evaluate_onnx_direct(onnx_path: str, data_yaml: str, conf_threshold: float =
         input_shape = session.get_inputs()[0].shape
 
         if len(input_shape) == 4:
-            batch_size, channels, height, width = input_shape
+            batch_size, _, height, width = input_shape
             model_input_shape = (height, width)
         else:
             raise ValueError(f"Unexpected input shape: {input_shape}")
@@ -179,7 +179,6 @@ def evaluate_onnx_direct(onnx_path: str, data_yaml: str, conf_threshold: float =
         logger.info(f"Evaluating on {total_images} sample images")
 
         predictions = []
-        ground_truths = []
 
         for i, img_path in enumerate(val_images[:total_images]):
             try:

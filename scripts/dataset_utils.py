@@ -6,7 +6,6 @@ fix_class_imbalance.py, generate_synthetic_aruco.py, merge_hammer_classes.py,
 and simple_aruco_generator.py
 """
 
-import os
 import random
 import shutil
 from collections import defaultdict
@@ -16,8 +15,6 @@ import albumentations as A
 import cv2
 import numpy as np
 import yaml
-from PIL import Image
-from sklearn.model_selection import train_test_split
 
 
 class YOLODataBalancer:
@@ -72,7 +69,7 @@ class YOLODataBalancer:
         return class_counts, image_class_map
 
     def create_balanced_split(
-        self, class_counts, image_class_map, target_samples_per_class=200
+        self, class_counts, image_class_map
     ):
         """Create balanced train/val/test splits"""
         print("Creating balanced splits...")

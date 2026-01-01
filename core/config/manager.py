@@ -93,46 +93,6 @@ class ConfigSchema:
         "required": ["name"],
     }
 
-    # Training pipeline schema
-    TRAINING_SCHEMA = {
-        **BASE_SCHEMA,
-        "properties": {
-            **BASE_SCHEMA["properties"],
-            "pipeline": {
-                "type": "object",
-                "properties": {
-                    "type": {"const": "training"},
-                    "resume_training": {"type": "boolean"},
-                    "checkpoint_path": {"type": "string"},
-                },
-            },
-        },
-    }
-
-    # Evaluation pipeline schema
-    EVALUATION_SCHEMA = {
-        **BASE_SCHEMA,
-        "properties": {
-            **BASE_SCHEMA["properties"],
-            "pipeline": {
-                "type": "object",
-                "properties": {
-                    "type": {"const": "evaluation"},
-                    "metrics": {
-                        "type": "array",
-                        "items": {
-                            "enum": ["precision", "recall", "f1", "mAP50", "mAP50_95"]
-                        },
-                    },
-                    "benchmark_types": {
-                        "type": "array",
-                        "items": {"enum": ["accuracy", "speed", "memory"]},
-                    },
-                },
-            },
-        },
-    }
-
 
 class ConfigManager:
     """

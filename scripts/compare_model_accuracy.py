@@ -157,10 +157,10 @@ class ModelAccuracyComparator:
             if status in ['success', 'estimated']:
                 mAP50 = metrics.get('mAP50', 0.0)
                 mAP95 = metrics.get('mAP50_95', 0.0)
-                status_str = status.title()
+                status_display = status.title()
                 if 'note' in metrics:
-                    status_str += " (est.)"
-                report_lines.append(".4f")
+                    status_display += " (est.)"
+                report_lines.append(f"{model_type}\t\t{mAP50:.4f}\t\t{mAP95:.4f}\t\t{status_display}")
             else:
                 error = metrics.get('error', 'Unknown error')
                 report_lines.append(f"{model_type}\t\t-\t\t-\t\tFailed: {error}")
@@ -181,9 +181,9 @@ class ModelAccuracyComparator:
                     baseline = metrics
                     report_lines.append(f"  {model_type}: mAP50={baseline['mAP50']:.4f}, mAP50-95={baseline['mAP50_95']:.4f} (baseline)")
                 else:
-                    mAP50_diff = metrics['mAP50'] - baseline['mAP50']
-                    mAP95_diff = metrics['mAP50_95'] - baseline['mAP50_95']
-                    report_lines.append(".4f")
+                    mAP50_diff_val = metrics['mAP50'] - baseline['mAP50']
+                    mAP95_diff_val = metrics['mAP50_95'] - baseline['mAP50_95']
+                    report_lines.append(f"  {model_type}: mAP50={metrics['mAP50']:.4f} ({mAP50_diff_val:+.4f}), mAP50-95={metrics['mAP50_95']:.4f} ({mAP95_diff_val:+.4f})")
 
         # Error analysis
         failed_models = {k: v for k, v in results.items() if v.get('status') != 'success'}
