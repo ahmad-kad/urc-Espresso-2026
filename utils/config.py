@@ -16,7 +16,7 @@ class ConfigManager:
     Manages configuration loading, validation, and inheritance
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.configs_dir = Path(__file__).parent.parent.parent / "configs"
 
     def load_config(self, config_name: str = "default") -> Dict[str, Any]:
@@ -84,7 +84,7 @@ class ConfigManager:
 
         return result
 
-    def save_config(self, config: Dict, config_path: Path):
+    def save_config(self, config: Dict[str, Any], config_path: Path) -> None:
         """
         Save configuration to file
         """

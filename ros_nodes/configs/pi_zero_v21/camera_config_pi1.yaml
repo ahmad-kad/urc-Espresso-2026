@@ -1,0 +1,32 @@
+# Configuration for Pi Zero 2 W #1 with v2.1 Camera
+# Optimized for Raspberry Pi Zero 2 W hardware constraints
+
+ros2:
+  enabled: true
+  node_name: "camera_publisher_pi1"
+  topic: "/camera/chasis/image_raw"
+  fps: 15
+  compression:
+    enabled: true
+    jpeg_quality: 80
+    resolution: "half"  # Pi Zero 2 W optimized: 1280x720 (better performance)
+    target_frame_size_kb: 200  # Optimized for half resolution
+
+network:
+  ros_domain_id: 42  # Same for all Pis in network
+
+camera:
+  source: 0  # Default camera device
+  resolution: "half"  # Pi Zero 2 W optimized: 1280x720 (better performance than full 1920x1080)
+  fps: 15  # Match ROS2 fps setting
+  test_mode: false  # Set to true for testing without camera
+  calibration_file: "chasis.json"  # Camera calibration file for undistortion
+  enable_undistortion: true  # Enable lens distortion correction
+
+performance:
+  cpu_governor: "performance"  # Set CPU to performance mode on startup
+  disable_bluetooth: true  # Save power by disabling unused services
+  disable_hdmi: false  # Set to true for headless operation
+
+power:
+  battery_optimized: false  # Set to true for battery-powered operation

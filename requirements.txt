@@ -1,0 +1,54 @@
+# Core Robotics Object Detection Requirements
+# Generated from virtual environment
+#
+# Install with: pip install -r requirements.txt
+#
+# For optional dependencies:
+#   ROS2: pip install -r requirements.txt && pip install rclpy sensor-msgs cv-bridge
+#   GPU: pip install torch torchvision --index-url https://download.pytorch.org/whl/cu128
+#   Dev: pip install black isort flake8 mypy pytest
+
+# Core ML libraries
+torch==2.9.1
+torchvision==0.24.1
+ultralytics==8.3.245
+ultralytics-thop==2.0.18
+
+# Computer vision and image processing
+opencv-python==4.12.0.88
+opencv-python-headless==4.12.0.88
+pillow==12.0.0
+albumentations==2.0.8
+scikit-image==0.26.0
+
+# Data science and visualization
+numpy==1.26.4
+pandas==2.3.3
+matplotlib==3.9.4
+seaborn==0.13.2
+scipy==1.16.3
+tqdm==4.67.1
+einops==0.8.1
+
+# Model optimization and deployment
+onnx==1.17.0
+onnxruntime==1.21.1
+onnxmltools==1.14.0
+onnxscript==0.5.7
+onnx-ir==0.1.13
+onnxruntime_extensions==0.13.0
+
+# Sony IMX500 and MCT toolkit
+imx500-converter==3.17.3
+model_compression_toolkit==2.5.0
+uni_pytorch==3.17.1
+
+# Machine learning utilities
+scikit-learn==1.8.0
+
+# Networking and utilities
+requests==2.32.5
+PyYAML==6.0.3
+
+# Hardware support
+pyrealsense2==2.56.5.9235

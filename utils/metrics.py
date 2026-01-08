@@ -39,11 +39,3 @@ def calculate_iou(box1: List[float], box2: List[float]) -> float:
         return 0.0
 
     return intersection / union
-
-
-
-
-
-
-
-

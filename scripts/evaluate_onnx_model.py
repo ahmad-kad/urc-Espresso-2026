@@ -4,13 +4,14 @@ Evaluate ONNX model accuracy directly using ONNX Runtime
 Bypasses YOLO CLI for compatibility with quantized models
 """
 
+import logging
+import time
+from pathlib import Path
+from typing import Dict, List, Optional, Tuple
+
 import numpy as np
 import onnxruntime as ort
 import torch
-from pathlib import Path
-from typing import Dict, List, Tuple, Optional
-import logging
-import time
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -21,7 +22,7 @@ def load_onnx_model(model_path: str) -> ort.InferenceSession:
     logger.info(f"Loading ONNX model: {model_path}")
 
     # Try different providers for compatibility
-    providers = ['CPUExecutionProvider']
+    providers = ["CPUExecutionProvider"]
 
     try:
         session = ort.InferenceSession(model_path, providers=providers)
@@ -36,6 +37,7 @@ def preprocess_image(image: np.ndarray, input_shape: Tuple[int, int]) -> np.ndar
     """Preprocess image for ONNX model input"""
     # Resize image to model input size
     import cv2
+
     height, width = input_shape
     resized = cv2.resize(image, (width, height))
 
@@ -76,16 +78,20 @@ def postprocess_output(output: np.ndarray, conf_threshold: float = 0.5) -> List[
             confidence = class_scores[class_id]
 
             if confidence > conf_threshold:
-                predictions.append({
-                    'bbox': [float(x1), float(y1), float(x2), float(y2)],
-                    'class_id': int(class_id),
-                    'confidence': float(confidence)
-                })
+                predictions.append(
+                    {
+                        "bbox": [float(x1), float(y1), float(x2), float(y2)],
+                        "class_id": int(class_id),
+                        "confidence": float(confidence),
+                    }
+                )
 
     return predictions
 
 
-def evaluate_onnx_accuracy(onnx_path: str, data_yaml: str, conf_threshold: float = 0.5) -> Dict:
+def evaluate_onnx_accuracy(
+    onnx_path: str, data_yaml: str, conf_threshold: float = 0.5
+) -> Dict:
     """Evaluate ONNX model accuracy using YOLO CLI"""
     try:
         import subprocess
@@ -94,63 +100,79 @@ def evaluate_onnx_accuracy(onnx_path: str, data_yaml: str, conf_threshold: float
 
         # Try to use YOLO CLI for ONNX evaluation
         cmd = [
-            "yolo", "val",
+            "yolo",
+            "val",
             f"model={onnx_path}",
             f"data={data_yaml}",
             f"imgsz=416",  # Use fixed size for ONNX models
-            "--verbose=False"
+            "--verbose=False",
         ]
 
         logger.info(f"Running: {' '.join(cmd)}")
-        result = subprocess.run(cmd, capture_output=True, text=True, encoding='utf-8', errors='ignore', cwd=".")
+        result = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="ignore",
+            cwd=".",
+        )
 
         if result.returncode != 0:
             logger.error(f"YOLO CLI failed for ONNX: {result.stderr}")
             # Try alternative approach for INT8 models
-            if "ConvInteger" in str(result.stderr) or "NOT_IMPLEMENTED" in str(result.stderr):
-                logger.info("ONNX Runtime doesn't support quantized ops. Using approximation...")
+            if "ConvInteger" in str(result.stderr) or "NOT_IMPLEMENTED" in str(
+                result.stderr
+            ):
+                logger.info(
+                    "ONNX Runtime doesn't support quantized ops. Using approximation..."
+                )
                 return {
-                    'mAP50': 0.75,  # Conservative estimate for quantized models
-                    'mAP50_95': 0.35,
-                    'note': 'Approximate metrics - quantized model not fully supported by ONNX Runtime',
-                    'status': 'success'
+                    "mAP50": 0.75,  # Conservative estimate for quantized models
+                    "mAP50_95": 0.35,
+                    "note": "Approximate metrics - quantized model not fully supported by ONNX Runtime",
+                    "status": "success",
                 }
             else:
-                return {'error': f'YOLO CLI failed: {result.stderr}', 'status': 'failed'}
+                return {
+                    "error": f"YOLO CLI failed: {result.stderr}",
+                    "status": "failed",
+                }
 
         # Parse the output to extract metrics
         output = result.stdout
-        lines = output.split('\n')
+        lines = output.split("\n")
 
         for line in reversed(lines):
             line = line.strip()
-            if line.startswith('all') and len(line.split()) >= 7:
+            if line.startswith("all") and len(line.split()) >= 7:
                 parts = line.split()
                 try:
                     mAP50 = float(parts[-2])
                     mAP50_95 = float(parts[-1])
                     logger.info(".4f")
-                    return {
-                        'mAP50': mAP50,
-                        'mAP50_95': mAP50_95,
-                        'status': 'success'
-                    }
+                    return {"mAP50": mAP50, "mAP50_95": mAP50_95, "status": "success"}
                 except (ValueError, IndexError) as e:
                     continue
 
-        return {'error': 'Could not parse evaluation metrics from ONNX validation', 'status': 'failed'}
+        return {
+            "error": "Could not parse evaluation metrics from ONNX validation",
+            "status": "failed",
+        }
 
     except Exception as e:
         logger.error(f"ONNX evaluation failed: {e}")
-        return {'error': str(e), 'status': 'failed'}
+        return {"error": str(e), "status": "failed"}
 
 
-def evaluate_onnx_direct(onnx_path: str, data_yaml: str, conf_threshold: float = 0.5) -> Dict:
+def evaluate_onnx_direct(
+    onnx_path: str, data_yaml: str, conf_threshold: float = 0.5
+) -> Dict:
     """Direct ONNX evaluation for when YOLO validation fails"""
     try:
-        import yaml
         import cv2
         import numpy as np
+        import yaml
 
         logger.info("Performing direct ONNX evaluation...")
 
@@ -166,12 +188,12 @@ def evaluate_onnx_direct(onnx_path: str, data_yaml: str, conf_threshold: float =
             raise ValueError(f"Unexpected input shape: {input_shape}")
 
         # Load data config
-        with open(data_yaml, 'r') as f:
+        with open(data_yaml, "r") as f:
             data_config = yaml.safe_load(f)
 
-        val_images = data_config.get('val', [])
+        val_images = data_config.get("val", [])
         if isinstance(val_images, str):
-            with open(val_images, 'r') as f:
+            with open(val_images, "r") as f:
                 val_images = [line.strip() for line in f.readlines()]
 
         # Evaluate on first 10 images (simplified evaluation)
@@ -205,44 +227,41 @@ def evaluate_onnx_direct(onnx_path: str, data_yaml: str, conf_threshold: float =
 
         # Calculate basic metrics (simplified)
         if predictions:
-            avg_confidence = np.mean([p['confidence'] for p in predictions])
+            avg_confidence = np.mean([p["confidence"] for p in predictions])
             num_detections = len(predictions)
 
             # Placeholder mAP calculation - in a real implementation,
             # you'd compute proper mAP using libraries like pycocotools
             metrics = {
-                'mAP50': 0.8 + (avg_confidence - 0.5) * 0.1,  # Rough estimate
-                'mAP50_95': 0.4 + (avg_confidence - 0.5) * 0.1,  # Rough estimate
-                'avg_confidence': float(avg_confidence),
-                'num_detections': num_detections,
-                'note': 'Direct ONNX evaluation - approximate metrics',
-                'status': 'success'
+                "mAP50": 0.8 + (avg_confidence - 0.5) * 0.1,  # Rough estimate
+                "mAP50_95": 0.4 + (avg_confidence - 0.5) * 0.1,  # Rough estimate
+                "avg_confidence": float(avg_confidence),
+                "num_detections": num_detections,
+                "note": "Direct ONNX evaluation - approximate metrics",
+                "status": "success",
             }
         else:
-            metrics = {
-                'error': 'No predictions generated',
-                'status': 'failed'
-            }
+            metrics = {"error": "No predictions generated", "status": "failed"}
 
         return metrics
 
     except Exception as e:
         logger.error(f"Direct ONNX evaluation failed: {e}")
-        return {'error': str(e), 'status': 'failed'}
+        return {"error": str(e), "status": "failed"}
 
 
 def benchmark_model_speed(model_path: str, num_runs: int = 100) -> Dict:
     """Benchmark model inference speed"""
     try:
-        if model_path.endswith('.onnx'):
+        if model_path.endswith(".onnx"):
             return benchmark_onnx_speed(model_path, num_runs)
-        elif model_path.endswith('.pt'):
+        elif model_path.endswith(".pt"):
             return benchmark_pytorch_speed(model_path, num_runs)
         else:
             raise ValueError(f"Unsupported model format: {model_path}")
     except Exception as e:
         logger.error(f"Speed benchmarking failed: {e}")
-        return {'error': str(e)}
+        return {"error": str(e)}
 
 
 def benchmark_onnx_speed(onnx_path: str, num_runs: int = 100) -> Dict:
@@ -271,11 +290,11 @@ def benchmark_onnx_speed(onnx_path: str, num_runs: int = 100) -> Dict:
     latencies = np.array(latencies)
 
     return {
-        'avg_latency_ms': float(np.mean(latencies)),
-        'std_latency_ms': float(np.std(latencies)),
-        'min_latency_ms': float(np.min(latencies)),
-        'max_latency_ms': float(np.max(latencies)),
-        'fps': float(1000 / np.mean(latencies))
+        "avg_latency_ms": float(np.mean(latencies)),
+        "std_latency_ms": float(np.std(latencies)),
+        "min_latency_ms": float(np.min(latencies)),
+        "max_latency_ms": float(np.max(latencies)),
+        "fps": float(1000 / np.mean(latencies)),
     }
 
 
@@ -303,11 +322,11 @@ def benchmark_pytorch_speed(model_path: str, num_runs: int = 100) -> Dict:
     latencies = np.array(latencies)
 
     return {
-        'avg_latency_ms': float(np.mean(latencies)),
-        'std_latency_ms': float(np.std(latencies)),
-        'min_latency_ms': float(np.min(latencies)),
-        'max_latency_ms': float(np.max(latencies)),
-        'fps': float(1000 / np.mean(latencies))
+        "avg_latency_ms": float(np.mean(latencies)),
+        "std_latency_ms": float(np.std(latencies)),
+        "min_latency_ms": float(np.min(latencies)),
+        "max_latency_ms": float(np.max(latencies)),
+        "fps": float(1000 / np.mean(latencies)),
     }
 
 
@@ -316,10 +335,16 @@ def main():
     import argparse
 
     parser = argparse.ArgumentParser(description="Evaluate ONNX model accuracy")
-    parser.add_argument('--model', type=str, required=True, help='Path to model file')
-    parser.add_argument('--data-yaml', type=str, required=True, help='Path to data YAML')
-    parser.add_argument('--conf-threshold', type=float, default=0.5, help='Confidence threshold')
-    parser.add_argument('--benchmark-only', action='store_true', help='Only run speed benchmark')
+    parser.add_argument("--model", type=str, required=True, help="Path to model file")
+    parser.add_argument(
+        "--data-yaml", type=str, required=True, help="Path to data YAML"
+    )
+    parser.add_argument(
+        "--conf-threshold", type=float, default=0.5, help="Confidence threshold"
+    )
+    parser.add_argument(
+        "--benchmark-only", action="store_true", help="Only run speed benchmark"
+    )
 
     args = parser.parse_args()
 
@@ -331,8 +356,10 @@ def main():
             print(f"  {key}: {value}")
     else:
         # Full evaluation
-        if args.model.endswith('.onnx'):
-            accuracy_metrics = evaluate_onnx_accuracy(args.model, args.data_yaml, args.conf_threshold)
+        if args.model.endswith(".onnx"):
+            accuracy_metrics = evaluate_onnx_accuracy(
+                args.model, args.data_yaml, args.conf_threshold
+            )
             speed_metrics = benchmark_model_speed(args.model)
 
             print("Accuracy Results:")
@@ -343,7 +370,9 @@ def main():
             for key, value in speed_metrics.items():
                 print(f"  {key}: {value}")
         else:
-            print("For PyTorch models, use: python cli/evaluate.py --model <model> --data-yaml <yaml>")
+            print(
+                "For PyTorch models, use: python cli/evaluate.py --model <model> --data-yaml <yaml>"
+            )
 
 
 if __name__ == "__main__":

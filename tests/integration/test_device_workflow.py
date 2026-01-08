@@ -48,9 +48,10 @@ class TestDeviceWorkflow:
         config = sample_config.copy()
         config["device"] = "cpu"
 
-        with patch("detector.YOLO") as mock_yolo, patch(
-            "ultralytics.YOLO"
-        ) as mock_eval_yolo:
+        with (
+            patch("detector.YOLO") as mock_yolo,
+            patch("ultralytics.YOLO") as mock_eval_yolo,
+        ):
 
             # Setup detector model
             mock_model = Mock()
@@ -85,8 +86,9 @@ class TestDeviceWorkflow:
             device_checks.append(1)
             return False
 
-        with patch("detector.YOLO") as mock_yolo, patch(
-            "torch.cuda.is_available", side_effect=track_check
+        with (
+            patch("detector.YOLO") as mock_yolo,
+            patch("torch.cuda.is_available", side_effect=track_check),
         ):
             mock_model = Mock()
             mock_model.model = Mock()

@@ -3,20 +3,21 @@ Enhanced unit tests for the ObjectDetector class
 Tests performance, caching, error handling, and monitoring features
 """
 
-import pytest
 import tempfile
 import time
 from pathlib import Path
-from unittest.mock import Mock, patch, MagicMock
-import torch
+from unittest.mock import MagicMock, Mock, patch
+
 import numpy as np
+import pytest
+import torch
 
 from core.models import (
-    ObjectDetector,
-    ModelLoadError,
     InferenceError,
-    TrainingError,
     ModelCache,
+    ModelLoadError,
+    ObjectDetector,
+    TrainingError,
     get_model_hash,
     model_cache,
 )
@@ -293,9 +294,10 @@ class TestObjectDetector:
 
             detector = ObjectDetector(config)
 
-            with patch("pathlib.Path.exists", return_value=True), patch(
-                "pathlib.Path.stat"
-            ) as mock_stat:
+            with (
+                patch("pathlib.Path.exists", return_value=True),
+                patch("pathlib.Path.stat") as mock_stat,
+            ):
 
                 mock_stat.return_value.st_size = 25 * 1024 * 1024  # 25MB
 
@@ -329,9 +331,10 @@ class TestObjectDetector:
             "data": {"classes": ["test"]},
         }
 
-        with patch("detector.YOLO") as mock_yolo, patch(
-            "detector.torch.randn"
-        ) as mock_randn:
+        with (
+            patch("detector.YOLO") as mock_yolo,
+            patch("detector.torch.randn") as mock_randn,
+        ):
 
             mock_model = Mock()
             mock_model.predict.return_value = []
@@ -433,9 +436,10 @@ class TestObjectDetector:
 
     def test_thread_safety(self, sample_config):
         """Test thread-safe operations"""
-        with patch("detector.YOLO") as mock_yolo, patch(
-            "detector.torch.randn"
-        ) as mock_randn:
+        with (
+            patch("detector.YOLO") as mock_yolo,
+            patch("detector.torch.randn") as mock_randn,
+        ):
 
             mock_model = Mock()
             mock_model.predict.return_value = []

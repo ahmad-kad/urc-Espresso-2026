@@ -1,0 +1,99 @@
+# Camera Configuration Template
+# Copy this file and customize for your specific Pi setup
+# Adjust resolution, compression, framerate, and other settings as needed
+
+ros2:
+  enabled: true
+  # Unique node name for each Pi (change this!)
+  node_name: "camera_publisher_pi1"
+  # Unique topic for each Pi (change this!)
+  topic: "/camera/pi1/image_raw"
+  # Publishing framerate (lower = less CPU/bandwidth)
+  fps: 15
+  # Whether to publish annotated images (AI camera only)
+  publish_annotated: true
+
+  compression:
+    enabled: true
+    # JPEG quality (1-100, higher = better quality but more bandwidth)
+    jpeg_quality: 80
+    # Resolution options: full(1920x1080), half(1280x720), quarter(640x480)
+    # Lower resolution = less CPU and bandwidth
+    resolution: "full"
+    # Target frame size in KB (adaptive compression, overrides jpeg_quality)
+    # Set to null to use fixed JPEG quality instead
+    target_frame_size_kb: 300
+
+network:
+  # Same ROS domain ID for all Pis in your network
+  ros_domain_id: 42
+
+camera:
+  # Camera device index (0 = first camera, 1 = second camera, etc.)
+  source: 0
+  # Must match the resolution setting above
+  resolution: "full"
+  # Must match the fps setting above
+  fps: 15
+  # Set to true for testing without camera hardware
+  test_mode: false
+
+# AI inference settings (only used for AI camera Pi)
+inference:
+  # Path to your trained model
+  model: "output/models/mobilenetv2_imx500/weights/best.pth"
+  # Path to model configuration
+  config: "configs/robotics.yaml"
+  # Minimum confidence threshold (0.0-1.0)
+  confidence_threshold: 0.5
+  # IoU threshold for NMS (0.0-1.0)
+  iou_threshold: 0.4
+  # Model input size (must match your model's expected input)
+  input_size: 224
+
+performance:
+  # CPU governor: performance/ondemand/conservative/powersave
+  cpu_governor: "performance"
+  # Disable unused services to save resources
+  disable_bluetooth: true
+  disable_hdmi: false
+  # Enable real-time scheduling for AI camera (requires privileges)
+  enable_real_time_scheduling: false
+
+power:
+  # Set to true for battery-powered operation
+  battery_optimized: false
+
+# ArUco marker detection (AI camera only)
+aruco:
+  enabled: false
+  # ArUco dictionary type
+  dictionary: "DICT_4X4_50"
+  # Marker size in meters (for pose estimation)
+  marker_size: 0.05
+
+# Quality vs Performance Trade-offs:
+#
+# HIGH QUALITY (more CPU/bandwidth):
+#   fps: 15
+#   resolution: "full" (1920x1080)
+#   jpeg_quality: 80
+#   target_frame_size_kb: 300
+#
+# BALANCED (recommended for Pi Zero 2 W):
+#   fps: 15
+#   resolution: "half" (1280x720)
+#   jpeg_quality: 75
+#   target_frame_size_kb: 150
+#
+# LOW BANDWIDTH (for slow networks):
+#   fps: 10
+#   resolution: "quarter" (640x480)
+#   jpeg_quality: 60
+#   target_frame_size_kb: 50
+#
+# BATTERY OPTIMIZED:
+#   fps: 5
+#   resolution: "quarter" (640x480)
+#   jpeg_quality: 50
+#   target_frame_size_kb: 25

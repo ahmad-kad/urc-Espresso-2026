@@ -1,0 +1,49 @@
+# Configuration for Pi Zero 2 W with AI Camera + Inference
+# Includes both camera publishing and ML inference capabilities
+
+ros2:
+  enabled: true
+  node_name: "ai_camera_detector_pi4"
+  input_topic: "/camera/pi4/image_raw"
+  output_topic: "/object_detector/detections"
+  annotated_topic: "/object_detector/annotated_image"
+  fps: 10  # Lower FPS for inference processing
+  publish_annotated: true
+  compression:
+    enabled: true
+    jpeg_quality: 80  # Slightly higher quality for inference
+    resolution: "half"  # 320x240 - optimal for inference
+    target_frame_size_kb: 60
+
+network:
+  ros_domain_id: 42
+
+camera:
+  source: 0  # AI camera device
+  resolution: "half"
+  fps: 10
+  test_mode: false
+  calibration_file: "ai.json"  # Camera calibration file for undistortion
+  enable_undistortion: true  # Enable lens distortion correction
+
+inference:
+  model: "output/models/mobilenetv2_imx500/weights/best.pth"  # Update with your model path
+  config: "configs/robotics.yaml"
+  confidence_threshold: 0.5
+  iou_threshold: 0.4
+  input_size: 224  # Match your model's expected input size
+
+performance:
+  cpu_governor: "performance"
+  disable_bluetooth: true
+  disable_hdmi: false
+  # Additional optimizations for inference
+  enable_real_time_scheduling: true
+
+power:
+  battery_optimized: false
+
+aruco:
+  enabled: false  # Set to true if you want ArUco marker detection
+  dictionary: "DICT_4X4_50"
+  marker_size: 0.05  # meters

@@ -1,0 +1,31 @@
+# Configuration for Pi Zero 2 W #2 with v2.1 Camera
+
+ros2:
+  enabled: true
+  node_name: "camera_publisher_pi2"
+  topic: "/camera/arm_wrist/image_raw"
+  fps: 15
+  compression:
+    enabled: true
+    jpeg_quality: 80
+    resolution: "half"
+    target_frame_size_kb: 200  # Reduced for half resolution (1280x720)
+
+network:
+  ros_domain_id: 42
+
+camera:
+  source: 0
+  resolution: "half"  # Pi Zero 2 W optimized: 1280x720 instead of 1920x1080
+  fps: 15
+  test_mode: false
+  calibration_file: "arm_wrist.json"  # Camera calibration file for undistortion
+  enable_undistortion: true  # Enable lens distortion correction
+
+performance:
+  cpu_governor: "performance"
+  disable_bluetooth: true
+  disable_hdmi: false
+
+power:
+  battery_optimized: false

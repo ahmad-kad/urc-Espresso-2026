@@ -106,7 +106,7 @@ def save_debug_info(info: Dict[str, Any], script_name: str) -> Path:
 
 
 def format_metrics_table(metrics: Dict[str, float], title: str = "Metrics") -> str:
-    """Format metrics as a nice text table""" """Format metrics as a nice text table"""
+    """Format metrics as a nice text table"""
     table = f"\n{title}\n{'='*50}\n"
 
     for key, value in metrics.items():

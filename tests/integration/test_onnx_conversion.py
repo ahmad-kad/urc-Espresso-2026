@@ -2,11 +2,12 @@
 Integration tests for ONNX conversion and quantization
 """
 
+import shutil
+import tempfile
 from pathlib import Path
 from unittest.mock import Mock, patch
+
 import pytest
-import tempfile
-import shutil
 
 
 @pytest.mark.integration
@@ -45,8 +46,9 @@ class TestONNXConversion:
     def test_quantize_onnx_to_int8(self, temp_dir):
         """Test quantizing ONNX model to INT8"""
         try:
-            from scripts.convert_to_onnx import quantize_onnx_to_int8
             import onnxruntime as ort
+
+            from scripts.convert_to_onnx import quantize_onnx_to_int8
         except ImportError:
             pytest.skip("onnxruntime not available")
 

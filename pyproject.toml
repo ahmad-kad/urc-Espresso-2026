@@ -5,40 +5,289 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "robotics-obj-detection"
 version = "0.1.0"
-description = "General-purpose YOLO object detection framework for robotics with ROS2 integration"
+description = "General-purpose YOLO object detection framework for robotics with ROS2 integration and IMX500 deployment support"
+readme = "README.md"
+license = {text = "Apache-2.0"}
+authors = [
+    {name = "AI Development Team", email = "ai@example.com"}
+]
+maintainers = [
+    {name = "AI Development Team", email = "ai@example.com"}
+]
+keywords = [
+    "robotics",
+    "computer-vision",
+    "object-detection",
+    "yolo",
+    "ros2",
+    "imx500",
+    "raspberry-pi",
+    "machine-learning",
+    "deep-learning"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Image Recognition",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+requires-python = ">=3.10"
 dependencies = [
     # Core ML libraries
-    "torch>=2.0.0",
-    "torchvision>=0.15.0",
-    "ultralytics>=8.0.0",
+    "torch==2.9.1",
+    "torchvision==0.24.1",
+    "ultralytics==8.3.245",
 
     # Computer vision
-    "opencv-python>=4.8.0",
-    "pillow>=10.0.0",
-    "albumentations>=1.3.0",
+    "opencv-python==4.12.0.88",
+    "opencv-python-headless==4.12.0.88",
+    "pillow==12.0.0",
+    "albumentations==2.0.8",
+    "scikit-image==0.26.0",
 
     # Data science and visualization
-    "numpy>=1.24.0,<2.3.0",
-    "pandas>=2.0.0",
-    "matplotlib>=3.7.0",
-    "seaborn>=0.12.0",
-    "scipy>=1.10.0",
-    "tqdm>=4.65.0",
-    "einops>=0.7.0",
+    "numpy==1.26.4",
+    "pandas==2.3.3",
+    "matplotlib==3.9.4",
+    "seaborn==0.13.2",
+    "scipy==1.16.3",
+    "tqdm==4.67.1",
+    "einops==0.8.1",
+    "polars==1.36.1",
 
     # Model optimization and deployment
-    "onnx>=1.14.0",
-    "onnxruntime>=1.15.0",
-    "onnxmltools>=1.12.0",
+    "onnx==1.17.0",
+    "onnxruntime==1.21.1",
+    "onnxmltools==1.14.0",
+    "onnxscript==0.5.7",
+    "onnx-ir==0.1.13",
 
-    # Raspberry Pi specific
+    # Sony IMX500 and MCT toolkit
+    "imx500-converter==3.17.3",
+    "model-compression-toolkit==2.5.0",
+    "mct-quantizers==1.6.0",
+
+    # Additional ML utilities
+    "scikit-learn==1.8.0",
+    "joblib==1.5.3",
+    "threadpoolctl==3.6.0",
+
+    # Image processing
+    "ImageIO==2.37.2",
+    "tifffile==2025.12.20",
+    "lazy-loader==0.4",
+
+    # Networking and utilities
+    "requests==2.32.5",
+    "certifi==2025.11.12",
+    "charset-normalizer==3.4.4",
+    "idna==3.11",
+    "urllib3==2.6.2",
+
+    # Configuration and serialization
+    "PyYAML==6.0.3",
+    "flatbuffers==25.12.19",
+
+    # Raspberry Pi specific (conditional)
     "picamera2>=0.3.0; sys_platform == 'linux'",
 
-    # Alert system
-    "requests>=2.28.0",
+    # Intel RealSense (optional)
+    "pyrealsense2==2.56.5.9235; sys_platform == 'linux'",
 ]
 
 [project.optional-dependencies]
+ros2 = [
+    # Core ROS2
+    "rclpy==7.1.6",
+    "rcutils==6.7.4",
+
+    # ROS2 interfaces and messages
+    "builtin-interfaces==2.0.3",
+    "std-msgs==5.3.6",
+    "std-srvs==5.3.6",
+    "sensor-msgs==5.3.6",
+    "sensor-msgs-py==5.3.6",
+    "geometry-msgs==5.3.6",
+    "nav-msgs==5.3.6",
+    "diagnostic-msgs==5.3.6",
+    "action-msgs==2.0.3",
+    "service-msgs==2.0.3",
+    "lifecycle-msgs==2.0.3",
+    "composition-interfaces==2.0.3",
+    "rcl-interfaces==2.0.3",
+    "rosgraph-msgs==2.0.3",
+    "trajectory-msgs==5.3.6",
+    "stereo-msgs==5.3.6",
+    "shape-msgs==5.3.6",
+    "pcl-msgs==1.0.0",
+    "map-msgs==2.4.1",
+    "unique-identifier-msgs==2.5.0",
+    "visualization-msgs==5.3.6",
+
+    # ROS2 computer vision
+    "cv-bridge==4.1.0",
+    "image-geometry==4.1.0",
+    "vision-msgs>=4.0.0",
+
+    # ROS2 tools and utilities
+    "ros2action==0.32.6",
+    "ros2bag==0.26.9",
+    "ros2bag-mcap-cli==0.26.9",
+    "ros2bag-sqlite3-cli==0.26.9",
+    "ros2cli==0.32.6",
+    "ros2component==0.32.6",
+    "ros2doctor==0.32.6",
+    "ros2interface==0.32.6",
+    "ros2launch==0.26.10",
+    "ros2lifecycle==0.32.6",
+    "ros2multicast==0.32.6",
+    "ros2node==0.32.6",
+    "ros2param==0.32.6",
+    "ros2pkg==0.32.6",
+    "ros2run==0.32.6",
+    "ros2service==0.32.6",
+    "ros2topic==0.32.6",
+
+    # ROS2 middleware
+    "rmw-dds-common==3.1.0",
+
+    # ROS2 development tools
+    "launch==3.4.9",
+    "launch-ros==0.26.10",
+    "launch-testing==3.4.9",
+    "launch-testing-ros==0.26.10",
+    "launch-xml==3.4.9",
+    "launch-yaml==3.4.9",
+
+    # ROS2 message passing
+    "message-filters==4.11.9",
+    "rosbag2-interfaces==0.26.9",
+    "rosbag2-py==0.26.9",
+
+    # ROS2 TF2
+    "tf2-geometry-msgs==0.36.16",
+    "tf2-kdl==0.36.16",
+    "tf2-msgs==0.36.16",
+    "tf2-py==0.36.16",
+    "tf2-ros-py==0.36.16",
+    "tf2-sensor-msgs==0.36.16",
+    "tf2-tools==0.36.16",
+
+    # ROS2 utilities
+    "diagnostic-updater==4.2.6",
+    "interactive-markers==2.5.5",
+    "laser-geometry==2.7.2",
+    "resource-retriever==3.4.4",
+
+    # ROS2 GUI tools (Qt-based)
+    "python-qt-binding==2.2.2",
+    "qt-dotgraph==2.7.5",
+    "qt-gui==2.7.5",
+    "qt-gui-cpp==2.7.5",
+    "qt-gui-py-common==2.7.5",
+
+    # ROS2 RQt tools
+    "rqt-action==2.2.0",
+    "rqt-bag==1.5.5",
+    "rqt-bag-plugins==1.5.5",
+    "rqt-console==2.2.1",
+    "rqt-graph==1.5.5",
+    "rqt-gui==1.6.2",
+    "rqt-gui-py==1.6.2",
+    "rqt-msg==1.5.1",
+    "rqt-plot==1.4.4",
+    "rqt-publisher==1.7.2",
+    "rqt-py-common==1.6.2",
+    "rqt-py-console==1.2.3",
+    "rqt-reconfigure==1.6.2",
+    "rqt-service-caller==1.2.1",
+    "rqt-shell==1.2.2",
+    "rqt-srv==1.2.2",
+    "rqt-topic==1.7.4",
+
+    # ROS2 bridges and APIs
+    "rosapi==2.4.1",
+    "rosapi-msgs==2.4.1",
+    "rosbridge-library==2.4.1",
+    "rosbridge-msgs==2.4.1",
+    "rosbridge-server==2.4.1",
+
+    # ROS2 security
+    "sros2==0.13.4",
+
+    # ROS2 type support
+    "rosidl-adapter==4.6.6",
+    "rosidl-cli==4.6.6",
+    "rosidl-cmake==4.6.6",
+    "rosidl-generator-c==4.6.6",
+    "rosidl-generator-cpp==4.6.6",
+    "rosidl-generator-py==0.22.2",
+    "rosidl-generator-type-description==4.6.6",
+    "rosidl-parser==4.6.6",
+    "rosidl-pycommon==4.6.6",
+    "rosidl-runtime-py==0.13.1",
+    "rosidl-typesupport-c==3.2.2",
+    "rosidl-typesupport-cpp==3.2.2",
+    "rosidl-typesupport-fastrtps-c==3.6.2",
+    "rosidl-typesupport-fastrtps-cpp==3.6.2",
+    "rosidl-typesupport-introspection-c==4.6.6",
+    "rosidl-typesupport-introspection-cpp==4.6.6",
+
+    # ROS2 development and testing
+    "ament-cmake-test==2.5.4",
+    "ament-copyright==0.17.3",
+    "ament-cppcheck==0.17.3",
+    "ament-cpplint==0.17.3",
+    "ament-flake8==0.17.3",
+    "ament-index-python==1.8.1",
+    "ament-lint==0.17.3",
+    "ament-lint-cmake==0.17.3",
+    "ament-package==0.16.4",
+    "ament-pep257==0.17.3",
+    "ament-uncrustify==0.17.3",
+    "ament-xmllint==0.17.3",
+
+    # ROS2 examples and demos
+    "demo-nodes-py==0.33.7",
+    "examples-rclpy-executors==0.19.7",
+    "examples-rclpy-minimal-action-client==0.19.7",
+    "examples-rclpy-minimal-action-server==0.19.7",
+    "examples-rclpy-minimal-client==0.19.7",
+    "examples-rclpy-minimal-publisher==0.19.7",
+    "examples-rclpy-minimal-service==0.19.7",
+    "examples-rclpy-minimal-subscriber==0.19.7",
+    "logging-demo==0.33.7",
+    "quality-of-service-demo-py==0.33.7",
+    "topic-monitor==0.33.7",
+    "turtlesim==1.8.3",
+    "teleop-twist-keyboard==2.4.1",
+
+    # ROS2 domain coordination
+    "domain-coordinator==0.12.0",
+
+    # Additional ROS2 utilities
+    "angles==1.16.1",
+    "osrf-pycommon==2.1.7",
+    "rpyutils==0.4.2",
+    "type-description-interfaces==2.0.3",
+    "typing-inspection==0.4.2",
+    "xacro==2.1.1",
+    "pendulum-msgs==0.33.7",
+    "action-tutorials-interfaces==0.33.7",
+    "action-tutorials-py==0.33.7",
+    "actionlib-msgs==5.3.6",
+    "example-interfaces==0.12.0",
+    "statistics-msgs==2.0.3",
+]
+
 dev = [
     # Code quality and development tools
     "black>=23.0.0",
@@ -57,21 +306,144 @@ dev = [
     # Documentation
     "sphinx>=5.0.0",
     "sphinx-rtd-theme>=1.2.0",
+
+    # Additional development tools
+    "setuptools==80.9.0",
+    "wheel==0.45.1",
+    "Jinja2==3.1.6",
+    "MarkupSafe==3.0.3",
+    "packaging==25.0",
+    "filelock==3.20.1",
+    "platformdirs>=3.0.0",
+    "tomli>=1.2.0; python_version < '3.11'",
+
+    # Type checking and linting
+    "typing-extensions==4.15.0",
+    "pydantic==2.11.10",
+    "pydantic-core==2.33.2",
+    "annotated-types==0.7.0",
 ]
 
 gpu = [
-    # GPU-specific packages
-    "torch[cu118]>=2.0.0; sys_platform == 'linux'",
-    "torchvision[cu118]>=0.15.0; sys_platform == 'linux'",
+    # GPU-specific packages (CUDA 12.8)
+    "torch[cu128]>=2.9.0; sys_platform == 'linux'",
+    "torchvision[cu128]>=0.24.0; sys_platform == 'linux'",
+    "nvidia-cublas-cu12==12.8.4.1",
+    "nvidia-cuda-cupti-cu12==12.8.90",
+    "nvidia-cuda-nvrtc-cu12==12.8.93",
+    "nvidia-cuda-runtime-cu12==12.8.90",
+    "nvidia-cudnn-cu12==9.10.2.21",
+    "nvidia-cufft-cu12==11.3.3.83",
+    "nvidia-cufile-cu12==1.13.1.3",
+    "nvidia-curand-cu12==10.3.9.90",
+    "nvidia-cusolver-cu12==11.7.3.90",
+    "nvidia-cusparse-cu12==12.5.8.93",
+    "nvidia-cusparselt-cu12==0.7.1",
+    "nvidia-nccl-cu12==2.27.5",
+    "nvidia-nvjitlink-cu12==12.8.93",
+    "nvidia-nvshmem-cu12==3.3.20",
+    "nvidia-nvtx-cu12==12.8.90",
+    "triton==3.5.1",
+]
+
+imx500 = [
+    # Sony IMX500 specific tools (already included in main deps)
+    # These are for development and testing
+    "tensorboard==2.20.0",
+    "tensorboard-data-server==0.7.2",
+    "Werkzeug==3.1.4",
+    "Markdown==3.10",
+    "absl-py==2.3.1",
+    "grpcio==1.76.0",
+    "protobuf==4.25.5",
+    "ortools==9.9.3963",
+    "PuLP==3.3.0",
+]
+
+full = [
+    # Everything - use with caution (very large installation)
+    "robotics-obj-detection[ros2,gpu,dev,imx500]",
 ]
 
 [tool.setuptools.packages.find]
-where = ["src"]
-include = ["src*"]
+where = ["."]
+include = ["core*", "utils*", "ros_nodes*", "pipeline*", "cli*", "scripts*"]
+exclude = ["tests*", "__pycache__*", "*.pyc"]
 
 [tool.black]
 line-length = 88
-target-version = ['py38']
+target-version = ['py310', 'py311', 'py312']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | venv
+  | _build
+  | buck-out
+  | build
+  | dist
+  | output
+)/
+'''
 
 [tool.isort]
 profile = "black"
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+line_length = 88
+known_first_party = ["core", "utils", "ros_nodes", "pipeline", "cli", "scripts"]
+skip = ["venv", "output", "__pycache__", ".git"]
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q --strict-markers --strict-config"
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+    "e2e: marks tests as end-to-end tests",
+]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+show_error_codes = true
+
+[[tool.mypy.overrides]]
+module = [
+    "cv2.*",
+    "torchvision.*",
+    "ultralytics.*",
+    "onnx.*",
+    "onnxruntime.*",
+    "model_compression_toolkit.*",
+    "imx500_converter.*",
+    "rclpy.*",
+    "cv_bridge.*",
+    "sensor_msgs.*",
+]
+ignore_missing_imports = true

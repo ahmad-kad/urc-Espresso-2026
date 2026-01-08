@@ -1,0 +1,63 @@
+# Configuration for PC Subscriber
+# Subscribes to all camera streams and inference results
+
+ros2:
+  enabled: true
+  node_name: "camera_subscriber_master"
+
+network:
+  ros_domain_id: 42
+
+subscriptions:
+  cameras:
+    - name: "pi1_camera"
+      topic: "/camera/pi1/image_raw"
+      type: "sensor_msgs/CompressedImage"
+      fps_expected: 15
+
+    - name: "pi2_camera"
+      topic: "/camera/pi2/image_raw"
+      type: "sensor_msgs/CompressedImage"
+      fps_expected: 15
+
+    - name: "pi3_camera"
+      topic: "/camera/pi3/image_raw"
+      type: "sensor_msgs/CompressedImage"
+      fps_expected: 15
+
+    - name: "ai_camera"
+      topic: "/camera/pi4/image_raw"
+      type: "sensor_msgs/CompressedImage"
+      fps_expected: 10
+
+  inference:
+    - name: "object_detections"
+      topic: "/object_detector/detections"
+      type: "vision_msgs/Detection2DArray"
+
+    - name: "annotated_images"
+      topic: "/object_detector/annotated_image"
+      type: "sensor_msgs/Image"
+
+display:
+  enabled: true
+  window_name: "Multi-Camera View"
+  layout: "grid"  # Options: grid, horizontal, vertical
+  show_fps: true
+  show_inference_overlay: true
+
+recording:
+  enabled: false  # Set to true to save streams
+  output_dir: "~/camera_recordings"
+  format: "mp4"  # Options: mp4, avi, mkv
+  segment_duration: 300  # seconds (5 minutes)
+
+monitoring:
+  enabled: true
+  log_fps: true
+  alert_on_disconnect: true
+  reconnect_timeout: 5  # seconds
+
+performance:
+  buffer_size: 10  # ROS2 QoS depth
+  thread_pool_size: 4  # For processing multiple streams

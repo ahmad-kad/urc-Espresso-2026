@@ -2,13 +2,15 @@
 Generic training framework for object detection models
 """
 
-from dataclasses import dataclass
 import os
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, Optional
 
-from .models import ObjectDetector
 from utils.logger_config import get_logger
+
+from .classification_trainer import ClassificationTrainer
+from .models import ObjectDetector
 
 logger = get_logger(__name__, debug=os.getenv("DEBUG") == "1")
 
@@ -32,6 +34,26 @@ class ModelTrainer:
     def __init__(self, config: Dict):
         self.config = config
         self.detector = ObjectDetector(config)
+        self.classification_trainer = None
+        self.model_type = self._detect_model_type()
+
+    def _detect_model_type(self) -> str:
+        """Detect if we're training YOLO or classification model"""
+        architecture = self.config.get("model", {}).get("architecture", "yolov8s")
+        if architecture.startswith("yolov8"):
+            return "yolo"
+        elif architecture in [
+            "mobilenetv2",
+            "mobilenetv3",
+            "resnet18",
+            "resnet34",
+            "efficientnet_lite0",
+            "efficientnet_lite1",
+        ]:
+            return "classification"
+        else:
+            logger.warning(f"Unknown architecture '{architecture}', assuming YOLO")
+            return "yolo"
 
     def train(
         self,
@@ -57,35 +79,81 @@ class ModelTrainer:
         logger.info(f"Data configuration: {data_yaml}")
 
         try:
-            # Set project name for organized outputs
-            if experiment_name:
-                project_name = f"{self.config.get('project', {}).get('name', 'object_detection')}_{experiment_name}"
-            else:
-                project_name = self.config.get("project", {}).get(
-                    "name", "object_detection"
+            # Handle different training types based on model architecture
+            if self.model_type == "classification":
+                # Classification training with torchvision models
+                logger.info(
+                    "Starting classification training with torchvision model..."
                 )
 
-            # Train the model - use output directory as base
-            output_base = Path("output")
-            train_kwargs = {
-                "project": str(output_base / "models"),
-                "name": project_name,
-            }
-            if project:
-                train_kwargs["project"] = str(output_base / project)
-            if name:
-                train_kwargs["name"] = name
+                # Setup classification trainer
+                self.classification_trainer = ClassificationTrainer(self.config)
+                model = self.detector.model  # Get the loaded torchvision model
+                self.classification_trainer.setup_model(model)
+                self.classification_trainer.setup_data_loaders()
 
-            # Add resume parameters if requested
-            if resume:
-                if resume_path:
-                    train_kwargs["resume"] = resume_path
+                # Set project name for organized outputs
+                if experiment_name:
+                    project_name = f"{self.config.get('project', {}).get('name', 'classification')}_{experiment_name}"
                 else:
-                    train_kwargs["resume"] = True
+                    project_name = self.config.get("project", {}).get(
+                        "name", "classification"
+                    )
 
-            results = self.detector.train(
-                data_yaml, model_name=name or project_name, **train_kwargs
-            )
+                # Train the model
+                output_base = Path("output")
+                save_path = (
+                    output_base / "models" / project_name / "weights" / "best.pth"
+                )
+                save_path.parent.mkdir(parents=True, exist_ok=True)
+
+                num_epochs = self.config.get("training", {}).get("epochs", 25)
+                results = self.classification_trainer.train(
+                    num_epochs=num_epochs, save_path=str(save_path)
+                )
+
+                # Create mock results object for compatibility
+                class MockResults:
+                    def __init__(self, save_dir, results_dict):
+                        self.save_dir = save_dir
+                        self.results = results_dict
+
+                mock_results = MockResults(str(save_path.parent.parent), results)
+
+            else:
+                # YOLO training (existing logic)
+                logger.info("Starting YOLO training...")
+
+                # Set project name for organized outputs
+                if experiment_name:
+                    project_name = f"{self.config.get('project', {}).get('name', 'object_detection')}_{experiment_name}"
+                else:
+                    project_name = self.config.get("project", {}).get(
+                        "name", "object_detection"
+                    )
+
+                # Train the model - use output directory as base
+                output_base = Path("output")
+                train_kwargs = {
+                    "project": str(output_base / "models"),
+                    "name": project_name,
+                }
+                if project:
+                    train_kwargs["project"] = str(output_base / project)
+                if name:
+                    train_kwargs["name"] = name
+
+                # Add resume parameters if requested
+                if resume:
+                    if resume_path:
+                        train_kwargs["resume"] = resume_path
+                    else:
+                        train_kwargs["resume"] = True
+
+                results = self.detector.train(
+                    data_yaml, model_name=name or project_name, **train_kwargs
+                )
+                mock_results = results
 
             logger.info("Training completed successfully!")
 
@@ -154,22 +222,30 @@ class ModelTrainer:
 
         try:
             # Use YOLO CLI for evaluation instead of Python API to avoid serialization issues
-            import subprocess
             import re
+            import subprocess
 
             cmd = [
-                "yolo", "val",
+                "yolo",
+                "val",
                 f"model={model_path}",
                 f"data={data_yaml}",
-                "--verbose=False"
+                "--verbose=False",
             ]
 
             # For ONNX models, specify the correct image size
-            if model_path.endswith('.onnx'):
+            if model_path.endswith(".onnx"):
                 cmd.append("imgsz=416")
 
             logger.info(f"Running command: {' '.join(cmd)}")
-            result = subprocess.run(cmd, capture_output=True, text=True, encoding='utf-8', errors='ignore', cwd=".")
+            result = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                errors="ignore",
+                cwd=".",
+            )
 
             if result.returncode != 0:
                 logger.error(f"YOLO CLI failed: {result.stderr}")
@@ -183,10 +259,10 @@ class ModelTrainer:
                 return {"error": "No output from YOLO CLI"}
 
             # Look for the 'all' line which contains overall metrics
-            lines = output.split('\n')
+            lines = output.split("\n")
             for line in lines:
                 line = line.strip()
-                if line.startswith('all') and len(line.split()) >= 7:
+                if line.startswith("all") and len(line.split()) >= 7:
                     # Parse the 'all' line which contains overall metrics
                     # Format: "all        320        327      0.93      0.838      0.881      0.486"
                     parts = line.split()
@@ -197,15 +273,20 @@ class ModelTrainer:
                             metrics["mAP50_95"] = float(parts[-1])
                             break
                         except (ValueError, IndexError) as e:
-                            logger.warning(f"Failed to parse metrics from line: {line}, error: {e}")
+                            logger.warning(
+                                f"Failed to parse metrics from line: {line}, error: {e}"
+                            )
                             continue
 
-            logger.info(f"Evaluation completed: mAP50={metrics.get('mAP50', 'N/A')}, mAP50_95={metrics.get('mAP50_95', 'N/A')}")
+            logger.info(
+                f"Evaluation completed: mAP50={metrics.get('mAP50', 'N/A')}, mAP50_95={metrics.get('mAP50_95', 'N/A')}"
+            )
             return metrics
 
         except Exception as e:
             logger.error(f"Model evaluation failed: {e}")
             import traceback
+
             logger.error(f"Traceback: {traceback.format_exc()}")
             return {"error": str(e)}
 
@@ -224,6 +305,7 @@ class ModelTrainer:
             Dictionary with speed metrics
         """
         import time
+
         import numpy as np
 
         logger.info(f"Measuring inference speed for {num_runs} runs")
@@ -304,6 +386,7 @@ class ModelTrainer:
             Dictionary with speed metrics
         """
         import time
+
         import numpy as np
 
         logger.info(f"Measuring ONNX speed for {num_runs} runs")

@@ -1,30 +1,124 @@
 # Robotics environment configuration
 # Optimized for robotic applications with ROS2 integration
 
-extends: ../default.yaml
-
 project:
   name: "robotics_object_detection"
+  version: "0.1.0"
 
+# Dataset configuration
+data:
+  yaml_path: "consolidated_dataset/data.yaml"
+  classes: ['Bottle', 'BrickHammer', 'OrangeHammer']  # From consolidated_dataset/data.yaml
+  num_classes: 3
+
+# Model configuration
 model:
-  input_size: 416  # Higher resolution for small object detection
-  confidence_threshold: 0.6  # Higher confidence for robotics
+  architecture: "yolov8s"
+  input_size: 416  # Must match model training size (best.pt was trained at 416)
+  confidence_threshold: 0.25  # Lower threshold for better detection of small objects
+  iou_threshold: 0.4  # Standard IoU threshold
+  max_detections: 10  # Reduced for edge devices (lower memory)
 
+# Training configuration
 training:
   epochs: 100
   batch_size: 4  # Smaller batch for embedded training
   device: "cpu"  # Default to CPU for Raspberry Pi training
+  learning_rate: 0.001
+  weight_decay: 0.0005
+  patience: 25
+  # Multi-scale training: train at multiple input sizes for size robustness
+  multi_scale: true  # Enable multi-scale training
+  multi_scale_min: 320  # Minimum input size
+  multi_scale_max: 640  # Maximum input size
+  multi_scale_step: 32  # Step size for multi-scale (must be divisible by 32)
 
-  # Optimized for small objects at distance
+  # Optimized for robustness: different sizes, occlusion, perspective
   augmentation:
-    scale: 0.5  # Distance simulation
-    degrees: 15.0  # Limited rotation for oriented objects
+    # Multi-scale training for objects at different distances/sizes
+    scale: 0.9  # Large scale variation (0.1x to 1.0x) for size robustness
+    # Perspective transformations for viewpoint changes
+    perspective: 0.0005  # Perspective distortion (increased for robustness)
+    # Geometric transformations
+    degrees: 20.0  # Rotation for orientation robustness
+    translate: 0.15  # Translation for position robustness
+    shear: 10.0  # Shear transformation
+    # Flipping
+    fliplr: 0.5  # Horizontal flip
+    flipud: 0.0  # Vertical flip (usually not needed for robotics)
+    # Advanced augmentations for occlusion and robustness
+    mosaic: 1.0  # Mosaic augmentation (combines 4 images, simulates occlusion)
+    mixup: 0.15  # Mixup augmentation (blends images, simulates partial occlusion)
+    copy_paste: 0.3  # Copy-paste augmentation (simulates occlusion)
+    # Lighting robustness augmentations
+    hsv_h: 0.02  # Hue variation
+    hsv_s: 0.7  # Saturation variation
+    hsv_v: 0.4  # Value (brightness) variation
 
+# ROS2 settings
 ros2:
   enabled: true
+  node_name: "object_detector"
+  input_topic: "/camera/camera/color/image_raw"  # RealSense D435 color image topic
+  output_topic: "/object_detector/detections"
+  annotated_topic: "/object_detector/annotated_image"
+  publish_annotated: true
 
+# Real-time settings (optimized for edge devices)
 realtime:
   temporal_filter: true
   temporal_alpha: 0.4
-  temporal_min_frames: 5
+  temporal_min_frames: 3  # Reduced from 5 for faster convergence
   temporal_boost_factor: 0.25
+  temporal_max_history: 5  # Reduced from 10 to save memory
+  detection_persistence: true  # Keep detections visible for a delay
+  persistence_duration: 5.0  # Seconds to keep detections visible after last detection
+
+# Image preprocessing for lighting robustness (lightweight for edge)
+preprocessing:
+  enabled: true
+  clahe: false  # Disabled for edge devices (memory intensive)
+  clahe_clip_limit: 2.0
+  clahe_tile_size: 8
+  adaptive_brightness: true  # Lightweight brightness normalization
+  brightness_threshold_low: 30  # If mean brightness < this, brighten
+  brightness_threshold_high: 220  # If mean brightness > this, darken
+  gamma_correction: false  # Disabled for edge devices (extra computation)
+  gamma: 1.2
+
+# Multi-scale inference (DISABLED for edge devices - too expensive)
+inference:
+  multi_scale: false  # DISABLED: Runs 3x inference, too expensive for edge devices
+  multi_scale_sizes: [320, 416, 512]  # Scales to test (includes base input_size 416)
+  multi_scale_ensemble: false  # Combine detections from all scales
+  multi_scale_confidence_boost: 0.05  # Boost confidence for detections found at multiple scales
+
+# Device configuration
+device: "cpu"  # Edge devices typically use CPU (change to "cuda" if GPU available)
+
+# ArUco tag detection using cv2.aruco (more accurate than YOLO for ArUco tags)
+aruco:
+  enabled: true  # Enable cv2.aruco detection for ArUco tags
+  dictionary: "DICT_4X4_50"  # ArUco dictionary type (used if multi_dictionary is false)
+  # Options: DICT_4X4_50, DICT_4X4_100, DICT_4X4_250, DICT_4X4_1000,
+  #          DICT_5X5_50, DICT_5X5_100, DICT_6X6_50, DICT_6X6_100,
+  #          DICT_7X7_50, DICT_7X7_100
+  multi_dictionary: true  # Enable multi-dictionary detection (4x4, 5x5, 6x6, 7x7 simultaneously)
+  max_detection_size: 1280  # Downscale images larger than this for faster detection (0 = no downscaling)
+  
+  # Motion handling for moving objects with multiple marker sizes
+  motion_blur_deblur: true  # Enable motion blur deblurring
+  kalman_tracking: true  # Enable Kalman filter tracking for position prediction
+  consensus_frames: 1  # RELIABILITY FIX: Reduced to 1 (effectively disabled) - allows first detection immediately
+  confidence_decay_rate: 0.1  # Confidence decay rate per second for lost markers (0.1 = 10% per second)
+  motion_adaptive: true  # Adapt detection parameters based on motion velocity
+  fast_motion_error_correction: 0.9  # Error correction rate for fast motion (>2.0 px/frame)
+  slow_motion_error_correction: 0.8  # Error correction rate for slow/stationary motion
+
+# Edge device optimizations
+edge:
+  optimize_memory: true  # Enable memory optimizations
+  reduce_image_copy: true  # Minimize image copying
+  limit_detection_history: true  # Limit stored detection history
+  use_int8_model: false  # Set to true if using INT8 quantized ONNX model (much smaller)
+  enable_torch_compile: false  # Disable torch.compile (not available on all edge devices)

@@ -3,25 +3,26 @@ Tests for the unified pipeline architecture
 Validates the base classes, configuration management, and pipeline integration
 """
 
-import pytest
 import tempfile
 from pathlib import Path
 from unittest.mock import Mock, patch
 
+import pytest
+
+from core.config.manager import ConfigManager, ConfigValidationResult
 from pipeline.base import (
     BasePipeline,
-    PipelineConfig,
-    PipelineResult,
-    PipelineError,
-    TrainingError,
-    EvaluationError,
     ConversionError,
     DeploymentError,
+    EvaluationError,
+    PipelineConfig,
+    PipelineError,
+    PipelineResult,
+    TrainingError,
     create_pipeline_output_dir,
-    save_pipeline_result,
     load_pipeline_result,
+    save_pipeline_result,
 )
-from core.config.manager import ConfigManager, ConfigValidationResult
 
 
 class TestPipelineConfig:

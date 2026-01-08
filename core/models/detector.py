@@ -3,13 +3,13 @@ High-Performance YOLO Object Detector
 Production-ready with advanced error handling, caching, and performance optimizations
 """
 
-import os
-import time
 import hashlib
-from pathlib import Path
-from typing import Dict, Optional, Union, Any, Tuple
-from contextlib import contextmanager
+import os
 import threading
+import time
+from contextlib import contextmanager
+from pathlib import Path
+from typing import Any, Dict, Optional, Tuple, Union
 
 import torch
 from ultralytics import YOLO
@@ -147,6 +147,18 @@ class ObjectDetector:
                         architecture, pretrained_weights
                     )
 
+                elif architecture in [
+                    "mobilenetv2",
+                    "mobilenetv3",
+                    "resnet18",
+                    "resnet34",
+                    "efficientnet_lite0",
+                    "efficientnet_lite1",
+                ]:
+                    self.model = self._load_torchvision_model(
+                        architecture, pretrained_weights
+                    )
+
                 else:
                     # Default to YOLOv8s
                     logger.warning(
@@ -160,10 +172,90 @@ class ObjectDetector:
                 # Log model information
                 self._log_model_info()
 
+                # Store model type for later use
+                self.model_type = (
+                    "yolo" if architecture.startswith("yolov8") else "classification"
+                )
+
             except Exception as e:
                 self._performance_stats["errors"] += 1
                 logger.error(f"Failed to load model: {e}")
                 raise ModelLoadError(f"Model loading failed: {e}") from e
+
+    def _load_torchvision_model(
+        self, architecture: str, pretrained_weights: Optional[str] = None
+    ):
+        """Load torchvision classification model for IMX500 compatibility"""
+        try:
+            import torch.nn as nn
+            import torchvision.models as models
+
+            logger.info(f"Loading torchvision model: {architecture}")
+
+            # Get number of classes from config or default to 3 (for consolidated dataset)
+            num_classes = self.config.get("model", {}).get("num_classes", 3)
+
+            if architecture == "mobilenetv2":
+                model = models.mobilenet_v2(pretrained=True)
+                # Modify classifier for our number of classes
+                model.classifier[1] = nn.Linear(
+                    model.classifier[1].in_features, num_classes
+                )
+
+            elif architecture == "mobilenetv3":
+                # Load MobileNetV3-Large by default
+                model = models.mobilenet_v3_large(pretrained=True)
+                model.classifier[3] = nn.Linear(
+                    model.classifier[3].in_features, num_classes
+                )
+
+            elif architecture == "resnet18":
+                model = models.resnet18(pretrained=True)
+                model.fc = nn.Linear(model.fc.in_features, num_classes)
+
+            elif architecture == "resnet34":
+                model = models.resnet34(pretrained=True)
+                model.fc = nn.Linear(model.fc.in_features, num_classes)
+
+            elif architecture.startswith("efficientnet"):
+                # For EfficientNet-Lite variants, we'll use regular EfficientNet as approximation
+                # since EfficientNet-Lite isn't in standard torchvision
+                if architecture == "efficientnet_lite0":
+                    model = models.efficientnet_b0(pretrained=True)
+                elif architecture == "efficientnet_lite1":
+                    model = models.efficientnet_b1(pretrained=True)
+                else:
+                    model = models.efficientnet_b0(pretrained=True)
+
+                # Modify classifier
+                model.classifier[1] = nn.Linear(
+                    model.classifier[1].in_features, num_classes
+                )
+
+            else:
+                raise ValueError(
+                    f"Unsupported torchvision architecture: {architecture}"
+                )
+
+            # Load custom weights if provided
+            if pretrained_weights and Path(pretrained_weights).exists():
+                logger.info(f"Loading custom weights from: {pretrained_weights}")
+                state_dict = torch.load(pretrained_weights, map_location="cpu")
+                model.load_state_dict(state_dict)
+
+            logger.info(
+                f"Loaded torchvision {architecture} model with {num_classes} classes"
+            )
+            return model
+
+        except ImportError:
+            logger.error(
+                "torchvision not available. Install with: pip install torchvision"
+            )
+            raise
+        except Exception as e:
+            logger.error(f"Failed to load torchvision model {architecture}: {e}")
+            raise
 
     def _load_yolov8_baseline(self, pretrained_weights: Optional[str]) -> YOLO:
         """Load YOLOv8 baseline model"""
@@ -403,11 +495,22 @@ class ObjectDetector:
                 "fliplr": aug_config.get("fliplr", 0.5),
                 "mosaic": aug_config.get("mosaic", 1.0),
                 "mixup": aug_config.get("mixup", 0.0),
+                "copy_paste": aug_config.get("copy_paste", 0.0),
                 "hsv_h": aug_config.get("hsv_h", 0.0),
                 "hsv_s": aug_config.get("hsv_s", 0.7),
                 "hsv_v": aug_config.get("hsv_v", 0.4),
             }
         )
+
+        # Add multi-scale training if enabled
+        if training_config.get("multi_scale", False):
+            # YOLO supports multi-scale through imgsz range
+            min_size = training_config.get("multi_scale_min", 320)
+            max_size = training_config.get("multi_scale_max", 640)
+            step = training_config.get("multi_scale_step", 32)
+            # Note: YOLO's multi-scale is typically handled internally, but we can set imgsz to a range
+            # For now, we'll use the max size as base and let YOLO handle multi-scale internally
+            kwargs["imgsz"] = max_size
 
         # Add loss weights
         loss_config = training_config.get("loss_weights", {})

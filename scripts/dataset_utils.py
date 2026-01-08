@@ -10,17 +10,19 @@ import random
 import shutil
 from collections import defaultdict
 from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
 
 import albumentations as A
 import cv2
 import numpy as np
 import yaml
+from sklearn.model_selection import train_test_split
 
 
 class YOLODataBalancer:
     """Data balancing and splitting utilities"""
 
-    def __init__(self, data_dir="data"):
+    def __init__(self, data_dir: str = "data") -> None:
         self.data_dir = Path(data_dir)
         self.images_dir = self.data_dir / "images"
         self.labels_dir = self.data_dir / "labels"
@@ -36,11 +38,11 @@ class YOLODataBalancer:
             (dir_path / "images").mkdir(parents=True, exist_ok=True)
             (dir_path / "labels").mkdir(parents=True, exist_ok=True)
 
-    def analyze_class_distribution(self):
+    def analyze_class_distribution(self) -> Tuple[Dict[int, int], Dict[int, List[str]]]:
         """Analyze the current class distribution in the dataset"""
         print("Analyzing class distribution...")
 
-        class_counts = defaultdict(int)
+        class_counts: Dict[int, int] = defaultdict(int)
         image_class_map = defaultdict(list)
 
         label_files = list(self.labels_dir.glob("*.txt"))
@@ -68,9 +70,7 @@ class YOLODataBalancer:
 
         return class_counts, image_class_map
 
-    def create_balanced_split(
-        self, class_counts, image_class_map
-    ):
+    def create_balanced_split(self, class_counts: Dict[int, int], image_class_map: Dict[int, List[str]]) -> Tuple[List[str], List[str], List[str]]:
         """Create balanced train/val/test splits"""
         print("Creating balanced splits...")
 
@@ -99,7 +99,7 @@ class YOLODataBalancer:
 
         return list(train_images), list(val_images), list(test_images)
 
-    def copy_files_to_split(self, images, split_dir):
+    def copy_files_to_split(self, images: List[str], split_dir: Path) -> None:
         """Copy image and label files to split directory"""
         images_dir = split_dir / "images"
         labels_dir = split_dir / "labels"
@@ -117,7 +117,7 @@ class YOLODataBalancer:
             if src_label.exists():
                 shutil.copy2(src_label, labels_dir / f"{image_name}.txt")
 
-    def create_data_yaml(self):
+    def create_data_yaml(self) -> None:
         """Create data.yaml for the balanced dataset"""
         data_yaml = {
             "path": str(self.output_dir.absolute()),
@@ -132,7 +132,7 @@ class YOLODataBalancer:
 
         print(f"Created data.yaml at {self.output_dir / 'data.yaml'}")
 
-    def balance_dataset(self):
+    def balance_dataset(self) -> None:
         """Main method to balance the dataset"""
         print("Starting dataset balancing...")
 
@@ -166,7 +166,7 @@ class YOLODataBalancer:
 class EnhancedDataAugmenter:
     """Enhanced data augmentation for robotics applications"""
 
-    def __init__(self, data_dir="consolidated_dataset"):
+    def __init__(self, data_dir: str = "consolidated_dataset") -> None:
         self.data_dir = Path(data_dir)
         # Use train directory for source data
         self.source_images_dir = self.data_dir / "train" / "images"
@@ -180,7 +180,7 @@ class EnhancedDataAugmenter:
 
     # get_class_distribution method removed - unused
 
-    def create_confidence_focused_augmentations(self):
+    def create_confidence_focused_augmentations(self) -> Any:
         """Create confidence-focused augmentations for distance, occlusion, and partial visibility"""
         return A.Compose(
             [
@@ -284,7 +284,7 @@ class EnhancedDataAugmenter:
             print(f"Error augmenting {image_path}: {e}")
             return False
 
-    def augment_dataset(self, augmentation_factor=3):
+    def augment_dataset(self, augmentation_factor: int = 3) -> None:
         """Apply augmentations to create enhanced dataset"""
         print("Starting enhanced data augmentation...")
 
@@ -340,7 +340,7 @@ class EnhancedDataAugmenter:
 class OrangeHammerRelabeler:
     """Identify and relabel orange hammers that were incorrectly labeled"""
 
-    def __init__(self, data_path="balanced_data"):
+    def __init__(self, data_path: str = "balanced_data") -> None:
         self.data_path = Path(data_path)
         self.train_images = self.data_path / "train" / "images"
         self.train_labels = self.data_path / "train" / "labels"
@@ -349,7 +349,7 @@ class OrangeHammerRelabeler:
         self.test_images = self.data_path / "test" / "images"
         self.test_labels = self.data_path / "test" / "labels"
 
-    def is_orange_hammer(self, image_path, bbox):
+    def is_orange_hammer(self, image_path: str, bbox: List[float]) -> bool:
         """Determine if a hammer in the image appears orange"""
 
         # Load image
@@ -394,7 +394,7 @@ class OrangeHammerRelabeler:
         # Consider it an orange hammer if more than 20% of pixels are orange
         return orange_percentage > 20
 
-    def relabel_orange_hammers(self):
+    def relabel_orange_hammers(self) -> None:
         """Scan dataset and relabel hammers that appear orange"""
         print("Scanning for orange hammers to relabel...")
 
@@ -467,11 +467,11 @@ class OrangeHammerRelabeler:
 class OrangeHammerGenerator:
     """Generate synthetic OrangeHammer samples to fix class imbalance"""
 
-    def __init__(self, data_dir="balanced_data"):
+    def __init__(self, data_dir: str = "balanced_data") -> None:
         self.data_dir = Path(data_dir)
         self.output_dir = Path("enhanced_data")
 
-    def generate_synthetic_hammers(self, num_samples=200):
+    def generate_synthetic_hammers(self, num_samples: int = 200) -> None:
         """Generate synthetic orange hammer samples"""
         print(f"Generating {num_samples} synthetic OrangeHammer samples...")
 
@@ -540,14 +540,14 @@ class OrangeHammerGenerator:
         print(f"Generated {generated} synthetic OrangeHammer samples")
 
 
-def generate_aruco_marker(marker_id, size=200):
+def generate_aruco_marker(marker_id: int, size: int = 200) -> np.ndarray:
     """Generate an ArUco marker image"""
     aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_50)
     marker_image = cv2.aruco.generateImageMarker(aruco_dict, marker_id, size)
     return marker_image
 
 
-def create_industrial_background(width=640, height=640):
+def create_industrial_background(width: int = 640, height: int = 640) -> np.ndarray:
     """Create a realistic industrial background"""
     # Create base gray background
     background = np.random.randint(100, 150, (height, width, 3), dtype=np.uint8)
@@ -566,7 +566,7 @@ def create_industrial_background(width=640, height=640):
     return background
 
 
-def apply_robotics_augmentations(image, bbox):
+def apply_robotics_augmentations(image: np.ndarray, bbox: List[float]) -> Tuple[np.ndarray, List[float]]:
     """Apply robotics-specific augmentations"""
     augmented = A.Compose(
         [
@@ -580,7 +580,7 @@ def apply_robotics_augmentations(image, bbox):
     return augmented["image"], augmented["bboxes"][0]
 
 
-def generate_synthetic_aruco_sample(marker_id, sample_id, output_dir="synthetic_aruco"):
+def generate_synthetic_aruco_sample(marker_id: int, sample_id: int, output_dir: str = "synthetic_aruco") -> None:
     """Generate a single synthetic ArUco sample"""
     output_dir = Path(output_dir)
     output_dir.mkdir(exist_ok=True)

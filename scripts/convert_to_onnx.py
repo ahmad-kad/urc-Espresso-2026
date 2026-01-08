@@ -5,13 +5,14 @@ Supports YOLOv8 models
 """
 
 import argparse
+import logging
 import sys
 from pathlib import Path
 from typing import Optional
+
 import torch
 import torch.onnx
 from ultralytics import YOLO  # type: ignore
-import logging
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
@@ -24,7 +25,7 @@ def convert_onnx_to_int8(fp32_model_path: str, output_path: str) -> str:
     logger.info(f"Converting ONNX FP32 to INT8: {fp32_model_path}")
 
     try:
-        from onnxruntime.quantization import quantize_dynamic, QuantType
+        from onnxruntime.quantization import QuantType, quantize_dynamic
 
         logger.info("Quantizing ONNX model to INT8...")
 
@@ -46,8 +47,8 @@ def convert_onnx_to_int8(fp32_model_path: str, output_path: str) -> str:
             # Fallback to static quantization if dynamic fails
             try:
                 from onnxruntime.quantization import (
-                    quantize_static,
                     CalibrationDataReader,
+                    quantize_static,
                 )
 
                 # Create a simple calibration data reader
@@ -111,23 +112,25 @@ def convert_onnx_to_int8(fp32_model_path: str, output_path: str) -> str:
 
 
 def convert_yolo_to_onnx(
-    model_path: str, output_path: str, input_size: int = 416, opset_version: int = 11
+    model_path: str,
+    output_path: str,
+    input_size: int = 416,
+    opset_version: int = 15,  # Changed from 11 to 15
 ):
-    """Convert YOLO model to ONNX format using YOLO's export with raw outputs"""
-    logger.info(f"Converting YOLO model: {model_path} with raw output export")
+    """Convert YOLO model to ONNX format compatible with IMX500"""
+    logger.info(f"Converting YOLO model for IMX500: {model_path}")
 
-    # Load the YOLO model
     model = YOLO(model_path)
 
-    # Use YOLO's export method but try to get raw model outputs
     try:
-        # Export using YOLO's export method with parameters to get raw outputs
+        # IMX500 requires specific export settings
         export_result = model.export(
             format="onnx",
             imgsz=input_size,
-            opset=opset_version,
-            simplify=False,  # Don't simplify to preserve structure
-            dynamic=False,   # Static batch size
+            opset=15,  # IMX500 supports opset 15-20, use 15 for compatibility
+            simplify=False,  # Don't simplify - IMX500 needs full structure
+            dynamic=False,  # MUST be static (no dynamic batch/shape)
+            half=False,  # Keep FP32 (MCT will quantize later)
         )
 
         # YOLO export returns the path to the exported model
@@ -143,6 +146,7 @@ def convert_yolo_to_onnx(
             exported_path = Path(model_path).parent / f"{Path(model_path).stem}.onnx"
             if exported_path.exists():
                 import shutil
+
                 # Ensure destination directory exists
                 Path(output_path).parent.mkdir(parents=True, exist_ok=True)
                 shutil.move(str(exported_path), output_path)
@@ -158,7 +162,9 @@ def convert_yolo_to_onnx(
                         f"YOLO model exported with raw outputs and saved to: {output_path}"
                     )
                     return output_path
-                raise Exception(f"YOLO export completed but expected file not found at {exported_path} or {export_result}")
+                raise Exception(
+                    f"YOLO export completed but expected file not found at {exported_path} or {export_result}"
+                )
         else:
             raise Exception("YOLO export returned None")
 
@@ -169,14 +175,16 @@ def convert_yolo_to_onnx(
         try:
             if model is None:
                 raise Exception("Model failed to load")
-            
+
             # Get the model without the detection head (just the backbone)
             if hasattr(model, "model") and hasattr(model.model, "model"):
                 backbone_model = model.model.model  # The actual neural network
             elif hasattr(model, "model"):
                 backbone_model = model.model  # Fallback for different model structures
             else:
-                raise Exception("Model structure not compatible with backbone extraction")
+                raise Exception(
+                    "Model structure not compatible with backbone extraction"
+                )
 
             # Create dummy input
             dummy_input = torch.randn(1, 3, input_size, input_size)
@@ -223,27 +231,30 @@ def detect_model_type(model_path: str) -> str:
     # Try to inspect the model file to detect YOLO models
     try:
         # Load the model state dict to check for YOLO-specific keys
-        if model_path.endswith('.pt'):
-            state_dict = torch.load(model_path, map_location='cpu', weights_only=False)
+        if model_path.endswith(".pt"):
+            state_dict = torch.load(model_path, map_location="cpu", weights_only=False)
             if isinstance(state_dict, dict):
                 # Check for YOLO-specific keys in state dict
                 state_keys = set(state_dict.keys())
                 yolo_indicators = [
-                    'model',  # YOLO models have a 'model' key
-                    'epoch', 'best_fitness', 'date'  # YOLO training metadata
+                    "model",  # YOLO models have a 'model' key
+                    "epoch",
+                    "best_fitness",
+                    "date",  # YOLO training metadata
                 ]
                 if any(key in state_keys for key in yolo_indicators):
                     return "yolo"
 
                 # Check if the model dict contains YOLO architecture markers
-                if 'model' in state_dict and isinstance(state_dict['model'], dict):
-                    model_dict = state_dict['model']
-                    if 'type' in model_dict and model_dict['type'] == 'yolov8':
+                if "model" in state_dict and isinstance(state_dict["model"], dict):
+                    model_dict = state_dict["model"]
+                    if "type" in model_dict and model_dict["type"] == "yolov8":
                         return "yolo"
 
             # Try loading as YOLO model directly
             try:
                 from ultralytics import YOLO
+
                 model = YOLO(model_path)
                 # If we can load it with YOLO, it's a YOLO model
                 return "yolo"
@@ -281,7 +292,7 @@ def convert_model(
         opset_versions = [11, 13, 17, 9]
 
     logger.info(f"Converting {model_type} model from {model_path} to {output_path}")
-    
+
     success = False
     last_error = None
 
@@ -297,11 +308,15 @@ def convert_model(
             if Path(output_path).exists():
                 file_size = Path(output_path).stat().st_size / (1024 * 1024)
                 if file_size > 1:
-                    logger.info(f"Converted successfully with opset {opset_version}. Size: {file_size:.2f} MB")
+                    logger.info(
+                        f"Converted successfully with opset {opset_version}. Size: {file_size:.2f} MB"
+                    )
                     success = True
                     break
                 else:
-                    logger.warning(f"File too small ({file_size:.2f} MB), trying next opset")
+                    logger.warning(
+                        f"File too small ({file_size:.2f} MB), trying next opset"
+                    )
                     Path(output_path).unlink()
         except Exception as e:
             last_error = e
@@ -313,7 +328,9 @@ def convert_model(
         raise RuntimeError(f"Conversion failed. Last error: {last_error}")
 
 
-def batch_convert_models(models_dir: str = "output/models", output_dir: str = "output/onnx"):
+def batch_convert_models(
+    models_dir: str = "output/models", output_dir: str = "output/onnx"
+):
     """Convert all models in the output/models directory to ONNX"""
     models_path = Path(models_dir)
     if not models_path.exists():
@@ -333,24 +350,32 @@ def batch_convert_models(models_dir: str = "output/models", output_dir: str = "o
                         break
 
                 try:
-                    convert_model(str(best_model_path), str(output_path), input_size=input_size)
+                    convert_model(
+                        str(best_model_path), str(output_path), input_size=input_size
+                    )
                     converted_count += 1
                 except Exception as e:
                     logger.error(f"Failed to convert {model_name}: {e}")
-    
+
     logger.info(f"Successfully converted {converted_count} models")
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Convert PyTorch models to ONNX format")
+    parser = argparse.ArgumentParser(
+        description="Convert PyTorch models to ONNX format"
+    )
     parser.add_argument("--model_path", type=str, help="Path to PyTorch model file")
     parser.add_argument("--output_path", type=str, help="Path for ONNX output file")
     parser.add_argument("--model_type", type=str, choices=["yolo"], help="Model type")
     parser.add_argument("--input_size", type=int, default=416, help="Model input size")
-    parser.add_argument("--batch_convert", action="store_true", help="Batch convert mode")
+    parser.add_argument(
+        "--batch_convert", action="store_true", help="Batch convert mode"
+    )
     parser.add_argument("--models_dir", type=str, default="output/models")
     parser.add_argument("--output_dir", type=str, default="output/onnx")
-    parser.add_argument("--int8", action="store_true", help="Create INT8 quantized version")
+    parser.add_argument(
+        "--int8", action="store_true", help="Create INT8 quantized version"
+    )
 
     args = parser.parse_args()
 
@@ -358,14 +383,20 @@ def main():
         if args.batch_convert:
             batch_convert_models(args.models_dir, args.output_dir)
         elif args.model_path:
-            fp32_output = args.output_path or f"output/onnx/{Path(args.model_path).stem}.onnx"
-            convert_model(args.model_path, fp32_output, args.model_type, args.input_size)
+            fp32_output = (
+                args.output_path or f"output/onnx/{Path(args.model_path).stem}.onnx"
+            )
+            convert_model(
+                args.model_path, fp32_output, args.model_type, args.input_size
+            )
 
             if args.int8:
                 fp32_path = Path(fp32_output)
                 suffix = "_int8.onnx"
                 if fp32_path.stem.endswith("_fp32"):
-                    int8_output = str(fp32_path.with_name(f"{fp32_path.stem[:-5]}{suffix}"))
+                    int8_output = str(
+                        fp32_path.with_name(f"{fp32_path.stem[:-5]}{suffix}")
+                    )
                 else:
                     int8_output = str(fp32_path.with_name(f"{fp32_path.stem}{suffix}"))
                 convert_onnx_to_int8(fp32_output, int8_output)

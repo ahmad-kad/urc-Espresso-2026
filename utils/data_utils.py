@@ -4,7 +4,7 @@ Data processing and loading utilities
 
 import logging
 from pathlib import Path
-from typing import Dict, List, Tuple, Optional
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import cv2
 import numpy as np
@@ -13,7 +13,7 @@ import yaml
 logger = logging.getLogger(__name__)
 
 
-def load_data_config(data_yaml_path: str) -> Dict:
+def load_data_config(data_yaml_path: str) -> Dict[str, Any]:
     """
     Load and validate data configuration from YAML
     """
@@ -32,7 +32,7 @@ def load_data_config(data_yaml_path: str) -> Dict:
     return config
 
 
-def get_image_paths(data_split: str, data_root: str = ".") -> List[str]:
+def get_image_paths(data_split: Union[str, List[str]], data_root: str = ".") -> List[str]:
     """
     Get all image paths for a data split
     """
@@ -57,7 +57,7 @@ def get_image_paths_from_dir(directory: Path) -> List[str]:
     """
 
     image_extensions = {".jpg", ".jpeg", ".png", ".bmp", ".tiff", ".webp"}
-    image_paths = []
+    image_paths: List[str] = []
 
     if not directory.exists():
         logger.warning(f"Directory does not exist: {directory}")
@@ -84,12 +84,8 @@ def create_data_yaml(
     """
 
     if class_names is None:
-        # Try to infer from directory structure or use generic names
-        class_names = (
-            [f"class_{i}" for i in range(len(class_names))]
-            if class_names
-            else ["object"]
-        )
+        # Use generic names if not provided
+        class_names = ["object"]
 
     data_config = {
         "train": train_dir,
@@ -110,7 +106,7 @@ def create_data_yaml(
     return output_path
 
 
-def analyze_image_sizes(image_paths: List[str], sample_size: int = 1000) -> Dict:
+def analyze_image_sizes(image_paths: List[str], sample_size: int = 1000) -> Dict[str, Any]:
     """
     Analyze image dimensions in the dataset
     """
