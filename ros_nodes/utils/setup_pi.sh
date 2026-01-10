@@ -1,270 +1,387 @@
-#!/bin/bash
+#!/usr/bin/env python3
+"""
+Dual Camera Launch Script for LiDAR-Camera Fusion
+Launches two camera nodes with maximum quality configurations
+"""
 
-# Ubuntu 24.04 setup for Raspberry Pi Zero 2W camera nodes
-# Supports: Pi Camera v2.0, v2.1, and AI camera modules
-# Includes: DNS fix, camera packages, ROS2 workspace, systemd service
-# Usage: ./setup_pi.sh [camera_type] [pi_number]
-# Example: ./setup_pi.sh v20 1
-# Example: ./setup_pi.sh v21 2
-# Example: ./setup_pi.sh ai 1
+import subprocess
+import sys
+import time
+import signal
+import os
 
-set -e  # Exit on any error
+# ============================================================================
+# CONFIGURATION - All quality/performance settings in one place
+# ============================================================================
+CONFIG = {
+    # Camera settings - optimized for quality over framerate
+    "width": 1920,           # Full HD for detail
+    "height": 1080,          # Full HD for detail
+    "fps": 15.0,             # Lower framerate allows better quality/exposure
+    "format": "MJPEG",       # Compressed but lossless for network efficiency
+    
+    # Device scanning
+    "camera_scan_range": 10,  # How many /dev/videoX to check
+    
+    # Timing (seconds)
+    "process_kill_timeout": 3,
+    "ros_daemon_wait": 2,
+    "camera_init_wait": 5,
+    "inter_launch_delay": 3,
+    "topic_check_timeout": 5,
+    "hz_check_timeout": 3,
+    
+    # ROS settings
+    "ros_distro": "jazzy",
+    "working_dir": "/home/durian/glitter/glitter",
+    "camera_node_script": "src/camera/pi_camera_node.py",
+    
+    # Topic naming
+    "topic_namespace": "cameras",
+    "left_topic_name": "left/image_raw",
+    "right_topic_name": "right/image_raw",
+}
 
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-NC='\033[0m' # No Color
+# ============================================================================
+# UTILITY FUNCTIONS
+# ============================================================================
 
-CAMERA_TYPE=${1:-"v21"}
-PI_NUMBER=${2:-"1"}
+def get_ros_source_cmd():
+    """Return source command for ROS environment"""
+    return f"source /opt/ros/{CONFIG['ros_distro']}/setup.bash"
 
-# Validate camera type
-if [[ ! "$CAMERA_TYPE" =~ ^(v20|v21|ai)$ ]]; then
-    echo -e "${RED}ERROR: Invalid camera type '$CAMERA_TYPE'${NC}"
-    echo "Supported types: v20, v21, ai"
-    exit 1
-fi
+def run_command(cmd, name):
+    """Run a command in the background with full shell environment"""
+    print(f"Starting {name}...")
+    print(f"Command: {cmd}")
+    full_cmd = f"bash -c '{cmd}'"
+    process = subprocess.Popen(
+        full_cmd,
+        shell=True,
+        preexec_fn=os.setsid
+    )
+    return process
 
-echo -e "${GREEN}==========================================${NC}"
-echo -e "${GREEN}Pi Zero 2W Camera Setup${NC}"
-echo "Ubuntu: 24.04 | ROS2: Jazzy"
-echo "Camera: $CAMERA_TYPE | Pi #$PI_NUMBER"
-echo -e "${GREEN}==========================================${NC}"
+def run_command_sync(cmd, timeout=None, capture=True):
+    """Run a command synchronously and return output"""
+    try:
+        result = subprocess.run(
+            f"bash -c '{cmd}'",
+            shell=True,
+            capture_output=capture,
+            text=True,
+            timeout=timeout
+        )
+        return result
+    except subprocess.TimeoutExpired:
+        return None
+    except Exception as e:
+        print(f"Command execution error: {e}")
+        return None
 
-# Configure reliable DNS (fix for resolution issues)
-echo "[1/9] Configuring DNS..."
-sudo tee /etc/resolv.conf > /dev/null <<EOF
-nameserver 8.8.8.8
-nameserver 8.8.4.4
-options edns0 trust-ad
-EOF
-echo -e "${GREEN}✓ DNS configured with Google DNS${NC}"
+def kill_process_group(pid, timeout=None):
+    """Safely kill a process group"""
+    if timeout is None:
+        timeout = CONFIG["process_kill_timeout"]
+    
+    try:
+        os.killpg(os.getpgid(pid), signal.SIGTERM)
+        process = subprocess.Popen(
+            ["sleep", str(timeout)],
+            preexec_fn=os.setsid
+        )
+        try:
+            process.wait(timeout=timeout)
+        except subprocess.TimeoutExpired:
+            os.killpg(os.getpgid(pid), signal.SIGKILL)
+    except (ProcessLookupError, OSError):
+        pass
 
-# Update system
-echo "[2/9] Updating system..."
-sudo apt update && sudo apt upgrade -y
-echo -e "${GREEN}✓ System updated${NC}"
+def clean_existing_camera_processes():
+    """Kill any existing camera processes to free up devices"""
+    patterns = ["pi_camera_node", "camera_left", "camera_right"]
+    running_pids = set()
+    
+    for pattern in patterns:
+        result = subprocess.run(
+            ["pgrep", "-f", pattern],
+            capture_output=True,
+            text=True
+        )
+        pids = [p.strip() for p in result.stdout.strip().split('\n') if p.strip()]
+        running_pids.update(pids)
+    
+    if running_pids:
+        print(f"Cleaning {len(running_pids)} existing camera processes...")
+        for pid in running_pids:
+            kill_process_group(int(pid))
+        time.sleep(CONFIG["process_kill_timeout"])
 
-# Add ROS2 Jazzy repository
-echo "[3/9] Adding ROS2 Jazzy repository..."
-sudo apt install -y software-properties-common curl
-sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu noble main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
-sudo apt update
-echo -e "${GREEN}✓ ROS2 repository added${NC}"
+# ============================================================================
+# CAMERA DETECTION
+# ============================================================================
 
-# Install ROS2 Jazzy
-echo "[4/9] Installing ROS2 Jazzy..."
-sudo apt install -y \
-    ros-jazzy-ros-base \
-    ros-jazzy-cv-bridge \
-    ros-jazzy-image-transport \
-    ros-jazzy-rmw-cyclonedds-cpp \
-    python3-colcon-common-extensions
-echo -e "${GREEN}✓ ROS2 Jazzy installed${NC}"
+def detect_cameras():
+    """
+    Detect available cameras via v4l2 device enumeration
+    Returns list of working camera indices
+    """
+    # Use v4l2-ctl which works better with industrial cameras
+    result = run_command_sync("v4l2-ctl --list-devices", timeout=5)
+    
+    if not result or not result.stdout.strip():
+        print("v4l2-ctl not available, falling back to device scan")
+        return fallback_camera_detection()
+    
+    # Parse v4l2-ctl output to find /dev/videoX devices
+    indices = []
+    for line in result.stdout.split('\n'):
+        line = line.strip()
+        if line.startswith('/dev/video'):
+            try:
+                # Extract number from /dev/videoN
+                idx = int(line.split('video')[1].split()[0])
+                if idx not in indices and idx % 2 == 0:  # Use only even indices (main streams)
+                    indices.append(idx)
+            except (ValueError, IndexError):
+                continue
+    
+    return sorted(indices)
 
-# Install camera support
-echo "[5/9] Installing camera support..."
-sudo apt install -y \
-    libcamera-dev \
-    libcamera-tools \
-    python3-libcamera \
-    python3-opencv \
-    python3-yaml \
-    python3-numpy \
-    python3-pip \
-    v4l-utils
+def fallback_camera_detection():
+    """
+    Fallback detection using cv2.VideoCapture for when v4l2-ctl unavailable
+    """
+    camera_detection_code = f"""
+import cv2
+cameras = []
 
-# Install picamera2 and dependencies
-sudo apt install -y libcap-dev python3-prctl
-pip3 install --break-system-packages picamera2
-echo -e "${GREEN}✓ Camera packages installed${NC}"
+for i in range({CONFIG['camera_scan_range']}):
+    cap = cv2.VideoCapture(i)
+    if not cap.isOpened():
+        continue
+    
+    # Try to read a frame - just need one successful frame
+    ret, frame = cap.read()
+    if ret and frame is not None and frame.size > 0:
+        h, w = frame.shape[:2]
+        cameras.append((i, w, h))
+    
+    cap.release()
 
-# Configure camera permissions
-echo "[6/10] Configuring camera permissions..."
-sudo usermod -aG video $USER
-echo -e "${GREEN}✓ Camera permissions configured${NC}"
+if cameras:
+    for idx, w, h in cameras:
+        print(f"Camera {{idx}}: {{w}}x{{h}}")
+else:
+    print("No cameras found")
+"""
+    
+    result = run_command_sync(camera_detection_code, timeout=30)
+    if not result or not result.stdout.strip() or "No cameras found" in result.stdout:
+        return []
+    
+    indices = []
+    for line in result.stdout.strip().split('\n'):
+        try:
+            idx = int(line.split(':')[0].split(' ')[1])
+            indices.append(idx)
+        except (ValueError, IndexError):
+            continue
+    
+    return indices
 
-# Test camera detection
-echo "[7/10] Testing camera detection..."
-CAMERA_FOUND=false
-if command -v libcamera-vid &> /dev/null; then
-    if timeout 3s libcamera-vid --list-cameras 2>/dev/null | grep -q "Camera"; then
-        echo -e "${GREEN}✓ Camera detected${NC}"
-        CAMERA_FOUND=true
-    fi
-fi
+def validate_camera_count(available_indices):
+    """Warn if insufficient cameras, but allow single camera mode"""
+    count = len(available_indices)
+    
+    if count == 0:
+        print("✗ No cameras detected")
+        return False
+    
+    print(f"\n✓ Found {count} working camera(s):")
+    for idx in available_indices:
+        print(f"  - /dev/video{idx}")
+    
+    if count == 1:
+        print("⚠ Single camera mode - fusion limited to one perspective")
+    
+    return True
 
-if [ "$CAMERA_FOUND" = false ]; then
-    echo -e "${YELLOW}⚠ Camera not detected - will check after reboot${NC}"
-fi
+# ============================================================================
+# ROS OPERATIONS
+# ============================================================================
 
-# Install AI dependencies if needed
-if [ "$CAMERA_TYPE" = "ai" ]; then
-    echo "Installing AI dependencies..."
-    pip3 install --break-system-packages torch torchvision ultralytics
-    echo -e "${GREEN}✓ AI dependencies installed${NC}"
-fi
+def check_topics():
+    """Check if camera topics are publishing"""
+    cmd = (
+        f"{get_ros_source_cmd()} && "
+        f"ros2 topic list | grep -E '{CONFIG['topic_namespace']}/(left|right)'"
+    )
+    result = run_command_sync(cmd, timeout=CONFIG["topic_check_timeout"])
+    
+    if not result or not result.stdout.strip():
+        return []
+    
+    topics = [t.strip() for t in result.stdout.strip().split('\n') if t.strip()]
+    return topics
 
-# Create workspace
-echo "[8/10] Setting up workspace..."
-mkdir -p $HOME/ros2_camera_ws/src
+def get_topic_hz(topic):
+    """Get publishing rate of a topic"""
+    cmd = (
+        f"{get_ros_source_cmd()} && "
+        f"timeout {CONFIG['hz_check_timeout']} ros2 topic hz {topic}"
+    )
+    result = run_command_sync(cmd, timeout=CONFIG["hz_check_timeout"] + 1)
+    
+    if not result or not result.stdout.strip():
+        return None
+    
+    for line in result.stdout.split('\n'):
+        if 'average rate:' in line:
+            return line.split('average rate:')[1].strip()
+    
+    return None
 
-# Copy project files
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+def start_ros_daemon():
+    """Start ROS 2 daemon"""
+    cmd = f"{get_ros_source_cmd()} && ros2 daemon start"
+    subprocess.run(f"bash -c '{cmd}'", shell=True, capture_output=True)
+    time.sleep(CONFIG["ros_daemon_wait"])
 
-# Check if we're running from extracted tar (ros_nodes directory)
-if [[ "$SCRIPT_DIR" == *"/ros_nodes/utils" ]]; then
-    # Extracted from tar: ros_nodes is at the same level as script
-    PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-    if [ -d "$PROJECT_ROOT/cameras" ] && [ -d "$PROJECT_ROOT/utils" ]; then
-        echo "[INFO] Detected extracted tar structure"
-        # Create full directory structure first
-        mkdir -p $HOME/ros2_camera_ws/src/urc-Espresso-2026
-        rm -rf $HOME/ros2_camera_ws/src/urc-Espresso-2026/*
-        cp -r "$PROJECT_ROOT"/* $HOME/ros2_camera_ws/src/urc-Espresso-2026/
-        echo -e "${GREEN}✓ Project copied from tar structure${NC}"
-    else
-        echo -e "${RED}✗ Invalid tar structure at: $PROJECT_ROOT${NC}"
-        echo "Contents of PROJECT_ROOT:"
-        ls -la "$PROJECT_ROOT"
-        exit 1
-    fi
-else
-    # Normal project structure: script is in project/ros_nodes/utils/
-    PROJECT_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
-    if [ -d "$PROJECT_ROOT/ros_nodes" ] && [ -d "$PROJECT_ROOT/core" ]; then
-        rm -rf $HOME/ros2_camera_ws/src/urc-Espresso-2026
-        mkdir -p $HOME/ros2_camera_ws/src
-        cp -r "$PROJECT_ROOT" $HOME/ros2_camera_ws/src/urc-Espresso-2026
-        echo -e "${GREEN}✓ Project copied from full project structure${NC}"
-    else
-        echo -e "${RED}✗ Full project structure not found at: $PROJECT_ROOT${NC}"
-        echo "Expected: $PROJECT_ROOT/ros_nodes and $PROJECT_ROOT/core"
-        echo "Contents of PROJECT_ROOT:"
-        ls -la "$PROJECT_ROOT" 2>/dev/null || echo "Directory not accessible"
-        exit 1
-    fi
-fi
+# ============================================================================
+# CAMERA NODE LAUNCHING
+# ============================================================================
 
-# Build workspace
-echo "Building ROS2 workspace..."
-cd $HOME/ros2_camera_ws
-source /opt/ros/jazzy/setup.bash
-if colcon build --symlink-install; then
-    echo -e "${GREEN}✓ Workspace built successfully${NC}"
-else
-    echo -e "${RED}✗ Workspace build failed${NC}"
-    echo "You may need to run: cd ~/ros2_camera_ws && source /opt/ros/jazzy/setup.bash && colcon build --symlink-install"
-    exit 1
-fi
+def build_camera_command(device_id, side):
+    """
+    Build camera node launch command
+    Args:
+        device_id: /dev/videoX index
+        side: "left" or "right"
+    """
+    topic_name = (
+        CONFIG["left_topic_name"] if side == "left"
+        else CONFIG["right_topic_name"]
+    )
+    
+    cmd = (
+        f"cd {CONFIG['working_dir']} && "
+        f"{get_ros_source_cmd()} && "
+        f"python3 {CONFIG['camera_node_script']} "
+        f"--ros-args "
+        f"-p device_id:={device_id} "
+        f"-p topic_name:={CONFIG['topic_namespace']}/{topic_name} "
+        f"-p width:={CONFIG['width']} "
+        f"-p height:={CONFIG['height']} "
+        f"-p fps:={CONFIG['fps']} "
+        f"-p format:={CONFIG['format']} "
+        f"--remap __node:=camera_{side}_node"
+    )
+    
+    return cmd
 
-# Configure CycloneDDS
-echo "[9/10] Configuring CycloneDDS..."
-sudo mkdir -p /etc/cyclonedds
-sudo tee /etc/cyclonedds/config.xml > /dev/null <<'EOF'
-<?xml version="1.0" encoding="UTF-8"?>
-<CycloneDDS xmlns="https://cdds.io/config">
-  <Domain id="42">
-    <General>
-      <Interfaces>
-        <NetworkInterface name="auto"/>
-      </Interfaces>
-      <MaxMessageSize>65536B</MaxMessageSize>
-    </General>
-  </Domain>
-</CycloneDDS>
-EOF
-echo -e "${GREEN}✓ CycloneDDS configured${NC}"
+def launch_cameras(available_indices):
+    """Launch camera nodes and return process list"""
+    processes = []
+    
+    print("\n" + "="*60)
+    print("Camera Configuration (Quality-Optimized):")
+    print(f"  Resolution: {CONFIG['width']}x{CONFIG['height']}")
+    print(f"  Framerate: {CONFIG['fps']} FPS")
+    print(f"  Format: {CONFIG['format']}")
+    print("="*60 + "\n")
+    
+    if len(available_indices) >= 1:
+        idx = available_indices[0]
+        cmd = build_camera_command(idx, "left")
+        processes.append(run_command(cmd, f"Camera Left (Device {idx})"))
+        time.sleep(CONFIG["inter_launch_delay"])
+    
+    if len(available_indices) >= 2:
+        idx = available_indices[1]
+        cmd = build_camera_command(idx, "right")
+        processes.append(run_command(cmd, f"Camera Right (Device {idx})"))
+        time.sleep(CONFIG["inter_launch_delay"])
+    
+    return processes
 
-# Create auto-start service
-echo "[10/10] Creating auto-start service..."
+# ============================================================================
+# MAIN
+# ============================================================================
 
-if [ "$CAMERA_TYPE" = "ai" ]; then
-    SERVICE_NAME="ai-camera-pi$PI_NUMBER"
-    NODE_SCRIPT="ai_camera_detector_node.py"
-    NODE_DIR="ai_camera_publisher"
-else
-    SERVICE_NAME="camera-pi$PI_NUMBER"
-    NODE_SCRIPT="camera_publisher.py"
-    NODE_DIR="camera_publisher"
-fi
+def main():
+    print("="*60)
+    print("Dual Camera Launch for LiDAR Fusion (Quality Mode)")
+    print("="*60)
+    
+    # Clean up existing processes
+    clean_existing_camera_processes()
+    
+    # Detect cameras
+    print("\nDetecting cameras...")
+    available_indices = detect_cameras()
+    
+    if not validate_camera_count(available_indices):
+        print("Cannot proceed without cameras")
+        return
+    
+    # Start ROS
+    print("\nStarting ROS 2 daemon...")
+    start_ros_daemon()
+    
+    # Launch camera nodes
+    processes = []
+    
+    try:
+        processes = launch_cameras(available_indices)
+        
+        # Wait for initialization
+        print(f"Waiting {CONFIG['camera_init_wait']}s for cameras to initialize...")
+        time.sleep(CONFIG["camera_init_wait"])
+        
+        # Check topics
+        topics = check_topics()
+        
+        if topics:
+            print(f"\n✓ Camera topics publishing ({len(topics)}):")
+            for topic in topics:
+                print(f"  - {topic}")
+                hz = get_topic_hz(topic)
+                if hz:
+                    print(f"    Publishing at: {hz} Hz")
+        else:
+            print("\n✗ No camera topics found after initialization")
+        
+        # Summary
+        print("\n" + "="*60)
+        print("Dual Camera System Running!")
+        print("="*60)
+        if len(available_indices) >= 1:
+            print(f"  - {CONFIG['topic_namespace']}/{CONFIG['left_topic_name']}")
+        if len(available_indices) >= 2:
+            print(f"  - {CONFIG['topic_namespace']}/{CONFIG['right_topic_name']}")
+        
+        print("\nFusion Examples:")
+        print(f"  python3 src/core/fusion.py --ros-args -p image_topic:={CONFIG['topic_namespace']}/{CONFIG['left_topic_name']}")
+        print(f"  python3 src/core/fusion.py --ros-args -p image_topic:={CONFIG['topic_namespace']}/{CONFIG['right_topic_name']}")
+        
+        print("\nPress Ctrl+C to stop...")
+        while True:
+            time.sleep(1)
+    
+    except KeyboardInterrupt:
+        print("\n\nShutdown requested...")
+    
+    except Exception as e:
+        print(f"\nError: {e}")
+        import traceback
+        traceback.print_exc()
+    
+    finally:
+        print("Stopping camera processes...")
+        for process in processes:
+            kill_process_group(process.pid)
+        print("All cameras stopped.")
 
-# Create service file with corrected paths
-sudo tee /etc/systemd/system/$SERVICE_NAME.service > /dev/null <<EOF
-[Unit]
-Description=ROS2 Camera $CAMERA_TYPE Pi $PI_NUMBER
-After=network-online.target
-Wants=network-online.target
-
-[Service]
-Type=simple
-User=$USER
-WorkingDirectory=$HOME/ros2_camera_ws
-Environment="ROS_DOMAIN_ID=42"
-Environment="RMW_IMPLEMENTATION=rmw_cyclonedds_cpp"
-Environment="CYCLONEDDS_URI=file:///etc/cyclonedds/config.xml"
-ExecStart=/bin/bash -c 'source /opt/ros/jazzy/setup.bash && source ~/ros2_camera_ws/install/setup.bash && python3 ~/ros2_camera_ws/src/urc-Espresso-2026/ros_nodes/cameras/pi_zero_2_w/$NODE_DIR/$NODE_SCRIPT --pi-number $PI_NUMBER --camera-type $CAMERA_TYPE'
-Restart=always
-RestartSec=10
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
-# Enable service
-sudo systemctl daemon-reload
-if sudo systemctl enable $SERVICE_NAME.service 2>/dev/null; then
-    echo -e "${GREEN}✓ Service $SERVICE_NAME enabled for startup${NC}"
-else
-    echo -e "${YELLOW}⚠ Service enable failed, but service file created${NC}"
-fi
-
-# Start service
-if sudo systemctl start $SERVICE_NAME.service 2>/dev/null; then
-    echo -e "${GREEN}✓ Service $SERVICE_NAME started${NC}"
-    sleep 2
-    if systemctl is-active --quiet $SERVICE_NAME.service; then
-        echo -e "${GREEN}✓ Service is running successfully${NC}"
-    else
-        echo -e "${YELLOW}⚠ Service started but may have issues - check logs${NC}"
-    fi
-else
-    echo -e "${YELLOW}⚠ Service start failed - check configuration${NC}"
-fi
-
-# Setup environment
-cat >> $HOME/.bashrc <<'EOF'
-
-# ROS2 Camera Setup
-source /opt/ros/jazzy/setup.bash
-export ROS_DOMAIN_ID=42
-export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
-export CYCLONEDDS_URI=file:///etc/cyclonedds/config.xml
-EOF
-
-# Set hostname
-sudo hostnamectl set-hostname "pi-$CAMERA_TYPE-$PI_NUMBER"
-
-echo ""
-echo -e "${GREEN}==========================================${NC}"
-echo -e "${GREEN}Setup Complete!${NC}"
-echo -e "${GREEN}==========================================${NC}"
-echo "Hostname: pi-$CAMERA_TYPE-$PI_NUMBER"
-echo "Service: $SERVICE_NAME"
-echo ""
-
-# Check current service status
-echo "Current Service Status:"
-systemctl status $SERVICE_NAME.service --no-pager -l | head -5 || echo "Service status check failed"
-
-echo ""
-echo "Next steps:"
-echo "  Check logs: journalctl -u $SERVICE_NAME.service -f"
-echo "  View topics: ros2 topic list"
-echo "  Test camera: ros2 topic hz /camera/image_raw"
-echo ""
-echo -e "${GREEN}Environment variables loaded automatically on login${NC}"
-echo -e "${YELLOW}Note: Service should start on next boot${NC}"
-echo -e "${GREEN}==========================================${NC}"
+if __name__ == "__main__":
+    main()
